@@ -1,0 +1,5 @@
+firstName,lastName,email,phone,companyName,source,status
+Duplicate,User1,dup@example.com,555-9001,DupCorp,website,new
+Duplicate,User2,dup@example.com,555-9002,DupCorp,referral,qualified
+Different,Name,different@example.com,555-9001,Another,coldCall,contacted
+Unique,Person,unique@example.com,555-9999,UniqueCo,social,qualified

@@ -1,0 +1,281 @@
+/**
+ * Common Components Styles
+ * ErrorBanner and OfflineNotice components
+ * Agent CRM-34 Implementation
+ */
+
+/* ============================================
+   ErrorBanner
+   ============================================ */
+
+.error-banner {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+  padding: 12px 16px;
+  border-radius: var(--radius-md);
+  border: 1px solid;
+  margin-bottom: 16px;
+  animation: slideDown 0.2s ease-out;
+}
+
+@keyframes slideDown {
+  from {
+    opacity: 0;
+    transform: translateY(-8px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Error variant */
+.error-banner--error {
+  background: rgba(239, 68, 68, 0.1);
+  border-color: rgba(239, 68, 68, 0.3);
+  color: #991b1b;
+}
+
+.error-banner--error .error-banner__icon {
+  color: #dc2626;
+}
+
+/* Warning variant */
+.error-banner--warning {
+  background: rgba(245, 158, 11, 0.1);
+  border-color: rgba(245, 158, 11, 0.3);
+  color: #92400e;
+}
+
+.error-banner--warning .error-banner__icon {
+  color: #f59e0b;
+}
+
+/* Info variant */
+.error-banner--info {
+  background: rgba(59, 130, 246, 0.1);
+  border-color: rgba(59, 130, 246, 0.3);
+  color: #1e40af;
+}
+
+.error-banner--info .error-banner__icon {
+  color: #3b82f6;
+}
+
+/* Icon */
+.error-banner__icon {
+  flex-shrink: 0;
+  margin-top: 2px;
+}
+
+/* Content */
+.error-banner__content {
+  flex: 1;
+  min-width: 0;
+}
+
+.error-banner__message {
+  margin: 0;
+  font-size: 14px;
+  line-height: 1.5;
+  font-weight: 500;
+}
+
+/* Actions */
+.error-banner__actions {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-shrink: 0;
+}
+
+.error-banner__button {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0;
+  border: none;
+  background: transparent;
+  cursor: pointer;
+  transition: opacity 0.15s;
+}
+
+.error-banner__button:hover {
+  opacity: 0.7;
+}
+
+.error-banner__button--retry {
+  padding: 4px 12px;
+  font-size: 13px;
+  font-weight: 500;
+  border-radius: var(--radius-sm);
+  background: rgba(0, 0, 0, 0.05);
+}
+
+.error-banner--error .error-banner__button--retry {
+  color: #991b1b;
+}
+
+.error-banner--error .error-banner__button--retry:hover {
+  background: rgba(0, 0, 0, 0.1);
+  opacity: 1;
+}
+
+.error-banner--warning .error-banner__button--retry {
+  color: #92400e;
+}
+
+.error-banner--warning .error-banner__button--retry:hover {
+  background: rgba(0, 0, 0, 0.1);
+  opacity: 1;
+}
+
+.error-banner--info .error-banner__button--retry {
+  color: #1e40af;
+}
+
+.error-banner--info .error-banner__button--retry:hover {
+  background: rgba(0, 0, 0, 0.1);
+  opacity: 1;
+}
+
+.error-banner__button--dismiss {
+  width: 24px;
+  height: 24px;
+  border-radius: var(--radius-sm);
+}
+
+/* ============================================
+   OfflineNotice
+   ============================================ */
+
+.offline-notice {
+  position: fixed;
+  left: 0;
+  right: 0;
+  display: flex;
+  justify-content: center;
+  padding: 12px 16px;
+  background: linear-gradient(
+    135deg,
+    rgba(239, 68, 68, 0.95) 0%,
+    rgba(220, 38, 38, 0.95) 100%
+  );
+  backdrop-filter: blur(8px);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+  z-index: 9999;
+  animation: slideIn 0.3s ease-out;
+}
+
+.offline-notice--top {
+  top: 0;
+}
+
+.offline-notice--bottom {
+  bottom: 0;
+}
+
+@keyframes slideIn {
+  from {
+    opacity: 0;
+    transform: translateY(-100%);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Reconnected state */
+.offline-notice--reconnected {
+  background: linear-gradient(
+    135deg,
+    rgba(34, 197, 94, 0.95) 0%,
+    rgba(22, 163, 74, 0.95) 100%
+  );
+  animation: slideIn 0.3s ease-out;
+}
+
+/* Content */
+.offline-notice__content {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  max-width: 1200px;
+  width: 100%;
+}
+
+.offline-notice__icon {
+  flex-shrink: 0;
+  color: white;
+}
+
+.offline-notice__text {
+  flex: 1;
+  font-size: 14px;
+  font-weight: 500;
+  color: white;
+  text-align: center;
+}
+
+/* Responsive */
+@media (max-width: 640px) {
+  .offline-notice {
+    padding: 10px 12px;
+  }
+
+  .offline-notice__text {
+    font-size: 13px;
+  }
+
+  .error-banner {
+    padding: 10px 12px;
+    gap: 10px;
+  }
+
+  .error-banner__message {
+    font-size: 13px;
+  }
+}
+
+/* Dark mode support (if implemented) */
+@media (prefers-color-scheme: dark) {
+  .error-banner--error {
+    background: rgba(239, 68, 68, 0.15);
+    border-color: rgba(239, 68, 68, 0.4);
+    color: #fecaca;
+  }
+
+  .error-banner--error .error-banner__icon {
+    color: #ef4444;
+  }
+
+  .error-banner--warning {
+    background: rgba(245, 158, 11, 0.15);
+    border-color: rgba(245, 158, 11, 0.4);
+    color: #fde68a;
+  }
+
+  .error-banner--warning .error-banner__icon {
+    color: #fbbf24;
+  }
+
+  .error-banner--info {
+    background: rgba(59, 130, 246, 0.15);
+    border-color: rgba(59, 130, 246, 0.4);
+    color: #bfdbfe;
+  }
+
+  .error-banner--info .error-banner__icon {
+    color: #60a5fa;
+  }
+
+  .error-banner__button--retry {
+    background: rgba(255, 255, 255, 0.1);
+  }
+
+  .error-banner__button--retry:hover {
+    background: rgba(255, 255, 255, 0.15);
+  }
+}

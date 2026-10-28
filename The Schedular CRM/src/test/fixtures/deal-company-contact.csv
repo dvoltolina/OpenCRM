@@ -1,0 +1,5 @@
+title,valueCents,clientEmail,clientName,stageName,expectedCloseDate,notes,assignedRepEmail
+Enterprise License Deal,500000,john.doe@example.com,John Doe,Proposal,2025-03-01,Negotiating terms,rep1@example.com
+Healthcare Platform,750000,jane.smith@example.com,Jane Smith,Discovery,2025-02-15,Initial demo completed,rep2@example.com
+Manufacturing System,1000000,bob.johnson@example.com,Bob Johnson,Negotiation,2025-01-20,Pricing discussion ongoing,rep1@example.com
+Small Business Package,25000,new.customer@example.com,New Customer,Qualification,2025-04-01,Inbound lead from website,rep3@example.com

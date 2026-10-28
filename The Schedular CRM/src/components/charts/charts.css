@@ -1,0 +1,669 @@
+/**
+ * Charts Components Styles
+ * Agent CRM-19 Implementation
+ */
+
+/* ============================================
+   Chart Container
+   ============================================ */
+
+.chart-container {
+  background: var(--color-bg-card);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-lg);
+  overflow: hidden;
+}
+
+.chart-container__header {
+  padding: 16px 20px;
+  border-bottom: 1px solid var(--color-border);
+}
+
+.chart-container__title {
+  margin: 0;
+  font-size: 16px;
+  font-weight: 600;
+  color: var(--color-text);
+}
+
+.chart-container__subtitle {
+  margin: 4px 0 0;
+  font-size: 13px;
+  color: var(--color-text-muted);
+}
+
+.chart-container__content {
+  padding: 20px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* Loading State */
+.chart-container__loading {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  color: var(--color-text-muted);
+  font-size: 14px;
+}
+
+.chart-container__spinner {
+  width: 32px;
+  height: 32px;
+  border: 3px solid var(--color-border);
+  border-top-color: var(--color-primary);
+  border-radius: 50%;
+  animation: chart-spin 0.8s linear infinite;
+}
+
+@keyframes chart-spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+/* Empty State */
+.chart-container__empty {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  color: var(--color-text-muted);
+  font-size: 14px;
+}
+
+.chart-container__empty-icon {
+  opacity: 0.5;
+}
+
+/* ============================================
+   Recharts Custom Styles
+   ============================================ */
+
+.recharts-wrapper {
+  width: 100% !important;
+}
+
+.recharts-tooltip-wrapper {
+  outline: none;
+}
+
+.recharts-default-tooltip {
+  background: var(--color-bg-card) !important;
+  border: 1px solid var(--color-border) !important;
+  border-radius: var(--radius-sm) !important;
+  box-shadow: var(--shadow-md) !important;
+  padding: 10px 14px !important;
+}
+
+.recharts-tooltip-label {
+  color: var(--color-text) !important;
+  font-weight: 600 !important;
+  margin-bottom: 6px !important;
+}
+
+.recharts-tooltip-item {
+  color: var(--color-text-muted) !important;
+  font-size: 13px !important;
+  padding: 2px 0 !important;
+}
+
+.recharts-legend-wrapper {
+  padding-top: 10px !important;
+}
+
+.recharts-legend-item-text {
+  color: var(--color-text) !important;
+  font-size: 13px !important;
+}
+
+/* ============================================
+   Pipeline Chart
+   ============================================ */
+
+.pipeline-chart {
+  width: 100%;
+  height: 100%;
+}
+
+.pipeline-chart__bar {
+  cursor: pointer;
+  transition: opacity 0.2s;
+}
+
+.pipeline-chart__bar:hover {
+  opacity: 0.8;
+}
+
+/* ============================================
+   Sales Trend Chart
+   ============================================ */
+
+.sales-trend-chart {
+  width: 100%;
+  height: 100%;
+}
+
+.sales-trend-chart__controls {
+  display: flex;
+  gap: 8px;
+  margin-bottom: 16px;
+}
+
+.sales-trend-chart__control {
+  padding: 6px 12px;
+  font-size: 12px;
+  background: var(--color-bg);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-sm);
+  color: var(--color-text);
+  cursor: pointer;
+  transition: all 0.15s;
+}
+
+.sales-trend-chart__control:hover {
+  border-color: var(--color-primary);
+}
+
+.sales-trend-chart__control--active {
+  background: var(--color-primary);
+  border-color: var(--color-primary);
+  color: white;
+}
+
+/* ============================================
+   Conversion Chart (Funnel)
+   ============================================ */
+
+.conversion-chart {
+  width: 100%;
+}
+
+.conversion-chart__stage {
+  display: flex;
+  align-items: center;
+  margin-bottom: 12px;
+}
+
+.conversion-chart__bar-wrapper {
+  flex: 1;
+  margin-right: 16px;
+}
+
+.conversion-chart__bar {
+  height: 40px;
+  border-radius: var(--radius-sm);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: white;
+  font-weight: 500;
+  font-size: 14px;
+  transition: width 0.3s ease;
+}
+
+.conversion-chart__label {
+  min-width: 120px;
+  font-size: 14px;
+  color: var(--color-text);
+}
+
+.conversion-chart__stats {
+  min-width: 100px;
+  text-align: right;
+  font-size: 13px;
+  color: var(--color-text-muted);
+}
+
+.conversion-chart__conversion {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 8px 0;
+  color: var(--color-text-muted);
+  font-size: 12px;
+}
+
+.conversion-chart__arrow {
+  margin: 0 8px;
+}
+
+/* ============================================
+   Deal Value Chart
+   ============================================ */
+
+.deal-value-chart {
+  width: 100%;
+  height: 100%;
+}
+
+.deal-value-chart__legend {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 16px;
+  margin-top: 16px;
+}
+
+.deal-value-chart__legend-item {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 13px;
+  color: var(--color-text);
+}
+
+.deal-value-chart__legend-color {
+  width: 12px;
+  height: 12px;
+  border-radius: 2px;
+}
+
+/* ============================================
+   Win/Loss Chart
+   ============================================ */
+
+.win-loss-chart {
+  width: 100%;
+  height: 100%;
+}
+
+.win-loss-chart__summary {
+  display: flex;
+  justify-content: center;
+  gap: 32px;
+  margin-bottom: 16px;
+}
+
+.win-loss-chart__stat {
+  text-align: center;
+}
+
+.win-loss-chart__stat-value {
+  font-size: 24px;
+  font-weight: 600;
+}
+
+.win-loss-chart__stat-value--won {
+  color: var(--color-success);
+}
+
+.win-loss-chart__stat-value--lost {
+  color: var(--color-danger);
+}
+
+.win-loss-chart__stat-label {
+  font-size: 13px;
+  color: var(--color-text-muted);
+  margin-top: 4px;
+}
+
+/* ============================================
+   Activity Chart
+   ============================================ */
+
+.activity-chart {
+  width: 100%;
+  height: 100%;
+}
+
+.activity-chart__legend {
+  display: flex;
+  justify-content: center;
+  gap: 16px;
+  margin-top: 12px;
+}
+
+.activity-chart__legend-item {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 12px;
+  color: var(--color-text-muted);
+}
+
+.activity-chart__legend-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+}
+
+/* ============================================
+   Responsive
+   ============================================ */
+
+/* ============================================
+   ChartRenderer Custom Tooltip
+   ============================================ */
+
+.chart-tooltip {
+  background: var(--color-bg-card);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-sm);
+  box-shadow: var(--shadow-md);
+  padding: 12px 16px;
+  min-width: 150px;
+}
+
+.chart-tooltip__label {
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--color-text);
+  margin: 0 0 8px;
+  border-bottom: 1px solid var(--color-border);
+  padding-bottom: 6px;
+}
+
+.chart-tooltip__item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 13px;
+  margin: 4px 0;
+  gap: 16px;
+}
+
+.chart-tooltip__item-label {
+  color: var(--color-text-muted);
+}
+
+.chart-tooltip__item-value {
+  font-weight: 500;
+  color: var(--color-text);
+}
+
+/* ============================================
+   ChartRenderer Table
+   ============================================ */
+
+.report-table-wrapper {
+  width: 100%;
+  overflow-x: auto;
+}
+
+.report-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 14px;
+}
+
+.report-table__header {
+  background: var(--color-bg-secondary);
+  padding: 12px 16px;
+  text-align: left;
+  font-weight: 600;
+  color: var(--color-text);
+  border-bottom: 2px solid var(--color-border);
+  white-space: nowrap;
+}
+
+.report-table__row {
+  transition: background 0.15s;
+}
+
+.report-table__row:nth-child(even) {
+  background: var(--color-bg-secondary);
+}
+
+.report-table__row:hover {
+  background: rgba(59, 130, 246, 0.05);
+}
+
+.report-table__row--clickable {
+  cursor: pointer;
+}
+
+.report-table__row--clickable:hover {
+  background: rgba(59, 130, 246, 0.1);
+}
+
+.report-table__cell {
+  padding: 12px 16px;
+  border-bottom: 1px solid var(--color-border);
+  color: var(--color-text);
+}
+
+/* ============================================
+   ChartRenderer Metric Display
+   ============================================ */
+
+.report-metrics-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+  gap: 16px;
+  width: 100%;
+}
+
+.report-metric-card {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 24px 16px;
+  background: var(--color-bg-secondary);
+  border-radius: var(--radius-md);
+  border: 1px solid var(--color-border);
+  text-align: center;
+}
+
+.report-metric-card__label {
+  font-size: 13px;
+  font-weight: 500;
+  color: var(--color-text-muted);
+  margin-bottom: 8px;
+}
+
+.report-metric-card__value {
+  font-size: 28px;
+  font-weight: 700;
+  color: var(--color-text);
+  line-height: 1.2;
+}
+
+/* ============================================
+   ChartRenderer Heatmap
+   ============================================ */
+
+.report-heatmap {
+  width: 100%;
+  overflow-x: auto;
+}
+
+.report-heatmap__grid {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  min-width: fit-content;
+}
+
+.report-heatmap__header {
+  display: flex;
+  gap: 2px;
+  padding-left: 100px;
+}
+
+.report-heatmap__header-cell {
+  min-width: 60px;
+  height: 30px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 11px;
+  font-weight: 500;
+  color: var(--color-text-muted);
+}
+
+.report-heatmap__row {
+  display: flex;
+  gap: 2px;
+}
+
+.report-heatmap__row-label {
+  width: 100px;
+  display: flex;
+  align-items: center;
+  padding-right: 8px;
+  justify-content: flex-end;
+  font-size: 12px;
+  font-weight: 500;
+  color: var(--color-text);
+  flex-shrink: 0;
+}
+
+.report-heatmap__cell {
+  min-width: 60px;
+  height: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 4px;
+  font-size: 12px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: transform 0.2s, box-shadow 0.2s;
+}
+
+.report-heatmap__cell:hover {
+  transform: scale(1.1);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+  z-index: 1;
+  position: relative;
+}
+
+.report-heatmap__legend {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 16px;
+  margin-top: 16px;
+  padding: 12px;
+  background: var(--color-bg-secondary);
+  border-radius: var(--radius-sm);
+}
+
+.report-heatmap__legend-label {
+  font-size: 12px;
+  color: var(--color-text-muted);
+  margin-right: 8px;
+}
+
+.report-heatmap__legend-scale {
+  display: flex;
+  gap: 4px;
+}
+
+.report-heatmap__legend-swatch {
+  width: 24px;
+  height: 24px;
+  border-radius: 4px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 10px;
+}
+
+/* Heatmap intensity colors */
+.report-heatmap__cell--intensity-0 {
+  background: #f3f4f6;
+  color: #9ca3af;
+}
+
+.report-heatmap__cell--intensity-1 {
+  background: #dbeafe;
+  color: #1d4ed8;
+}
+
+.report-heatmap__cell--intensity-2 {
+  background: #bfdbfe;
+  color: #1d4ed8;
+}
+
+.report-heatmap__cell--intensity-3 {
+  background: #93c5fd;
+  color: #1e40af;
+}
+
+.report-heatmap__cell--intensity-4 {
+  background: #60a5fa;
+  color: white;
+}
+
+.report-heatmap__cell--intensity-5 {
+  background: #3b82f6;
+  color: white;
+}
+
+/* ============================================
+   ChartRenderer Unsupported
+   ============================================ */
+
+.chart-unsupported {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 48px 24px;
+  color: var(--color-text-muted);
+  background: var(--color-bg-secondary);
+  border-radius: var(--radius-sm);
+  text-align: center;
+}
+
+.chart-unsupported p {
+  margin: 0;
+  font-size: 14px;
+}
+
+/* ============================================
+   Responsive
+   ============================================ */
+
+@media (max-width: 640px) {
+  .chart-container__content {
+    padding: 12px;
+  }
+
+  .conversion-chart__label {
+    min-width: 80px;
+    font-size: 12px;
+  }
+
+  .conversion-chart__stats {
+    min-width: 60px;
+    font-size: 11px;
+  }
+
+  .win-loss-chart__summary {
+    gap: 16px;
+  }
+
+  .win-loss-chart__stat-value {
+    font-size: 20px;
+  }
+
+  .report-metrics-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  .report-metric-card__value {
+    font-size: 22px;
+  }
+
+  .report-heatmap__row-label {
+    width: 70px;
+    font-size: 10px;
+  }
+
+  .report-heatmap__header {
+    padding-left: 70px;
+  }
+
+  .report-heatmap__cell,
+  .report-heatmap__header-cell {
+    min-width: 45px;
+  }
+}

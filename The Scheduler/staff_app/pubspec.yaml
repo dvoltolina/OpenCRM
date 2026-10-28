@@ -1,0 +1,80 @@
+name: staff_app
+description: Dedicated mobile app for staff/technicians with offline support
+version: 1.0.0+1
+publish_to: 'none'
+
+environment:
+  sdk: '>=3.0.0 <4.0.0'
+  flutter: '>=3.16.0'
+
+dependencies:
+  flutter:
+    sdk: flutter
+
+  # Shared models
+  shared_models:
+    path: ../packages/shared_models
+
+  # Firebase
+  firebase_core: ^2.24.2
+  firebase_auth: ^4.16.0
+  cloud_firestore: ^4.14.0
+  firebase_storage: ^11.6.0
+  firebase_messaging: ^14.7.10
+
+  # Notifications
+  flutter_local_notifications: ^16.3.0
+
+  # State management
+  flutter_riverpod: ^2.4.9
+  riverpod_annotation: ^2.3.3
+
+  # Local database (with encryption)
+  drift: ^2.14.1
+  sqlcipher_flutter_libs: ^0.6.3
+  path_provider: ^2.1.1
+  path: ^1.8.3
+
+  # Security
+  flutter_secure_storage: ^9.0.0
+  local_auth: ^2.1.8
+  crypto: ^3.0.3
+  device_info_plus: ^9.1.1
+
+  # Crash reporting & analytics
+  firebase_crashlytics: ^3.4.8
+  firebase_analytics: ^10.7.4
+
+  # Connectivity & sync
+  connectivity_plus: ^5.0.2
+  workmanager: ^0.5.2
+  battery_plus: ^5.0.2
+
+  # Location
+  geolocator: ^10.1.0
+  geocoding: ^2.1.1
+
+  # UI
+  intl: ^0.18.1
+  url_launcher: ^6.2.2
+  timezone: ^0.9.2
+  adaptive_dialog: ^2.1.0
+
+  # Storage
+  shared_preferences: ^2.2.2
+
+  # Utils
+  uuid: ^4.2.2
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+  integration_test:
+    sdk: flutter
+  flutter_lints: ^3.0.1
+  build_runner: ^2.4.6
+  riverpod_generator: ^2.3.9
+  drift_dev: ^2.14.1
+
+flutter:
+  uses-material-design: true

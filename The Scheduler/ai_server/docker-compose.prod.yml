@@ -1,0 +1,186 @@
+# Production Docker Compose Overrides for The Scheduler AI Services
+# Agent AI-13: Docker & Cloud Deployment
+#
+# Usage: docker compose -f docker-compose.yml -f docker-compose.prod.yml up -d
+#
+# SECURITY REQUIREMENTS:
+# 1. All API keys MUST be set via environment or secrets
+# 2. Authentication MUST be enabled
+# 3. CORS origins MUST be restricted to production domains
+# 4. Debug mode MUST be disabled
+# 5. OpenAPI docs MUST be disabled (or auth-protected)
+
+version: '3.8'
+
+services:
+  # ============================================================
+  # PREDICTION SERVICE - Production Overrides
+  # ============================================================
+  prediction:
+    environment:
+      - PREDICTION_DEBUG=false
+      - PREDICTION_LOG_LEVEL=WARNING
+      - PREDICTION_REQUIRE_AUTHENTICATION=true
+      # API keys loaded from secrets or env
+      - PREDICTION_API_KEYS=${PREDICTION_API_KEYS:?PREDICTION_API_KEYS required}
+      - PREDICTION_ALLOWED_ORIGINS=${PROD_CORS_ORIGINS:?PROD_CORS_ORIGINS required}
+      - PREDICTION_RATE_LIMIT_RPM=${PREDICTION_RATE_LIMIT:-120}
+    deploy:
+      replicas: 2
+      resources:
+        limits:
+          cpus: '1.0'
+          memory: 1G
+        reservations:
+          cpus: '0.5'
+          memory: 512M
+      restart_policy:
+        condition: on-failure
+        delay: 5s
+        max_attempts: 3
+        window: 60s
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "10m"
+        max-file: "3"
+
+  # ============================================================
+  # SENTIMENT SERVICE - Production Overrides
+  # ============================================================
+  # NOTE: In production, sentiment service typically runs on
+  # cloud GPU (RunPod/Lambda Labs) - not in this compose file.
+  # This override is for on-premise GPU deployment only.
+  sentiment:
+    environment:
+      - SENTIMENT_DEBUG=false
+      - SENTIMENT_LOG_LEVEL=WARNING
+      - SENTIMENT_PROVIDER=${SENTIMENT_PROVIDER:-google_nl}
+      - GOOGLE_APPLICATION_CREDENTIALS=${GOOGLE_APPLICATION_CREDENTIALS:?GOOGLE_APPLICATION_CREDENTIALS required}
+      - GCLOUD_PROJECT=${GCLOUD_PROJECT:?GCLOUD_PROJECT required}
+      - SENTIMENT_LANGUAGE=${SENTIMENT_LANGUAGE:-en}
+      - SENTIMENT_MODEL=${SENTIMENT_MODEL:-gpt-4o-mini}
+      - OPENAI_API_KEY=${OPENAI_API_KEY:-}
+      - SENTIMENT_REQUIRE_HTTPS=true
+      - SENTIMENT_REQUIRE_AUTHENTICATION=true
+      - SENTIMENT_API_KEYS=${SENTIMENT_API_KEYS:?SENTIMENT_API_KEYS required}
+      - SENTIMENT_ALLOWED_ORIGINS=${PROD_CORS_ORIGINS:?PROD_CORS_ORIGINS required}
+      - SENTIMENT_REDACT_TRIGGER_TEXT=true
+      - SENTIMENT_RATE_LIMIT_RPM=${SENTIMENT_RATE_LIMIT:-60}
+    # Mount production service account read-only for Google NL
+    # volumes:
+    #   - /secure/path/gcp-sa.json:/secrets/gcp-sa.json:ro
+    deploy:
+      replicas: 1  # GPU-bound, single replica
+      resources:
+        limits:
+          cpus: '2.0'
+          memory: 4G
+        reservations:
+          cpus: '1.0'
+          memory: 2G
+          # GPU reservation for NVIDIA
+          # devices:
+          #   - driver: nvidia
+          #     count: 1
+          #     capabilities: [gpu]
+      restart_policy:
+        condition: on-failure
+        delay: 10s
+        max_attempts: 3
+        window: 120s
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "10m"
+        max-file: "3"
+
+  # ============================================================
+  # ROUTING SERVICE - Production Overrides
+  # ============================================================
+  routing:
+    environment:
+      - ROUTING_DEBUG=false
+      - ROUTING_LOG_LEVEL=WARNING
+      - ROUTING_PROVIDER=${ROUTING_PROVIDER:-google_routes}
+      - GOOGLE_ROUTES_API_KEY=${GOOGLE_ROUTES_API_KEY:?GOOGLE_ROUTES_API_KEY required}
+      - GOOGLE_ROUTES_REGION=${GOOGLE_ROUTES_REGION:-us-west1}
+      - ROUTING_REQUIRE_HTTPS=true
+      - ROUTING_REQUIRE_AUTHENTICATION=true
+      - ROUTING_API_KEY=${ROUTING_API_KEY:?ROUTING_API_KEY required}
+      - ROUTING_CORS_ORIGINS=${PROD_CORS_ORIGINS:?PROD_CORS_ORIGINS required}
+      - ROUTING_ENABLE_DOCS=false
+      - ROUTING_MAX_REQUESTS_PER_MINUTE=${ROUTING_RATE_LIMIT:-60}
+    deploy:
+      replicas: 2
+      resources:
+        limits:
+          cpus: '2.0'
+          memory: 2G
+        reservations:
+          cpus: '1.0'
+          memory: 1G
+      restart_policy:
+        condition: on-failure
+        delay: 5s
+        max_attempts: 3
+        window: 60s
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "10m"
+        max-file: "3"
+
+  # ============================================================
+  # OSRM - Production Overrides
+  # ============================================================
+  osrm:
+    deploy:
+      replicas: 1
+      resources:
+        limits:
+          cpus: '4.0'
+          memory: 8G
+        reservations:
+          cpus: '2.0'
+          memory: 4G
+      restart_policy:
+        condition: on-failure
+        delay: 10s
+        max_attempts: 3
+        window: 120s
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "10m"
+        max-file: "3"
+
+  # ============================================================
+  # OLLAMA - Production Overrides
+  # ============================================================
+  # NOTE: For production with GPU, uncomment the deploy section
+  ollama:
+    deploy:
+      replicas: 1
+      resources:
+        limits:
+          cpus: '4.0'
+          memory: 16G
+        reservations:
+          cpus: '2.0'
+          memory: 8G
+          # GPU reservation - uncomment for NVIDIA GPU
+          # devices:
+          #   - driver: nvidia
+          #     count: 1
+          #     capabilities: [gpu]
+      restart_policy:
+        condition: on-failure
+        delay: 10s
+        max_attempts: 3
+        window: 120s
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "10m"
+        max-file: "3"

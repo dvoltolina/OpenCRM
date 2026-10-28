@@ -1,0 +1,70 @@
+type Business @table {
+  name: String!
+  description: String
+  contactEmail: String
+  contactPhone: String
+  createdAt: Timestamp!
+}
+
+type Location @table {
+  business: Business!
+  name: String
+  address: String!
+  city: String!
+  state: String!
+  zipCode: String!
+  phone: String
+  createdAt: Timestamp!
+}
+
+type Provider @table {
+  business: Business!
+  firstName: String!
+  lastName: String!
+  email: String
+  phone: String
+  bio: String
+  createdAt: Timestamp!
+}
+
+type Service @table {
+  business: Business!
+  name: String!
+  durationMinutes: Int!
+  price: Float!
+  description: String
+  createdAt: Timestamp!
+}
+
+type Client @table {
+  business: Business!
+  firstName: String!
+  lastName: String!
+  email: String
+  phone: String
+  notes: String
+  createdAt: Timestamp!
+}
+
+type Availability @table {
+  provider: Provider!
+  location: Location!
+  startTime: Timestamp!
+  endTime: Timestamp!
+  date: Date!
+  isRecurring: Boolean
+  createdAt: Timestamp!
+}
+
+type Appointment @table {
+  client: Client!
+  provider: Provider!
+  service: Service!
+  location: Location!
+  startTime: Timestamp!
+  endTime: Timestamp!
+  date: Date!
+  status: String!
+  notes: String
+  createdAt: Timestamp!
+}

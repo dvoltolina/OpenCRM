@@ -1,0 +1,1255 @@
+rules_version = '2';
+
+// Firestore Security Rules for The Scheduler
+// Enforces multi-tenant isolation and role-based access control (RBAC)
+//
+// Multi-Tenant Isolation:
+// - All business-scoped data is stored under /businesses/{businessId}
+// - Users can only access data from businesses they belong to
+// - User profiles store businessId to enforce tenant boundaries
+//
+// RBAC Roles:
+// - owner: Full access to business settings and all data
+// - admin: Can manage all appointments, clients, providers, services
+// - staff: Can manage own schedule and appointments
+// - client: Can view/manage own appointments only
+
+service cloud.firestore {
+  match /databases/{database}/documents {
+
+    // ============================================================
+    // Helper Functions
+    // ============================================================
+
+    // Check if user is authenticated
+    function isAuthenticated() {
+      return request.auth != null;
+    }
+
+    // Check for presence of a specific auth token field
+    function tokenHas(field) {
+      return isAuthenticated() && request.auth.token.keys().hasAny([field]);
+    }
+
+    // Identify trusted service callers (backend/service accounts)
+    function isSystemCaller() {
+      return tokenHas('system') && request.auth.token.system == true;
+    }
+
+    // Require an expiresAt field within a bounded window to limit unbounded growth
+    function hasValidExpiry(maxDays) {
+      return request.resource.data.keys().hasAny(['expiresAt']) &&
+             request.resource.data.expiresAt is timestamp &&
+             request.resource.data.expiresAt > request.time &&
+             request.resource.data.expiresAt <= request.time + duration.value(maxDays, 'd');
+    }
+
+    // Get current user's profile (null-safe)
+    function getUserProfile() {
+      return isAuthenticated() && exists(/databases/$(database)/documents/users/$(request.auth.uid))
+        ? get(/databases/$(database)/documents/users/$(request.auth.uid)).data
+        : null;
+    }
+
+    // Check if user belongs to the specified business (token claim preferred)
+    function belongsToBusiness(businessId) {
+      return isAuthenticated() && (
+        (tokenHas('businessId') && request.auth.token.businessId == businessId) ||
+        (getUserProfile() != null && getUserProfile().businessId == businessId)
+      );
+    }
+
+    // Check if user has a specific role (token claim preferred)
+    function hasRole(role) {
+      return isAuthenticated() && (
+        (tokenHas('role') && request.auth.token.role == role) ||
+        (getUserProfile() != null && getUserProfile().role == role)
+      );
+    }
+
+    // Check if user has admin or owner role
+    function isAdmin() {
+      return hasRole('admin') || hasRole('owner');
+    }
+
+    // Check if user is owner
+    function isOwner() {
+      return hasRole('owner');
+    }
+
+    // Check if user is staff or higher
+    function isStaffOrHigher() {
+      let role = tokenHas('role') ? request.auth.token.role : (getUserProfile() != null ? getUserProfile().role : null);
+      return role == 'staff' || isAdmin();
+    }
+
+    // Get user's provider ID (if they are staff)
+    function getProviderId() {
+      return getUserProfile() != null ? getUserProfile().providerId : null;
+    }
+
+    // Get user's client ID (if they are a client)
+    function getClientId() {
+      return getUserProfile() != null ? getUserProfile().clientId : null;
+    }
+
+    // ----------------------------
+    // CRM sharing helpers (owner/admin/staff; clients cannot manage pipelines/stages)
+    // ----------------------------
+    function safeList(value) {
+      return value is list ? value : [];
+    }
+
+    function getUserTeams() {
+      let teams = [];
+      if (tokenHas('teamIds') && request.auth.token.teamIds is list) {
+        teams = teams + request.auth.token.teamIds;
+      }
+      if (tokenHas('managedTeamIds') && request.auth.token.managedTeamIds is list) {
+        teams = teams + request.auth.token.managedTeamIds;
+      }
+      let profile = getUserProfile();
+      if (profile != null && profile.keys().hasAny(['teamIds'])) {
+        teams = teams + safeList(profile.teamIds);
+      }
+      if (profile != null && profile.keys().hasAny(['managedTeamIds'])) {
+        teams = teams + safeList(profile.managedTeamIds);
+      }
+
+      // Deduplicate to avoid array-contains-any edge cases
+      let deduped = [];
+      for (team in teams) {
+        if (!(deduped.hasAny([team]))) {
+          deduped = deduped + [team];
+        }
+      }
+      return deduped;
+    }
+
+    function isResourceOwner(resource) {
+      return resource.data.keys().hasAny(['ownerId']) && resource.data.ownerId == request.auth.uid;
+    }
+
+    function hasTeamAccess(resource) {
+      return resource.data.keys().hasAny(['teamIds']) &&
+             resource.data.teamIds is list &&
+             resource.data.teamIds.hasAny(getUserTeams());
+    }
+
+    function canReadShareable(resource) {
+      return isOwner() ||
+             isAdmin() ||
+             isResourceOwner(resource) ||
+             hasTeamAccess(resource);
+    }
+
+    function canWriteShareable(resource) {
+      return isOwner() ||
+             isAdmin() ||
+             isResourceOwner(resource) ||
+             hasTeamAccess(resource);
+    }
+
+    function ownershipFieldsUnchanged(resource) {
+      return request.resource.data.ownerId == resource.data.ownerId &&
+             request.resource.data.ownerName == resource.data.ownerName &&
+             request.resource.data.teamIds == resource.data.teamIds;
+    }
+
+    function pipelineDoc(businessId, pipelineId) {
+      return /databases/$(database)/documents/businesses/$(businessId)/pipelines/$(pipelineId);
+    }
+
+    function pipelineExists(businessId, pipelineId) {
+      return exists(pipelineDoc(businessId, pipelineId));
+    }
+
+    function pipelineResource(businessId, pipelineId) {
+      return get(pipelineDoc(businessId, pipelineId));
+    }
+
+    function canReadPipeline(businessId, pipelineId) {
+      return pipelineExists(businessId, pipelineId) &&
+             canReadShareable(pipelineResource(businessId, pipelineId));
+    }
+
+    function canWritePipeline(businessId, pipelineId) {
+      return pipelineExists(businessId, pipelineId) &&
+             canWriteShareable(pipelineResource(businessId, pipelineId));
+    }
+
+    // ============================================================
+    // User Profiles
+    // ============================================================
+
+    match /users/{userId} {
+      // Users can read their own profile
+      // Admins can read all users in their business
+      allow read: if isAuthenticated() && (
+        request.auth.uid == userId ||
+        (isAdmin() && resource.data.businessId == getUserProfile().businessId)
+      );
+
+      // Users can create their own profile during registration
+      // Required fields: businessId, role, email
+      allow create: if isAuthenticated() &&
+                       request.auth.uid == userId &&
+                       request.resource.data.keys().hasAll(['businessId', 'role', 'email']);
+
+      // Only owners can update other user profiles
+      // Users can update their own lastLoginAt timestamp
+      allow update: if isAuthenticated() && (
+        isOwner() ||
+        (request.auth.uid == userId &&
+         request.resource.data.diff(resource.data).affectedKeys().hasOnly(['lastLoginAt']))
+      );
+
+      // Only owners can delete user profiles
+      allow delete: if isAuthenticated() && isOwner();
+    }
+
+    // ============================================================
+    // Businesses
+    // ============================================================
+
+    match /businesses/{businessId} {
+      // Anyone in the business can read business info
+      allow read: if belongsToBusiness(businessId);
+      // Allow public lookup for booking slug when doc contains only non-PHI fields
+      allow get: if resource.data.keys().hasOnly(['name', 'slug', 'publicBookingUrl']);
+
+      // Users can create their own business during registration
+      // The businessId in their profile must match the business they're creating
+      allow create: if isAuthenticated() &&
+                       getUserProfile().businessId == businessId &&
+                       getUserProfile().role == 'owner';
+
+      // Only owners can modify business settings
+      allow update, delete: if belongsToBusiness(businessId) && isOwner();
+
+      // ------------------------------------------------------------
+      // Clients
+      // ------------------------------------------------------------
+
+      match /clients/{clientId} {
+        // Admins and staff can read all clients
+        // Clients can only read their own profile
+        allow read: if belongsToBusiness(businessId) && (
+          isStaffOrHigher() ||
+          getClientId() == clientId
+        );
+
+        // Only admins can create/update/delete clients
+        allow write: if belongsToBusiness(businessId) && isAdmin();
+      }
+
+      // ------------------------------------------------------------
+      // Providers
+      // ------------------------------------------------------------
+
+      match /providers/{providerId} {
+        // Anyone in the business can read provider info (for booking)
+        allow read: if belongsToBusiness(businessId);
+
+        // Only admins can create/update/delete providers
+        allow write: if belongsToBusiness(businessId) && isAdmin();
+      }
+
+      // ------------------------------------------------------------
+      // Services
+      // ------------------------------------------------------------
+
+      match /services/{serviceId} {
+        // Anyone in the business can read services (for booking)
+        allow read: if belongsToBusiness(businessId);
+
+        // Only admins can create/update/delete services
+        allow write: if belongsToBusiness(businessId) && isAdmin();
+      }
+
+      // ------------------------------------------------------------
+      // Locations
+      // ------------------------------------------------------------
+
+      match /locations/{locationId} {
+        // Anyone in the business can read locations (for booking)
+        allow read: if belongsToBusiness(businessId);
+
+        // Only admins can create/update/delete locations
+        allow write: if belongsToBusiness(businessId) && isAdmin();
+      }
+
+      // ------------------------------------------------------------
+      // Appointments
+      // ------------------------------------------------------------
+
+      match /appointments/{appointmentId} {
+        // Helper to check if user is an attendee of a group session
+        function isAttendee() {
+          return hasRole('client') &&
+                 resource.data.isGroupSession == true &&
+                 getClientId() in resource.data.attendeeIds;
+        }
+
+        // Helper to check if appointment is publicly visible group session
+        function isPublicGroupSession() {
+          return resource.data.isGroupSession == true &&
+                 resource.data.publicVisibility == true;
+        }
+
+        // Admins can read all appointments
+        // Staff can read their own appointments
+        // Clients can read their own appointments OR group sessions they're attending
+        // Anyone in business can read public group sessions
+        allow read: if belongsToBusiness(businessId) && (
+          isAdmin() ||
+          (hasRole('staff') && resource.data.providerId == getProviderId()) ||
+          (hasRole('client') && resource.data.clientId == getClientId()) ||
+          isAttendee() ||
+          isPublicGroupSession()
+        );
+
+        // Admins can create/update any appointment
+        // Staff can create appointments for themselves
+        // Clients can create appointments for themselves
+        allow create: if belongsToBusiness(businessId) && (
+          isAdmin() ||
+          (hasRole('staff') && request.resource.data.providerId == getProviderId()) ||
+          (hasRole('client') && request.resource.data.clientId == getClientId())
+        );
+
+        // Admins can update any appointment
+        // Staff can update their own appointments
+        // Clients can update their own appointments (limited fields)
+        allow update: if belongsToBusiness(businessId) && (
+          isAdmin() ||
+          (hasRole('staff') && resource.data.providerId == getProviderId()) ||
+          (hasRole('client') &&
+           resource.data.clientId == getClientId() &&
+           request.resource.data.diff(resource.data).affectedKeys().hasOnly(['status', 'notes']))
+        );
+
+        // Only admins can delete appointments
+        allow delete: if belongsToBusiness(businessId) && isAdmin();
+
+        // ------------------------------------------------------------
+        // Appointment Attendees (Group Sessions)
+        // ------------------------------------------------------------
+
+        match /attendees/{attendeeId} {
+          // Helper to check if parent appointment exists and user can access it
+          function getParentAppointment() {
+            return get(/databases/$(database)/documents/businesses/$(businessId)/appointments/$(appointmentId)).data;
+          }
+
+          // Staff and admins can read all attendees
+          // Clients can read their own attendee record
+          allow read: if belongsToBusiness(businessId) && (
+            isStaffOrHigher() ||
+            (hasRole('client') && resource.data.clientId == getClientId())
+          );
+
+          // Staff and admins can create attendees
+          // Clients can join group sessions (register themselves)
+          allow create: if belongsToBusiness(businessId) && (
+            isStaffOrHigher() ||
+            (hasRole('client') &&
+             request.resource.data.clientId == getClientId() &&
+             getParentAppointment().isGroupSession == true)
+          );
+
+          // Staff and admins can update any attendee
+          // Clients can only update their own record (limited fields: status for cancellation)
+          allow update: if belongsToBusiness(businessId) && (
+            isStaffOrHigher() ||
+            (hasRole('client') &&
+             resource.data.clientId == getClientId() &&
+             request.resource.data.diff(resource.data).affectedKeys().hasOnly(['status']))
+          );
+
+          // Only admins can delete attendee records
+          allow delete: if belongsToBusiness(businessId) && isAdmin();
+        }
+
+        // ------------------------------------------------------------
+        // Appointment Files (Session Materials)
+        // ------------------------------------------------------------
+
+        match /files/{fileId} {
+          // Staff and admins can read all appointment files
+          // Clients can read files for their own appointments or group sessions they attend
+          allow read: if belongsToBusiness(businessId) && (
+            isStaffOrHigher() ||
+            (hasRole('client') &&
+              get(/databases/$(database)/documents/businesses/$(businessId)/appointments/$(appointmentId)).data.clientId == getClientId()) ||
+            (hasRole('client') &&
+              getClientId() in get(/databases/$(database)/documents/businesses/$(businessId)/appointments/$(appointmentId)).data.attendeeIds)
+          );
+
+          // Only staff and admins can upload appointment files
+          allow create: if belongsToBusiness(businessId) &&
+                           request.resource.data.businessId == businessId &&
+                           request.resource.data.appointmentId == appointmentId &&
+                           isStaffOrHigher();
+
+          // Only staff and admins can update file metadata
+          allow update: if belongsToBusiness(businessId) &&
+                           request.resource.data.businessId == businessId &&
+                           request.resource.data.appointmentId == appointmentId &&
+                           isStaffOrHigher();
+
+          // Only admins can delete appointment files
+          allow delete: if belongsToBusiness(businessId) && isAdmin();
+        }
+      }
+
+      // ------------------------------------------------------------
+      // Group Sessions
+      // ------------------------------------------------------------
+
+      match /group_sessions/{sessionId} {
+        // Staff/clients need read for listing and enrollment
+        allow read: if belongsToBusiness(businessId);
+
+        // Only staff/admin manage sessions
+        allow create, update: if belongsToBusiness(businessId) && isStaffOrHigher();
+        allow delete: if belongsToBusiness(businessId) && isAdmin();
+
+        match /attendees/{attendeeId} {
+          // Staff can see all attendees; clients can see their own entry
+          allow read: if belongsToBusiness(businessId) && (
+            isStaffOrHigher() ||
+            (hasRole('client') && resource.data.clientId == getClientId())
+          );
+
+          // Staff create attendees; clients may self-register
+          allow create: if belongsToBusiness(businessId) && (
+            isStaffOrHigher() ||
+            (hasRole('client') && request.resource.data.clientId == getClientId())
+          );
+
+          // Staff can update; clients can only change status on their own record
+          allow update: if belongsToBusiness(businessId) && (
+            isStaffOrHigher() ||
+            (hasRole('client') &&
+             resource.data.clientId == getClientId() &&
+             request.resource.data.diff(resource.data).affectedKeys().hasOnly(['status']))
+          );
+
+          // Only admins can delete attendee records
+          allow delete: if belongsToBusiness(businessId) && isAdmin();
+        }
+      }
+
+      // ------------------------------------------------------------
+      // Availability
+      // ------------------------------------------------------------
+
+      match /availability/{availabilityId} {
+        // Anyone in the business can read availability (for booking)
+        allow read: if belongsToBusiness(businessId);
+
+        // Admins can create/update any availability
+        // Staff can manage their own availability
+        allow write: if belongsToBusiness(businessId) && (
+          isAdmin() ||
+          (hasRole('staff') && request.resource.data.providerId == getProviderId())
+        );
+      }
+
+      // ------------------------------------------------------------
+      // Weekly Schedules (Recurring Availability)
+      // ------------------------------------------------------------
+
+      match /weekly_schedules/{scheduleId} {
+        allow read: if belongsToBusiness(businessId);
+        allow write: if belongsToBusiness(businessId) && (
+          isAdmin() ||
+          (hasRole('staff') && request.resource.data.providerId == getProviderId())
+        );
+      }
+
+      // ------------------------------------------------------------
+      // Resources
+      // ------------------------------------------------------------
+
+      match /resources/{resourceId} {
+        allow read: if belongsToBusiness(businessId);
+        allow write: if belongsToBusiness(businessId) && isAdmin();
+      }
+
+      match /resourceMaintenanceLogs/{logId} {
+        allow read: if belongsToBusiness(businessId) && isStaffOrHigher();
+        allow write: if belongsToBusiness(businessId) && isAdmin();
+      }
+
+      // ------------------------------------------------------------
+      // Payments
+      // ------------------------------------------------------------
+
+      match /payments/{paymentId} {
+        allow read: if belongsToBusiness(businessId) && (
+          isStaffOrHigher() ||
+          (hasRole('client') && resource.data.clientId == getClientId())
+        );
+        allow write: if belongsToBusiness(businessId) && isAdmin();
+      }
+
+      // ------------------------------------------------------------
+      // Waitlist
+      // ------------------------------------------------------------
+
+      match /waitlist_entries/{entryId} {
+        allow read: if belongsToBusiness(businessId) && (
+          isStaffOrHigher() ||
+          (hasRole('client') && resource.data.clientId == getClientId())
+        );
+        allow create: if belongsToBusiness(businessId) && (
+          isStaffOrHigher() ||
+          (hasRole('client') && request.resource.data.clientId == getClientId())
+        );
+        allow update: if belongsToBusiness(businessId) && (
+          isAdmin() ||
+          hasRole('staff') ||
+          (hasRole('client') && resource.data.clientId == getClientId())
+        );
+        allow delete: if belongsToBusiness(businessId) && isAdmin();
+      }
+
+      // ------------------------------------------------------------
+      // Intake Forms
+      // ------------------------------------------------------------
+
+      match /intakeFormTemplates/{templateId} {
+        allow read: if belongsToBusiness(businessId);
+        allow write: if belongsToBusiness(businessId) && isAdmin();
+      }
+
+      match /intakeFormSubmissions/{submissionId} {
+        allow read: if belongsToBusiness(businessId) && (
+          isStaffOrHigher() ||
+          (hasRole('client') && resource.data.clientId == getClientId())
+        );
+        allow create: if belongsToBusiness(businessId) &&
+                         request.resource.data.businessId == businessId &&
+                         (
+                           isStaffOrHigher() ||
+                           (hasRole('client') && request.resource.data.clientId == getClientId())
+                         );
+        allow update: if belongsToBusiness(businessId) &&
+                         request.resource.data.businessId == businessId &&
+                         isStaffOrHigher();
+        allow delete: if belongsToBusiness(businessId) && isAdmin();
+      }
+
+      match /intakeFormDrafts/{draftId} {
+        allow read: if belongsToBusiness(businessId) && (
+          isStaffOrHigher() ||
+          (hasRole('client') && resource.data.clientId == getClientId())
+        );
+        allow write: if belongsToBusiness(businessId) &&
+                        request.resource.data.businessId == businessId &&
+                        (
+                          isStaffOrHigher() ||
+                          (hasRole('client') && request.resource.data.clientId == getClientId())
+                        );
+      }
+
+      // ------------------------------------------------------------
+      // Session Notes (PHI)
+      // ------------------------------------------------------------
+
+      match /session_notes/{noteId} {
+        allow read: if belongsToBusiness(businessId) && (
+          isAdmin() ||
+          (hasRole('staff') && resource.data.providerId == getProviderId())
+        );
+        allow create: if belongsToBusiness(businessId) &&
+                         request.resource.data.businessId == businessId &&
+                         (
+                           isAdmin() ||
+                           (hasRole('staff') && request.resource.data.providerId == getProviderId())
+                         );
+        allow update: if belongsToBusiness(businessId) &&
+                         request.resource.data.businessId == businessId &&
+                         (
+                           isAdmin() ||
+                           (hasRole('staff') && resource.data.providerId == getProviderId())
+                         );
+        allow delete: if belongsToBusiness(businessId) && isAdmin();
+      }
+
+      // ------------------------------------------------------------
+      // Time Entries (Staff Time Clock)
+      // ------------------------------------------------------------
+
+      match /timeEntries/{entryId} {
+        // Staff can read their own time entries
+        // Admins can read all time entries
+        allow read: if belongsToBusiness(businessId) && (
+          isAdmin() ||
+          (hasRole('staff') && resource.data.staffId == getProviderId())
+        );
+
+        // Staff can create time entries for themselves
+        // Admins can create entries for any staff
+        allow create: if belongsToBusiness(businessId) && (
+          isAdmin() ||
+          (hasRole('staff') && request.resource.data.staffId == getProviderId())
+        );
+
+        // Staff can update their own non-approved entries
+        // Admins can update any entry (for approval/rejection)
+        allow update: if belongsToBusiness(businessId) && (
+          isAdmin() ||
+          (hasRole('staff') &&
+           resource.data.staffId == getProviderId() &&
+           resource.data.status != 'approved')
+        );
+
+        // Only admins can delete time entries
+        allow delete: if belongsToBusiness(businessId) && isAdmin();
+      }
+
+      // ------------------------------------------------------------
+      // Client Files
+      // ------------------------------------------------------------
+
+      match /clients/{clientId}/files/{fileId} {
+        allow read: if belongsToBusiness(businessId) && (
+          isStaffOrHigher() ||
+          getClientId() == clientId
+        );
+        allow create: if belongsToBusiness(businessId) &&
+                        request.resource.data.businessId == businessId &&
+                        request.resource.data.clientId == clientId &&
+                        (
+                          isStaffOrHigher() ||
+                          getClientId() == clientId
+                        );
+        allow update: if belongsToBusiness(businessId) &&
+                        request.resource.data.businessId == businessId &&
+                        request.resource.data.clientId == clientId &&
+                        isStaffOrHigher();
+        allow delete: if belongsToBusiness(businessId) && isStaffOrHigher();
+      }
+
+      // ------------------------------------------------------------
+      // Magic Link Tokens
+      // ------------------------------------------------------------
+
+      match /magic_link_tokens/{tokenId} {
+        allow read, write: if false;
+      }
+
+      // ------------------------------------------------------------
+      // Modification Requests
+      // ------------------------------------------------------------
+
+      match /modification_requests/{requestId} {
+        allow read: if belongsToBusiness(businessId) && (
+          isStaffOrHigher() ||
+          (hasRole('client') && resource.data.clientId == getClientId())
+        );
+        allow create: if belongsToBusiness(businessId) && (
+          isStaffOrHigher() ||
+          (hasRole('client') && request.resource.data.clientId == getClientId())
+        );
+        allow update: if belongsToBusiness(businessId) && isStaffOrHigher();
+        allow delete: if belongsToBusiness(businessId) && isAdmin();
+      }
+
+      // ------------------------------------------------------------
+      // Communications
+      // ------------------------------------------------------------
+
+      match /message_templates/{templateId} {
+        allow read: if belongsToBusiness(businessId) && isStaffOrHigher();
+        allow write: if belongsToBusiness(businessId) && isAdmin();
+      }
+
+      match /automation_rules/{ruleId} {
+        allow read: if belongsToBusiness(businessId) && isStaffOrHigher();
+        allow write: if belongsToBusiness(businessId) && isAdmin();
+      }
+
+      match /message_history/{messageId} {
+        allow read: if belongsToBusiness(businessId) && isStaffOrHigher();
+        allow write: if false;
+      }
+
+      // ------------------------------------------------------------
+      // Integrations
+      // ------------------------------------------------------------
+
+      match /integrations/{integrationId} {
+        allow read: if belongsToBusiness(businessId) && isStaffOrHigher();
+        allow write: if belongsToBusiness(businessId) && isAdmin();
+
+        match /tokens/{tokenType} {
+          allow read, write: if false;
+        }
+      }
+
+      match /staff_integrations/{staffId} {
+        allow read: if belongsToBusiness(businessId) && (
+          isAdmin() ||
+          (hasRole('staff') && staffId == getProviderId())
+        );
+        allow write: if belongsToBusiness(businessId) && (
+          isAdmin() ||
+          (hasRole('staff') && staffId == getProviderId())
+        );
+      }
+
+      // ------------------------------------------------------------
+      // Subscriptions
+      // ------------------------------------------------------------
+
+      match /subscriptions/{subscriptionId} {
+        allow read: if belongsToBusiness(businessId) && isAdmin();
+        allow write: if false;
+      }
+
+      // Billing (owner/admin only; writes via backend)
+      match /billing/{billingId} {
+        allow read: if belongsToBusiness(businessId) && isAdmin();
+        allow write: if false;
+      }
+
+      match /billing_events/{eventId} {
+        allow read: if belongsToBusiness(businessId) && isAdmin();
+        allow write: if false;
+      }
+
+      match /billing_sessions/{sessionId} {
+        allow read: if belongsToBusiness(businessId) && isAdmin();
+        allow write: if false;
+      }
+
+      // ------------------------------------------------------------
+      // Settings
+      // ------------------------------------------------------------
+
+      match /settings/{settingDoc} {
+        allow read: if belongsToBusiness(businessId);
+        allow write: if belongsToBusiness(businessId) && isAdmin();
+      }
+
+      // ------------------------------------------------------------
+      // Gift Cards
+      // ------------------------------------------------------------
+
+      match /giftCards/{giftCardId} {
+        // Helper to check if user is the purchaser or recipient
+        function isGiftCardOwner() {
+          return hasRole('client') && (
+            resource.data.purchaserEmail == request.auth.token.email ||
+            resource.data.recipientEmail == request.auth.token.email
+          );
+        }
+
+        // Staff can read all gift cards
+        // Clients can check balance by code (limited read via Cloud Function)
+        // Purchaser/recipient can read their own gift cards
+        allow read: if belongsToBusiness(businessId) && (
+          isStaffOrHigher() ||
+          isGiftCardOwner()
+        );
+
+        // Authenticated users can create pending gift cards (purchase flow)
+        // The gift card service validates the data
+        allow create: if belongsToBusiness(businessId) &&
+                         request.resource.data.businessId == businessId &&
+                         request.resource.data.status == 'pending';
+
+        // Only staff can update gift cards (activate, redeem, void)
+        allow update: if belongsToBusiness(businessId) && isStaffOrHigher();
+
+        // Gift cards are never deleted (audit trail)
+        allow delete: if false;
+      }
+
+      match /giftCardTemplates/{templateId} {
+        // Anyone can read templates (for purchase page)
+        allow read: if true;
+
+        // Only admins can manage templates
+        allow write: if belongsToBusiness(businessId) && isAdmin();
+      }
+
+      // ------------------------------------------------------------
+      // POS - Products
+      // ------------------------------------------------------------
+
+      match /products/{productId} {
+        // Staff can read products (internal catalog)
+        allow read: if belongsToBusiness(businessId) && isStaffOrHigher();
+
+        // Only admins can manage products
+        allow write: if belongsToBusiness(businessId) && isAdmin();
+      }
+
+      // ------------------------------------------------------------
+      // POS - Transactions
+      // ------------------------------------------------------------
+
+      match /posTransactions/{transactionId} {
+        // Staff can read all transactions
+        allow read: if belongsToBusiness(businessId) && isStaffOrHigher();
+
+        // Staff can create transactions (process sales)
+        allow create: if belongsToBusiness(businessId) && isStaffOrHigher();
+
+        // Staff can update transactions (payment status, voiding)
+        allow update: if belongsToBusiness(businessId) && isStaffOrHigher();
+
+        // Financial records are never deleted
+        allow delete: if false;
+      }
+
+      // ------------------------------------------------------------
+      // Accounting Integration
+      // ------------------------------------------------------------
+
+      match /accountingConnections/{connectionId} {
+        // Only admins can read/manage accounting connections
+        // Contains sensitive OAuth tokens (encrypted)
+        allow read: if belongsToBusiness(businessId) && isAdmin();
+        allow write: if belongsToBusiness(businessId) && isAdmin();
+      }
+
+      match /syncRecords/{recordId} {
+        // Admins can read sync history
+        allow read: if belongsToBusiness(businessId) && isAdmin();
+
+        // Sync records are created by Cloud Functions only
+        // Allow admin write for manual corrections
+        allow create: if belongsToBusiness(businessId) && isAdmin();
+        allow update: if belongsToBusiness(businessId) && isAdmin();
+
+        // Sync records are never deleted (audit trail)
+        allow delete: if false;
+      }
+
+      // ------------------------------------------------------------
+      // Audit Logs (HIPAA Compliance)
+      // ------------------------------------------------------------
+
+      match /audit_logs/{logId} {
+        // Only admins and owners can read audit logs
+        allow read: if belongsToBusiness(businessId) && isAdmin();
+
+        // Audit logs are written by authenticated users (client-side) or Cloud Functions
+        // Client writes are allowed for PHI access logging
+        allow create: if belongsToBusiness(businessId) &&
+                         isAuthenticated() &&
+                         request.resource.data.businessId == businessId &&
+                         request.resource.data.userId == request.auth.uid;
+
+        // Audit logs are immutable - no updates or deletes
+        allow update, delete: if false;
+      }
+
+      // Legacy camelCase audit logs path used by CRM/Admin
+      match /auditLogs/{logId} {
+        allow read: if belongsToBusiness(businessId) && isAdmin();
+        allow create: if belongsToBusiness(businessId) &&
+                         isAuthenticated() &&
+                         request.resource.data.businessId == businessId &&
+                         request.resource.data.userId == request.auth.uid;
+        allow update, delete: if false;
+      }
+
+      // ------------------------------------------------------------
+      // Rate Limits (Automation Safety)
+      // ------------------------------------------------------------
+
+      match /rateLimits/{limitId} {
+        allow read: if belongsToBusiness(businessId) && isAdmin();
+        allow create, update: if belongsToBusiness(businessId) &&
+                                 (isAdmin() || isSystemCaller());
+        allow delete: if belongsToBusiness(businessId) && isAdmin();
+      }
+
+      // ------------------------------------------------------------
+      // CRM - Pipelines & Stages
+      // ------------------------------------------------------------
+
+      match /pipelines/{pipelineId} {
+        // Owner/Admin or owner/team overlap can read
+        allow read: if belongsToBusiness(businessId) && canReadShareable(resource);
+
+        // Create requires ownership fields; owner/admin can create, staff can create for their team if they set themselves as owner
+        allow create: if belongsToBusiness(businessId) &&
+                         isStaffOrHigher() &&
+                         request.resource.data.keys().hasAll(['name', 'isDefault', 'isActive', 'ownerId', 'teamIds']) &&
+                         (isAdmin() || isOwner() || request.resource.data.ownerId == request.auth.uid);
+
+        // Update requires shareable write and preserves ownership unless admin/owner
+        allow update: if belongsToBusiness(businessId) &&
+                         canWriteShareable(resource) &&
+                         (isAdmin() || isOwner() || ownershipFieldsUnchanged(resource));
+
+        // Only owners can delete pipelines
+        allow delete: if belongsToBusiness(businessId) && isOwner();
+      }
+
+      match /stages/{stageId} {
+        // Stages inherit pipeline sharing; enforce parent pipeline access
+        allow read: if belongsToBusiness(businessId) &&
+                      canReadPipeline(businessId, resource.data.pipelineId);
+
+        allow create: if belongsToBusiness(businessId) &&
+                         request.resource.data.keys().hasAll(['pipelineId', 'name', 'order', 'colorHex', 'probability', 'isActive']) &&
+                         canWritePipeline(businessId, request.resource.data.pipelineId);
+
+        allow update: if belongsToBusiness(businessId) &&
+                         canWritePipeline(businessId, resource.data.pipelineId);
+
+        // Only owners can delete stages
+        allow delete: if belongsToBusiness(businessId) && isOwner();
+      }
+
+      // ------------------------------------------------------------
+      // CRM - Leads
+      // ------------------------------------------------------------
+
+      match /leads/{leadId} {
+        // Owner/Admin or owner/team overlap can read
+        allow read: if belongsToBusiness(businessId) && canReadShareable(resource);
+
+        // Staff+ can create; must set ownership fields; non-admin must own the record
+        allow create: if belongsToBusiness(businessId) &&
+                         isStaffOrHigher() &&
+                         request.resource.data.keys().hasAll(['firstName', 'lastName', 'email', 'status', 'source', 'ownerId', 'teamIds']) &&
+                         (isAdmin() || isOwner() || request.resource.data.ownerId == request.auth.uid);
+
+        // Updates require shareable write; ownership changes admin/owner only
+        allow update: if belongsToBusiness(businessId) &&
+                         canWriteShareable(resource) &&
+                         (isAdmin() || isOwner() || ownershipFieldsUnchanged(resource));
+
+        // Only admins can delete leads
+        allow delete: if belongsToBusiness(businessId) && isAdmin();
+      }
+
+      // ------------------------------------------------------------
+      // CRM - Deals
+      // ------------------------------------------------------------
+
+      match /deals/{dealId} {
+        // Owner/Admin or owner/team overlap can read
+        allow read: if belongsToBusiness(businessId) && canReadShareable(resource);
+
+        // Staff+ can create; must set ownership fields; non-admin must own the record
+        allow create: if belongsToBusiness(businessId) &&
+                         isStaffOrHigher() &&
+                         request.resource.data.keys().hasAll(['title', 'pipelineId', 'stageId', 'valueCents', 'status', 'ownerId', 'teamIds']) &&
+                         (isAdmin() || isOwner() || request.resource.data.ownerId == request.auth.uid);
+
+        // Updates require shareable write; ownership changes admin/owner only
+        allow update: if belongsToBusiness(businessId) &&
+                         canWriteShareable(resource) &&
+                         (isAdmin() || isOwner() || ownershipFieldsUnchanged(resource));
+
+        // Only admins can delete deals
+        allow delete: if belongsToBusiness(businessId) && isAdmin();
+      }
+
+      // ------------------------------------------------------------
+      // CRM - Companies
+      // ------------------------------------------------------------
+
+      match /companies/{companyId} {
+        // Owner/Admin or owner/team overlap can read
+        allow read: if belongsToBusiness(businessId) && canReadShareable(resource);
+
+        // Staff+ can create; must set ownership fields; non-admin must own the record
+        allow create: if belongsToBusiness(businessId) &&
+                         isStaffOrHigher() &&
+                         request.resource.data.keys().hasAll(['name', 'ownerId', 'teamIds']) &&
+                         (isAdmin() || isOwner() || request.resource.data.ownerId == request.auth.uid);
+
+        // Updates require shareable write; ownership changes admin/owner only
+        allow update: if belongsToBusiness(businessId) &&
+                         canWriteShareable(resource) &&
+                         (isAdmin() || isOwner() || ownershipFieldsUnchanged(resource));
+
+        // Only admins can delete companies
+        allow delete: if belongsToBusiness(businessId) && isAdmin();
+      }
+
+      // ------------------------------------------------------------
+      // CRM - Sales Activities
+      // ------------------------------------------------------------
+
+      match /sales_activities/{activityId} {
+        // Owner/Admin or owner/team overlap can read
+        allow read: if belongsToBusiness(businessId) && canReadShareable(resource);
+
+        // Staff and above can create; must set ownership fields; non-admin must own
+        allow create: if belongsToBusiness(businessId) &&
+                         isStaffOrHigher() &&
+                         request.resource.data.keys().hasAll(['type', 'title', 'createdById', 'createdByName', 'ownerId', 'teamIds']) &&
+                         (isAdmin() || isOwner() || request.resource.data.ownerId == request.auth.uid);
+
+        // Updates require shareable write; ownership changes admin/owner only
+        allow update: if belongsToBusiness(businessId) &&
+                         canWriteShareable(resource) &&
+                         (isAdmin() || isOwner() || ownershipFieldsUnchanged(resource));
+
+        // Only admins can delete activities
+        allow delete: if belongsToBusiness(businessId) && isAdmin();
+      }
+
+      // ------------------------------------------------------------
+      // CRM - Custom Fields
+      // ------------------------------------------------------------
+
+      match /crm_custom_fields/{fieldId} {
+        // Anyone in the business can read custom field definitions
+        allow read: if belongsToBusiness(businessId);
+
+        // Only admins can manage custom fields
+        allow write: if belongsToBusiness(businessId) && isAdmin();
+      }
+
+      // ------------------------------------------------------------
+      // CRM - Form Templates & E-Signatures
+      // ------------------------------------------------------------
+
+      match /form_templates/{templateId} {
+        // Anyone in the business can read templates
+        allow read: if belongsToBusiness(businessId);
+
+        // Only admins can create/update templates
+        allow create, update: if belongsToBusiness(businessId) && isAdmin();
+
+        // Only owners can delete templates
+        allow delete: if belongsToBusiness(businessId) && isOwner();
+      }
+
+      match /template_instances/{instanceId} {
+        // Anyone in the business can read template instances
+        allow read: if belongsToBusiness(businessId);
+
+        // Staff and above can create instances
+        allow create: if belongsToBusiness(businessId) && isStaffOrHigher();
+
+        // Creator or admins can update instances
+        allow update: if belongsToBusiness(businessId) && (
+          isAdmin() ||
+          resource.data.createdById == request.auth.uid
+        );
+
+        // Only admins can delete instances
+        allow delete: if belongsToBusiness(businessId) && isAdmin();
+      }
+
+      match /signatures/{signatureId} {
+        // Anyone in the business can read signatures
+        allow read: if belongsToBusiness(businessId);
+
+        // Staff and above can create signatures
+        allow create: if belongsToBusiness(businessId) && isStaffOrHigher();
+
+        // Signatures are immutable once created
+        allow update: if false;
+
+        // Only owners can delete signatures (for legal compliance)
+        allow delete: if belongsToBusiness(businessId) && isOwner();
+      }
+
+      // ------------------------------------------------------------
+      // CRM - Secure File Links
+      // ------------------------------------------------------------
+
+      match /file_links/{linkId} {
+        // Anyone in the business can read file links
+        allow read: if belongsToBusiness(businessId);
+
+        // Staff and above can create file links
+        allow create: if belongsToBusiness(businessId) && isStaffOrHigher();
+
+        // Creator or admins can update file links
+        allow update: if belongsToBusiness(businessId) && (
+          isAdmin() ||
+          resource.data.createdById == request.auth.uid
+        );
+
+        // Only admins can delete file links
+        allow delete: if belongsToBusiness(businessId) && isAdmin();
+      }
+
+      match /file_link_access_logs/{logId} {
+        // Only admins can read access logs
+        allow read: if belongsToBusiness(businessId) && isAdmin();
+
+        // Access logs can be created by trusted callers; enforce tenant + TTL to limit growth
+        allow create: if belongsToBusiness(businessId) &&
+                         (isAdmin() || isSystemCaller()) &&
+                         hasValidExpiry(90);
+
+        // Access logs are immutable (audit requirement)
+        allow update, delete: if false;
+      }
+
+      // ------------------------------------------------------------
+      // Staff Onboarding - Join Codes
+      // ------------------------------------------------------------
+
+      match /join_codes/{codeId} {
+        // Only owners and admins can read join codes
+        allow read: if belongsToBusiness(businessId) && isAdmin();
+
+        // Only owners and admins can create join codes
+        // Validate that plaintext 'code' field is never stored (only codeHash)
+        allow create: if belongsToBusiness(businessId) &&
+                         isAdmin() &&
+                         !request.resource.data.keys().hasAny(['code']);
+
+        // Only owners and admins can update join codes (for revocation)
+        // Validate that plaintext 'code' field is not added
+        allow update: if belongsToBusiness(businessId) &&
+                         isAdmin() &&
+                         !request.resource.data.keys().hasAny(['code']);
+
+        // Soft delete only via status field; no hard deletes
+        allow delete: if false;
+      }
+
+      // ------------------------------------------------------------
+      // Staff Onboarding - Invites
+      // ------------------------------------------------------------
+
+      match /invites/{inviteId} {
+        // Only owners and admins can read invites
+        allow read: if belongsToBusiness(businessId) && isAdmin();
+
+        // Only owners and admins can create invites
+        allow create: if belongsToBusiness(businessId) && isAdmin();
+
+        // Only owners and admins can update invites (for revocation)
+        allow update: if belongsToBusiness(businessId) && isAdmin();
+
+        // Soft delete only via status field; no hard deletes
+        allow delete: if false;
+      }
+
+      // ------------------------------------------------------------
+      // Staff Onboarding - Join Requests (Approval Flow)
+      // ------------------------------------------------------------
+
+      match /join_requests/{requestId} {
+        // Owners and admins can read all join requests
+        // Requestors can read their own request
+        allow read: if belongsToBusiness(businessId) && (
+          isAdmin() ||
+          (isAuthenticated() && request.auth.uid == resource.data.requestorUserId)
+        );
+
+        // Join requests are created by Cloud Functions during join flow
+        // Allow authenticated users to create their own request
+        allow create: if belongsToBusiness(businessId) &&
+                         isAuthenticated() &&
+                         request.resource.data.requestorUserId == request.auth.uid;
+
+        // Only owners and admins can update join requests (approve/deny)
+        allow update: if belongsToBusiness(businessId) && isAdmin();
+
+        // Soft delete only via status field; no hard deletes
+        allow delete: if false;
+      }
+
+      // ------------------------------------------------------------
+      // Conversations (In-App Messaging)
+      // ------------------------------------------------------------
+
+      match /conversations/{conversationId} {
+        // Helper to check if user is a participant
+        function isParticipant() {
+          return request.auth.uid in resource.data.participantIds;
+        }
+
+        function isParticipantInNew() {
+          return request.auth.uid in request.resource.data.participantIds;
+        }
+
+        // Participants can read their conversations
+        // Staff and admins can read all conversations in their business
+        allow read: if belongsToBusiness(businessId) && (
+          isStaffOrHigher() ||
+          isParticipant()
+        );
+
+        // Staff can create conversations
+        // Clients can create conversations if they are a participant
+        allow create: if belongsToBusiness(businessId) && (
+          isStaffOrHigher() ||
+          (hasRole('client') && isParticipantInNew())
+        );
+
+        // Participants can update (mark as read, archive)
+        // Staff can update any conversation
+        allow update: if belongsToBusiness(businessId) && (
+          isStaffOrHigher() ||
+          isParticipant()
+        );
+
+        // Only admins can delete conversations
+        allow delete: if belongsToBusiness(businessId) && isAdmin();
+
+        // Messages subcollection
+        match /messages/{messageId} {
+          // Helper to check if parent conversation is accessible
+          function canAccessConversation() {
+            return isStaffOrHigher() ||
+                   request.auth.uid in get(/databases/$(database)/documents/businesses/$(businessId)/conversations/$(conversationId)).data.participantIds;
+          }
+
+          // Participants can read messages
+          allow read: if belongsToBusiness(businessId) && canAccessConversation();
+
+          // Participants can send messages
+          allow create: if belongsToBusiness(businessId) &&
+                           canAccessConversation() &&
+                           request.resource.data.senderId == request.auth.uid;
+
+          // Only sender can edit their message
+          allow update: if belongsToBusiness(businessId) &&
+                           canAccessConversation() &&
+                           (resource.data.senderId == request.auth.uid || isAdmin());
+
+          // Sender can delete their message, admins can delete any
+          allow delete: if belongsToBusiness(businessId) &&
+                           (resource.data.senderId == request.auth.uid || isAdmin());
+        }
+      }
+    }
+
+    // ============================================================
+    // User Notifications (User-scoped, not business-scoped)
+    // ============================================================
+
+    match /users/{userId}/notifications/{notificationId} {
+      // Users can only read their own notifications
+      allow read: if isAuthenticated() && request.auth.uid == userId;
+
+      // Only Cloud Functions should create notifications
+      // Allow users to create notifications for themselves (for FCM sync)
+      allow create: if isAuthenticated() &&
+                       request.auth.uid == userId &&
+                       request.resource.data.userId == userId;
+
+      // Users can update their own notifications (mark as read)
+      allow update: if isAuthenticated() &&
+                       request.auth.uid == userId &&
+                       request.resource.data.diff(resource.data).affectedKeys()
+                           .hasOnly(['isRead', 'readAt']);
+
+      // Users can delete their own notifications
+      allow delete: if isAuthenticated() && request.auth.uid == userId;
+    }
+  }
+}

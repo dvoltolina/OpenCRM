@@ -1,0 +1,17 @@
+# Demand Forecasting Service Dependencies
+# Agent AI-21: Waitlist Intelligence & Demand Forecasting
+
+# Core
+fastapi>=0.109.0
+uvicorn>=0.27.0
+pydantic>=2.5.0
+
+# Time Series Forecasting
+prophet>=1.1.5
+
+# Data Processing
+pandas>=2.1.0
+numpy>=1.24.0
+
+# HTTP Client (for health checks)
+httpx>=0.26.0

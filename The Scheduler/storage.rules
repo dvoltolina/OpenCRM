@@ -1,0 +1,192 @@
+rules_version = '2';
+service firebase.storage {
+  match /b/{bucket}/o {
+
+    // ============================================================
+    // Helper Functions
+    // ============================================================
+
+    function isAuthenticated() {
+      return request.auth != null;
+    }
+
+    function getUserProfile() {
+      return firestore.get(/databases/(default)/documents/users/$(request.auth.uid)).data;
+    }
+
+    function belongsToBusiness(businessId) {
+      return isAuthenticated() && getUserProfile().businessId == businessId;
+    }
+
+    function hasRole(role) {
+      return isAuthenticated() && getUserProfile().role == role;
+    }
+
+    function isAdmin() {
+      return hasRole('admin') || hasRole('owner');
+    }
+
+    function isStaffOrHigher() {
+      return hasRole('staff') || isAdmin();
+    }
+
+    function getClientId() {
+      return getUserProfile().clientId;
+    }
+
+    // File size limit: 10 MB
+    function isValidFileSize() {
+      return request.resource.size < 10 * 1024 * 1024;
+    }
+
+    // Allowed content types for client files
+    function isValidContentType() {
+      return request.resource.contentType.matches('image/.*') ||
+             request.resource.contentType.matches('application/pdf') ||
+             request.resource.contentType.matches('text/.*') ||
+             request.resource.contentType == 'application/msword' ||
+             request.resource.contentType == 'application/vnd.openxmlformats-officedocument.wordprocessingml.document' ||
+             request.resource.contentType == 'application/vnd.ms-excel' ||
+             request.resource.contentType == 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet';
+    }
+
+    // ============================================================
+    // Client Files
+    // ============================================================
+
+    match /businesses/{businessId}/clients/{clientId}/files/{fileId} {
+      // Staff can read all client files in their business
+      // Clients can read their own files
+      allow read: if belongsToBusiness(businessId) && (
+        isStaffOrHigher() ||
+        getClientId() == clientId
+      );
+
+      // Staff can upload files for any client
+      // Clients can upload their own files
+      allow create: if belongsToBusiness(businessId) &&
+                      isValidFileSize() &&
+                      isValidContentType() &&
+                      request.resource.metadata.businessId == businessId &&
+                      (
+                        isStaffOrHigher() ||
+                        getClientId() == clientId
+                      );
+
+      // Staff can update file metadata
+      allow update: if belongsToBusiness(businessId) &&
+                       isStaffOrHigher() &&
+                       isValidFileSize();
+
+      // Staff can delete files
+      allow delete: if belongsToBusiness(businessId) &&
+                       isStaffOrHigher() &&
+                       resource.metadata.businessId == businessId;
+    }
+
+    // ============================================================
+    // Reports & Exports (Admin only)
+    // ============================================================
+
+    match /businesses/{businessId}/reports/{reportId} {
+      // Only staff and admins can read reports
+      allow read: if belongsToBusiness(businessId) && isStaffOrHigher();
+
+      // Only system/Cloud Functions can write reports
+      allow write: if false;
+    }
+
+    // ============================================================
+    // Business Assets (Logos, Branding)
+    // ============================================================
+
+    match /businesses/{businessId}/assets/{assetId} {
+      // Anyone in the business can read assets
+      allow read: if belongsToBusiness(businessId);
+
+      // Only admins can upload/update assets
+      allow create, update: if belongsToBusiness(businessId) &&
+                               isAdmin() &&
+                               isValidFileSize() &&
+                               request.resource.contentType.matches('image/.*');
+
+      // Only admins can delete assets
+      allow delete: if belongsToBusiness(businessId) && isAdmin();
+    }
+
+    // ============================================================
+    // Intake Form Attachments
+    // ============================================================
+
+    match /businesses/{businessId}/intake_attachments/{submissionId}/{fileId} {
+      // Staff can read all intake attachments
+      // Clients can read their own submission attachments
+      allow read: if belongsToBusiness(businessId) && isStaffOrHigher();
+
+      // Clients can upload attachments during intake form submission
+      // Staff can upload on behalf of clients
+      allow create: if belongsToBusiness(businessId) &&
+                       isValidFileSize() &&
+                       isValidContentType();
+
+      // Only staff can delete attachments
+      allow delete: if belongsToBusiness(businessId) && isStaffOrHigher();
+    }
+
+    // ============================================================
+    // Appointment Files (Session Materials, Group Session Attachments)
+    // ============================================================
+
+    match /businesses/{businessId}/appointments/{appointmentId}/files/{fileId} {
+      // Staff can read all appointment files
+      // Clients can read files for appointments they're associated with
+      // Note: Fine-grained access (client vs attendee) is enforced in Firestore rules
+      allow read: if belongsToBusiness(businessId);
+
+      // Staff can upload files to appointments
+      allow create: if belongsToBusiness(businessId) &&
+                       isStaffOrHigher() &&
+                       isValidFileSize() &&
+                       isValidContentType() &&
+                       request.resource.metadata.businessId == businessId;
+
+      // Staff can update file metadata
+      allow update: if belongsToBusiness(businessId) &&
+                       isStaffOrHigher() &&
+                       isValidFileSize();
+
+      // Only staff can delete appointment files
+      allow delete: if belongsToBusiness(businessId) &&
+                       isStaffOrHigher() &&
+                       resource.metadata.businessId == businessId;
+    }
+
+    // ============================================================
+    // Group Session Materials (Alternative path structure)
+    // ============================================================
+
+    match /businesses/{businessId}/group_sessions/{sessionId}/materials/{fileId} {
+      // Anyone in the business can read group session materials
+      allow read: if belongsToBusiness(businessId);
+
+      // Only staff can upload group session materials
+      allow create: if belongsToBusiness(businessId) &&
+                       isStaffOrHigher() &&
+                       isValidFileSize() &&
+                       isValidContentType();
+
+      // Only staff can update materials
+      allow update: if belongsToBusiness(businessId) &&
+                       isStaffOrHigher() &&
+                       isValidFileSize();
+
+      // Only admins can delete materials
+      allow delete: if belongsToBusiness(businessId) && isAdmin();
+    }
+
+    // Deny everything else by default
+    match /{allPaths=**} {
+      allow read, write: if false;
+    }
+  }
+}

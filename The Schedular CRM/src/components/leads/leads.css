@@ -1,0 +1,277 @@
+/**
+ * Lead Components Styles
+ * Agent CRM-24 Implementation
+ */
+
+/* ============================================
+   Lead Actions
+   ============================================ */
+
+.lead-actions {
+  display: flex;
+  gap: 4px;
+}
+
+.lead-actions--inline {
+  flex-wrap: nowrap;
+}
+
+.lead-actions--dropdown {
+  position: relative;
+}
+
+.lead-actions__trigger {
+  padding: 4px;
+  border-radius: 4px;
+}
+
+.lead-actions__convert {
+  color: var(--color-text-secondary);
+}
+
+.lead-actions__convert--enabled {
+  color: var(--color-primary);
+  font-weight: 500;
+}
+
+.lead-actions__convert:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.lead-actions__delete {
+  color: var(--color-error);
+}
+
+.lead-actions__delete:hover:not(:disabled) {
+  background-color: var(--color-error-light);
+}
+
+/* Status change dropdown in lead actions */
+.lead-actions__status-select {
+  padding: 4px 8px;
+  font-size: 12px;
+  border: 1px solid var(--color-border, #e0e0e0);
+  border-radius: 4px;
+  background-color: var(--color-surface, #fff);
+  color: var(--color-text, #333);
+  cursor: pointer;
+  min-width: 90px;
+}
+
+.lead-actions__status-select:hover:not(:disabled) {
+  border-color: var(--color-primary, #1976d2);
+}
+
+.lead-actions__status-select:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+/* Assign rep button */
+.lead-actions__assign {
+  color: var(--color-primary, #1976d2);
+}
+
+.lead-actions__assign:hover:not(:disabled) {
+  background-color: var(--color-primary-light, #e3f2fd);
+}
+
+/* Sequence action styles */
+.lead-actions__sequence {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.lead-actions__sequence--enrolled {
+  color: var(--color-success, #388e3c);
+  background-color: var(--color-success-light, #e8f5e9);
+}
+
+.lead-actions__sequence-icon {
+  width: 14px;
+  height: 14px;
+}
+
+/* ============================================
+   Lead Status Badge
+   ============================================ */
+
+.lead-status-badge {
+  display: inline-flex;
+  align-items: center;
+  padding: 2px 8px;
+  border-radius: 12px;
+  font-size: 12px;
+  font-weight: 500;
+  text-transform: capitalize;
+}
+
+.lead-status-badge--new {
+  background-color: var(--color-info-light, #e3f2fd);
+  color: var(--color-info, #1976d2);
+}
+
+.lead-status-badge--contacted {
+  background-color: var(--color-warning-light, #fff3e0);
+  color: var(--color-warning, #f57c00);
+}
+
+.lead-status-badge--qualified {
+  background-color: var(--color-success-light, #e8f5e9);
+  color: var(--color-success, #388e3c);
+}
+
+.lead-status-badge--unqualified {
+  background-color: var(--color-gray-100, #f5f5f5);
+  color: var(--color-text-secondary, #666);
+}
+
+.lead-status-badge--converted {
+  background-color: var(--color-primary-light, #e3f2fd);
+  color: var(--color-primary, #1976d2);
+}
+
+/* ============================================
+   Lead Card (for alternative layouts)
+   ============================================ */
+
+.lead-card {
+  padding: 16px;
+  border: 1px solid var(--color-border, #e0e0e0);
+  border-radius: 8px;
+  background-color: var(--color-surface, #fff);
+}
+
+.lead-card__header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-bottom: 12px;
+}
+
+.lead-card__name {
+  font-size: 16px;
+  font-weight: 600;
+  color: var(--color-text, #333);
+  margin: 0;
+}
+
+.lead-card__company {
+  font-size: 14px;
+  color: var(--color-text-secondary, #666);
+  margin-top: 2px;
+}
+
+.lead-card__details {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  margin-bottom: 12px;
+}
+
+.lead-card__detail {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 14px;
+  color: var(--color-text-secondary, #666);
+}
+
+.lead-card__detail-icon {
+  width: 16px;
+  height: 16px;
+  opacity: 0.6;
+}
+
+.lead-card__footer {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding-top: 12px;
+  border-top: 1px solid var(--color-border, #e0e0e0);
+}
+
+.lead-card__source {
+  font-size: 12px;
+  color: var(--color-text-secondary, #666);
+}
+
+/* ============================================
+   Conversion Success State
+   ============================================ */
+
+.lead-conversion-success {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 24px;
+  text-align: center;
+}
+
+.lead-conversion-success__icon {
+  width: 64px;
+  height: 64px;
+  border-radius: 50%;
+  background-color: var(--color-success-light, #e8f5e9);
+  color: var(--color-success, #388e3c);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 16px;
+}
+
+.lead-conversion-success__title {
+  font-size: 18px;
+  font-weight: 600;
+  margin: 0 0 8px 0;
+}
+
+.lead-conversion-success__message {
+  font-size: 14px;
+  color: var(--color-text-secondary, #666);
+  margin: 0 0 16px 0;
+}
+
+.lead-conversion-success__links {
+  display: flex;
+  gap: 12px;
+}
+
+/* ============================================
+   Conversion Warning
+   ============================================ */
+
+.lead-conversion-warning {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+  padding: 12px;
+  border-radius: 8px;
+  background-color: var(--color-warning-light, #fff3e0);
+  margin-bottom: 16px;
+}
+
+.lead-conversion-warning__icon {
+  flex-shrink: 0;
+  width: 20px;
+  height: 20px;
+  color: var(--color-warning, #f57c00);
+}
+
+.lead-conversion-warning__content {
+  flex: 1;
+}
+
+.lead-conversion-warning__title {
+  font-weight: 600;
+  margin: 0 0 4px 0;
+  font-size: 14px;
+}
+
+.lead-conversion-warning__message {
+  margin: 0;
+  font-size: 13px;
+  color: var(--color-text-secondary, #666);
+}

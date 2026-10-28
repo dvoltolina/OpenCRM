@@ -1,0 +1,4 @@
+firstName,lastName,email,phone,companyName,source,status,notes
+Sarah,Connor,sarah.connor@example.com,555-2001,TechCorp,website,qualified,Very interested in enterprise plan
+Kyle,Reese,kyle.reese@example.com,555-2002,FutureTech,referral,contacted,Follow up next week
+Marcus,Wright,marcus.wright@example.com,555-2003,SkyNet Inc,coldCall,new,First outreach attempt

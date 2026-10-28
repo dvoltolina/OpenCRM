@@ -1,0 +1,88 @@
+.admin-dashboard-page {
+  gap: 24px;
+}
+
+.admin-dashboard-page__header-actions {
+  display: flex;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+
+.admin-dashboard-page__hero {
+  display: grid;
+  grid-template-columns: minmax(0, 1.7fr) minmax(320px, 0.95fr);
+  gap: 24px;
+  align-items: start;
+}
+
+.admin-dashboard-page__hero-copy h2 {
+  margin: 0 0 10px;
+  font-size: clamp(1.8rem, 3vw, 2.35rem);
+  color: var(--color-text);
+}
+
+.admin-dashboard-page__hero-copy p:last-child {
+  margin: 0;
+  max-width: 62ch;
+  color: var(--color-text-secondary);
+}
+
+.admin-dashboard-page__hero-stats {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 12px;
+}
+
+.admin-dashboard-page__hero-stats div {
+  padding: 16px;
+  border-radius: var(--radius-lg);
+  border: 1px solid color-mix(in srgb, var(--color-border) 84%, transparent);
+  background: color-mix(in srgb, var(--color-surface) 84%, white);
+}
+
+.admin-dashboard-page__hero-stats span {
+  display: block;
+  margin-bottom: 8px;
+  font-size: 12px;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: var(--color-text-secondary);
+}
+
+.admin-dashboard-page__hero-stats strong {
+  display: block;
+  font-size: 1.1rem;
+  line-height: 1.3;
+  color: var(--color-text);
+}
+
+.admin-dashboard-page__filters-card,
+.admin-dashboard-page__state-card {
+  overflow: visible;
+}
+
+.admin-dashboard-page__range-button {
+  min-width: 0;
+}
+
+.admin-dashboard-page__range-button.is-active {
+  border-color: rgba(40, 87, 231, 0.24);
+  background: rgba(40, 87, 231, 0.1);
+  color: var(--color-brand-700);
+}
+
+@media (max-width: 1100px) {
+  .admin-dashboard-page__hero {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 720px) {
+  .admin-dashboard-page__hero-stats {
+    grid-template-columns: 1fr;
+  }
+
+  .admin-dashboard-page__header-actions {
+    width: 100%;
+  }
+}

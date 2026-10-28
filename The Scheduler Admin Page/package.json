@@ -1,0 +1,37 @@
+{
+  "name": "scheduler-admin",
+  "version": "0.0.1",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build",
+    "preview": "vite preview",
+    "seed:firestore": "node scripts/seed-firestore.mjs",
+    "test": "vitest run",
+    "backfill:location-hours": "node scripts/backfill-location-hours.mjs"
+  },
+  "dependencies": {
+    "firebase": "^11.10.0",
+    "firebase-admin": "^12.7.0",
+    "next": "^14.2.33",
+    "qrcode": "^1.5.4",
+    "react": "^18.3.1",
+    "react-dom": "^18.3.1",
+    "react-router-dom": "^6.27.0",
+    "recharts": "^2.8.0",
+    "stripe": "^20.0.0"
+  },
+  "devDependencies": {
+    "@testing-library/jest-dom": "^6.9.1",
+    "@testing-library/react": "^16.3.0",
+    "@types/qrcode": "^1.5.6",
+    "@types/react": "^18.3.10",
+    "@types/react-dom": "^18.3.0",
+    "@vitejs/plugin-react": "^5.1.0",
+    "jsdom": "^27.2.0",
+    "typescript": "^5.6.3",
+    "vite": "^7.2.4",
+    "vitest": "^4.0.14"
+  }
+}

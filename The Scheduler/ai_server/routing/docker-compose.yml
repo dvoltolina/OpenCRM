@@ -1,0 +1,53 @@
+version: '3.8'
+
+services:
+  # Route Optimization Service
+  route-optimizer:
+    build: .
+    container_name: route-optimizer
+    ports:
+      - "8001:8001"
+    environment:
+      - ROUTING_DEBUG=true
+      - ROUTING_PROVIDER=${ROUTING_PROVIDER:-osrm}
+      - ROUTING_OSRM_URL=http://osrm:5000
+      - ROUTING_LOG_LEVEL=INFO
+      - GOOGLE_ROUTES_API_KEY=${GOOGLE_ROUTES_API_KEY:-}
+      - GOOGLE_ROUTES_REGION=${GOOGLE_ROUTES_REGION:-us-west1}
+      - ROUTING_REQUIRE_HTTPS=${ROUTING_REQUIRE_HTTPS:-false}
+      - ROUTING_REQUIRE_AUTHENTICATION=${ROUTING_REQUIRE_AUTH:-false}
+    depends_on:
+      osrm:
+        condition: service_healthy
+    networks:
+      - routing-network
+    restart: unless-stopped
+
+  # OSRM Routing Engine
+  # Uses pre-built OpenStreetMap data
+  osrm:
+    image: osrm/osrm-backend
+    container_name: osrm
+    ports:
+      - "5000:5000"
+    volumes:
+      - ./osrm-data:/data
+    # For first run, you need to download and process OSM data:
+    # 1. Download: wget http://download.geofabrik.de/north-america/us-latest.osm.pbf
+    # 2. Extract: docker run -t -v ./osrm-data:/data osrm/osrm-backend osrm-extract -p /opt/car.lua /data/us-latest.osm.pbf
+    # 3. Partition: docker run -t -v ./osrm-data:/data osrm/osrm-backend osrm-partition /data/us-latest.osrm
+    # 4. Customize: docker run -t -v ./osrm-data:/data osrm/osrm-backend osrm-customize /data/us-latest.osrm
+    command: osrm-routed --algorithm mld /data/us-latest.osrm
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:5000/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 10s
+    networks:
+      - routing-network
+    restart: unless-stopped
+
+networks:
+  routing-network:
+    driver: bridge

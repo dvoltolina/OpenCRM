@@ -1,0 +1,110 @@
+# Cloud Run Service Configuration for Routing Service
+# Agent AI-13: Docker & Cloud Deployment
+#
+# Deploy with:
+#   gcloud run services replace routing-service.yaml --region=us-central1
+#
+# Or use deploy.sh for full deployment workflow
+#
+# NOTE: This service requires OSRM. Options:
+# 1. Deploy OSRM on Compute Engine with persistent disk
+# 2. Use external OSRM API (Project-OSRM hosted)
+# 3. Use Google Maps Directions API instead
+
+apiVersion: serving.knative.dev/v1
+kind: Service
+metadata:
+  name: scheduler-routing
+  labels:
+    app: scheduler
+    service: routing
+    version: v1
+  annotations:
+    run.googleapis.com/description: "Route optimization service using OR-Tools"
+    run.googleapis.com/ingress: internal-and-cloud-load-balancing
+spec:
+  template:
+    metadata:
+      annotations:
+        # Autoscaling configuration
+        autoscaling.knative.dev/minScale: "1"
+        autoscaling.knative.dev/maxScale: "5"
+        # CPU allocation: always-on for computation
+        run.googleapis.com/cpu-throttling: "false"
+        # Startup CPU boost
+        run.googleapis.com/startup-cpu-boost: "true"
+        # Execution environment
+        run.googleapis.com/execution-environment: gen2
+        # VPC connector for OSRM access (if deployed in VPC)
+        # run.googleapis.com/vpc-access-connector: projects/${PROJECT_ID}/locations/${REGION}/connectors/ai-services-connector
+        # run.googleapis.com/vpc-access-egress: private-ranges-only
+    spec:
+      containerConcurrency: 20
+      timeoutSeconds: 60
+      serviceAccountName: scheduler-ai-services@${PROJECT_ID}.iam.gserviceaccount.com
+      containers:
+        - image: ${CONTAINER_REGISTRY}/scheduler-routing:${VERSION:-latest}
+          ports:
+            - containerPort: 8003
+              name: http1
+          resources:
+            limits:
+              cpu: "4"
+              memory: 4Gi
+          env:
+            - name: ROUTING_DEBUG
+              value: "false"
+            - name: ROUTING_LOG_LEVEL
+              value: "WARNING"
+            - name: ROUTING_REQUIRE_AUTHENTICATION
+              value: "true"
+            - name: ROUTING_ENABLE_DOCS
+              value: "false"
+            - name: ROUTING_OSRM_TIMEOUT_SECONDS
+              value: "30"
+            - name: ROUTING_SOLVER_TIME_LIMIT_SECONDS
+              value: "30"
+            # OSRM URL - configure based on your OSRM deployment
+            - name: ROUTING_OSRM_URL
+              valueFrom:
+                secretKeyRef:
+                  name: osrm-url
+                  key: latest
+            # Secrets from Secret Manager
+            - name: ROUTING_API_KEY
+              valueFrom:
+                secretKeyRef:
+                  name: routing-api-key
+                  key: latest
+            - name: ROUTING_CORS_ORIGINS
+              valueFrom:
+                secretKeyRef:
+                  name: cors-allowed-origins
+                  key: latest
+          startupProbe:
+            httpGet:
+              path: /api/v1/health
+              port: 8003
+            initialDelaySeconds: 10
+            periodSeconds: 5
+            timeoutSeconds: 10
+            failureThreshold: 12
+          livenessProbe:
+            httpGet:
+              path: /api/v1/health
+              port: 8003
+            initialDelaySeconds: 0
+            periodSeconds: 15
+            timeoutSeconds: 10
+            failureThreshold: 3
+          readinessProbe:
+            httpGet:
+              path: /api/v1/health
+              port: 8003
+            initialDelaySeconds: 0
+            periodSeconds: 5
+            timeoutSeconds: 10
+            failureThreshold: 3
+  traffic:
+    - percent: 100
+      latestRevision: true

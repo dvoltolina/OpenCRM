@@ -1,0 +1,114 @@
+# RunPod Docker Image for Sentiment Analysis Service
+# Agent AI-13: Docker & Cloud Deployment
+#
+# This Dockerfile creates a combined image with:
+# - Ollama LLM runtime
+# - Sentiment analysis service
+# - CUDA support for GPU acceleration
+#
+# Build:
+#   docker build -f Dockerfile.runpod -t scheduler-sentiment-runpod .
+#
+# The image is designed for RunPod's GPU pods.
+
+# =============================================================================
+# Base: CUDA + Python
+# =============================================================================
+FROM nvidia/cuda:12.1-runtime-ubuntu22.04 AS base
+
+# Prevent interactive prompts
+ENV DEBIAN_FRONTEND=noninteractive
+ENV TZ=UTC
+
+# Install system dependencies
+RUN apt-get update && apt-get install -y \
+    python3.11 \
+    python3.11-venv \
+    python3-pip \
+    curl \
+    wget \
+    git \
+    && rm -rf /var/lib/apt/lists/*
+
+# Set Python 3.11 as default
+RUN update-alternatives --install /usr/bin/python3 python3 /usr/bin/python3.11 1 \
+    && update-alternatives --install /usr/bin/python python /usr/bin/python3.11 1
+
+# =============================================================================
+# Install Ollama
+# =============================================================================
+RUN curl -fsSL https://ollama.com/install.sh | sh
+
+# Create ollama user and directories
+RUN useradd -m -s /bin/bash ollama \
+    && mkdir -p /root/.ollama \
+    && chown -R ollama:ollama /root/.ollama
+
+# =============================================================================
+# Install Sentiment Service Dependencies
+# =============================================================================
+WORKDIR /app
+
+# Copy requirements first for caching
+COPY sentiment/requirements.txt ./requirements.txt
+
+# Install Python dependencies
+RUN pip install --no-cache-dir -r requirements.txt
+
+# =============================================================================
+# Copy Application Code
+# =============================================================================
+COPY sentiment/ ./
+
+# Copy startup script
+COPY deploy/runpod/start.sh /start.sh
+RUN chmod +x /start.sh
+
+# =============================================================================
+# Environment Configuration
+# =============================================================================
+
+# Ollama configuration
+ENV OLLAMA_HOST=0.0.0.0
+ENV OLLAMA_PORT=11434
+ENV OLLAMA_MODELS=/root/.ollama/models
+
+# Sentiment service configuration
+ENV SENTIMENT_HOST=0.0.0.0
+ENV SENTIMENT_PORT=8002
+ENV SENTIMENT_DEBUG=false
+ENV SENTIMENT_LOG_LEVEL=WARNING
+ENV SENTIMENT_OLLAMA_URL=http://localhost:11434
+ENV SENTIMENT_DEFAULT_MODEL=phi3:mini
+ENV SENTIMENT_DEEP_ANALYSIS_MODEL=llama3.1:8b
+ENV SENTIMENT_REQUIRE_AUTHENTICATION=true
+ENV SENTIMENT_REDACT_TRIGGER_TEXT=true
+
+# =============================================================================
+# Expose Ports
+# =============================================================================
+
+# Sentiment API
+EXPOSE 8002
+
+# Ollama API (internal, but exposed for debugging)
+EXPOSE 11434
+
+# =============================================================================
+# Health Check
+# =============================================================================
+HEALTHCHECK --interval=30s --timeout=10s --start-period=120s --retries=5 \
+    CMD curl -f http://localhost:8002/health/ready || exit 1
+
+# =============================================================================
+# Startup
+# =============================================================================
+
+# Volume for model persistence across pod restarts
+VOLUME ["/root/.ollama"]
+
+# Workspace volume for RunPod
+VOLUME ["/workspace"]
+
+# Start both Ollama and sentiment service
+CMD ["/start.sh"]

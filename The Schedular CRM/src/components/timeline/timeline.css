@@ -1,0 +1,118 @@
+/**
+ * Unified Timeline Styles
+ * Agent CRM-26 Implementation
+ */
+
+/* ============================================
+   Unified Timeline Container
+   ============================================ */
+
+.unified-timeline {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.unified-timeline__loading,
+.unified-timeline__error,
+.unified-timeline__empty {
+  padding: 32px 24px;
+  text-align: center;
+  color: var(--color-text-muted, #999);
+  font-size: 14px;
+}
+
+.unified-timeline__error {
+  color: var(--color-danger, #dc2626);
+}
+
+.unified-timeline__empty {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  align-items: center;
+}
+
+.unified-timeline__empty p {
+  margin: 0;
+  color: var(--color-text-secondary, #666);
+}
+
+/* ============================================
+   Timeline Header
+   ============================================ */
+
+.unified-timeline__header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 12px;
+  padding: 0 4px;
+}
+
+.unified-timeline__filters {
+  flex: 1;
+  display: flex;
+  gap: 8px;
+}
+
+.unified-timeline__filter-select {
+  padding: 6px 12px;
+  border: 1px solid var(--color-border, #e0e0e0);
+  border-radius: 6px;
+  background: var(--color-bg-card, #fff);
+  color: var(--color-text, #333);
+  font-size: 13px;
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+
+.unified-timeline__filter-select:hover {
+  border-color: var(--color-primary, #1976d2);
+}
+
+.unified-timeline__filter-select:focus {
+  outline: none;
+  border-color: var(--color-primary, #1976d2);
+  box-shadow: 0 0 0 3px rgba(25, 118, 210, 0.1);
+}
+
+/* ============================================
+   Timeline Items
+   ============================================ */
+
+.unified-timeline__items {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+/* ============================================
+   Timeline Footer
+   ============================================ */
+
+.unified-timeline__footer {
+  display: flex;
+  justify-content: center;
+  padding: 16px 0;
+  border-top: 1px solid var(--color-border, #e0e0e0);
+}
+
+/* ============================================
+   Responsive
+   ============================================ */
+
+@media (max-width: 640px) {
+  .unified-timeline__header {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .unified-timeline__filters {
+    flex-direction: column;
+  }
+
+  .unified-timeline__filter-select {
+    width: 100%;
+  }
+}

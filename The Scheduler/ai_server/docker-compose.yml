@@ -1,0 +1,223 @@
+# Unified Docker Compose for The Scheduler AI Services
+# Agent AI-13: Docker & Cloud Deployment
+#
+# Usage:
+#   Development:  docker compose up -d
+#   Production:   docker compose -f docker-compose.yml -f docker-compose.prod.yml up -d
+#
+# Services:
+#   - prediction:  No-show prediction service (LightGBM, port 8001)
+#   - sentiment:   Sentiment analysis service (Ollama LLM, port 8002)
+#   - routing:     Route optimization service (OR-Tools + OSRM, port 8003)
+#   - osrm:        Open Source Routing Machine (port 5000)
+#   - ollama:      Local LLM runtime (port 11434)
+#
+# Network Architecture:
+#   Flutter App -> ai-network -> [prediction, sentiment, routing]
+#                                      |            |
+#                                   models       osrm, ollama
+
+version: '3.8'
+
+services:
+  # ============================================================
+  # PREDICTION SERVICE - No-Show Prediction (LightGBM)
+  # ============================================================
+  prediction:
+    build:
+      context: ./prediction
+      dockerfile: Dockerfile
+    container_name: scheduler-prediction
+    ports:
+      - "${PREDICTION_PORT:-8001}:8001"
+    environment:
+      - PREDICTION_HOST=0.0.0.0
+      - PREDICTION_PORT=8001
+      - PREDICTION_DEBUG=${PREDICTION_DEBUG:-false}
+      - PREDICTION_LOG_LEVEL=${PREDICTION_LOG_LEVEL:-INFO}
+      - PREDICTION_REQUIRE_AUTHENTICATION=${PREDICTION_REQUIRE_AUTH:-false}
+      - PREDICTION_API_KEYS=${PREDICTION_API_KEYS:-}
+      - PREDICTION_HIGH_RISK_THRESHOLD=${PREDICTION_HIGH_RISK_THRESHOLD:-0.7}
+      - PREDICTION_MEDIUM_RISK_THRESHOLD=${PREDICTION_MEDIUM_RISK_THRESHOLD:-0.4}
+      - PREDICTION_ALLOWED_ORIGINS=${CORS_ALLOWED_ORIGINS:-http://localhost:3000,http://localhost:8080}
+    volumes:
+      - prediction-models:/app/models
+    networks:
+      - ai-network
+    healthcheck:
+      test: ["CMD", "python", "-c", "import requests; requests.get('http://localhost:8001/health/live')"]
+      interval: 30s
+      timeout: 10s
+      start_period: 10s
+      retries: 3
+    restart: unless-stopped
+    labels:
+      - "com.scheduler.service=prediction"
+      - "com.scheduler.version=1.0.0"
+
+  # ============================================================
+  # SENTIMENT SERVICE - Sentiment Analysis (Ollama LLM)
+  # ============================================================
+  sentiment:
+    build:
+      context: ./sentiment
+      dockerfile: Dockerfile
+    container_name: scheduler-sentiment
+    ports:
+      - "${SENTIMENT_PORT:-8002}:8002"
+    environment:
+      - SENTIMENT_HOST=0.0.0.0
+      - SENTIMENT_PORT=8002
+      - SENTIMENT_DEBUG=${SENTIMENT_DEBUG:-false}
+      - SENTIMENT_LOG_LEVEL=${SENTIMENT_LOG_LEVEL:-INFO}
+      - SENTIMENT_PROVIDER=${SENTIMENT_PROVIDER:-ollama}
+      - SENTIMENT_OLLAMA_URL=http://ollama:11434
+      - SENTIMENT_DEFAULT_MODEL=${SENTIMENT_DEFAULT_MODEL:-phi3:mini}
+      - SENTIMENT_DEEP_ANALYSIS_MODEL=${SENTIMENT_DEEP_MODEL:-llama3.1:8b}
+      - GOOGLE_APPLICATION_CREDENTIALS=${GOOGLE_APPLICATION_CREDENTIALS:-}
+      - GCLOUD_PROJECT=${GCLOUD_PROJECT:-}
+      - SENTIMENT_LANGUAGE=${SENTIMENT_LANGUAGE:-en}
+      - SENTIMENT_MODEL=${SENTIMENT_MODEL:-gpt-4o-mini}
+      - OPENAI_API_KEY=${OPENAI_API_KEY:-}
+      - SENTIMENT_REQUIRE_HTTPS=${SENTIMENT_REQUIRE_HTTPS:-false}
+      - SENTIMENT_REQUIRE_AUTHENTICATION=${SENTIMENT_REQUIRE_AUTH:-false}
+      - SENTIMENT_API_KEYS=${SENTIMENT_API_KEYS:-}
+      - SENTIMENT_ALLOWED_ORIGINS=${CORS_ALLOWED_ORIGINS:-http://localhost:3000,http://localhost:8080}
+    # Mount secrets when using hosted providers (uncomment and supply files)
+    # volumes:
+    #   - ./secrets/gcp-sa.json:/secrets/gcp-sa.json:ro
+    depends_on:
+      ollama:
+        condition: service_healthy
+    networks:
+      - ai-network
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8002/health/live"]
+      interval: 30s
+      timeout: 10s
+      start_period: 15s
+      retries: 3
+    restart: unless-stopped
+    labels:
+      - "com.scheduler.service=sentiment"
+      - "com.scheduler.version=1.0.0"
+
+  # ============================================================
+  # ROUTING SERVICE - Route Optimization (OR-Tools + OSRM)
+  # ============================================================
+  routing:
+    build:
+      context: ./routing
+      dockerfile: Dockerfile
+    container_name: scheduler-routing
+    ports:
+      - "${ROUTING_PORT:-8003}:8001"
+    environment:
+      - ROUTING_DEBUG=${ROUTING_DEBUG:-false}
+      - ROUTING_LOG_LEVEL=${ROUTING_LOG_LEVEL:-INFO}
+      - ROUTING_PROVIDER=${ROUTING_PROVIDER:-osrm}
+      - ROUTING_OSRM_URL=http://osrm:5000
+      - ROUTING_OSRM_TIMEOUT_SECONDS=${ROUTING_OSRM_TIMEOUT:-30}
+      - ROUTING_SOLVER_TIME_LIMIT_SECONDS=${ROUTING_SOLVER_TIMEOUT:-30}
+      - GOOGLE_ROUTES_API_KEY=${GOOGLE_ROUTES_API_KEY:-}
+      - GOOGLE_ROUTES_REGION=${GOOGLE_ROUTES_REGION:-us-west1}
+      - ROUTING_REQUIRE_HTTPS=${ROUTING_REQUIRE_HTTPS:-false}
+      - ROUTING_REQUIRE_AUTHENTICATION=${ROUTING_REQUIRE_AUTH:-false}
+      - ROUTING_API_KEY=${ROUTING_API_KEY:-}
+      - ROUTING_CORS_ORIGINS=${CORS_ALLOWED_ORIGINS:-http://localhost:3000,http://localhost:8080}
+      - ROUTING_ENABLE_DOCS=${ROUTING_ENABLE_DOCS:-true}
+    depends_on:
+      osrm:
+        condition: service_healthy
+    networks:
+      - ai-network
+    healthcheck:
+      test: ["CMD", "python", "-c", "import httpx; httpx.get('http://localhost:8001/api/v1/health')"]
+      interval: 30s
+      timeout: 10s
+      start_period: 10s
+      retries: 3
+    restart: unless-stopped
+    labels:
+      - "com.scheduler.service=routing"
+      - "com.scheduler.version=1.0.0"
+
+  # ============================================================
+  # OSRM - Open Source Routing Machine
+  # ============================================================
+  # First-time setup required! Run scripts/setup-osrm.sh
+  osrm:
+    image: osrm/osrm-backend:latest
+    container_name: scheduler-osrm
+    ports:
+      - "${OSRM_PORT:-5000}:5000"
+    volumes:
+      - osrm-data:/data
+    command: osrm-routed --algorithm mld /data/${OSRM_REGION:-us-west}.osrm
+    networks:
+      - ai-network
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:5000/health"]
+      interval: 30s
+      timeout: 10s
+      start_period: 30s
+      retries: 3
+    restart: unless-stopped
+    labels:
+      - "com.scheduler.service=osrm"
+
+  # ============================================================
+  # OLLAMA - Local LLM Runtime
+  # ============================================================
+  ollama:
+    image: ollama/ollama:latest
+    container_name: scheduler-ollama
+    ports:
+      - "${OLLAMA_PORT:-11434}:11434"
+    volumes:
+      - ollama-models:/root/.ollama
+    environment:
+      - OLLAMA_HOST=0.0.0.0
+    networks:
+      - ai-network
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:11434/api/tags"]
+      interval: 30s
+      timeout: 10s
+      start_period: 60s
+      retries: 5
+    restart: unless-stopped
+    # GPU support - uncomment for NVIDIA GPUs
+    # deploy:
+    #   resources:
+    #     reservations:
+    #       devices:
+    #         - driver: nvidia
+    #           count: 1
+    #           capabilities: [gpu]
+    labels:
+      - "com.scheduler.service=ollama"
+
+# ============================================================
+# VOLUMES
+# ============================================================
+volumes:
+  # Trained ML models for prediction service
+  prediction-models:
+    name: scheduler-prediction-models
+
+  # OSRM map data (processed OSM files)
+  osrm-data:
+    name: scheduler-osrm-data
+
+  # Ollama model cache
+  ollama-models:
+    name: scheduler-ollama-models
+
+# ============================================================
+# NETWORKS
+# ============================================================
+networks:
+  ai-network:
+    name: scheduler-ai-network
+    driver: bridge

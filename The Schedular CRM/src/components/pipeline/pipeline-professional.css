@@ -1,0 +1,315 @@
+.pipeline-content {
+  display: grid;
+  gap: var(--space-md);
+}
+
+.pipeline-page__filters .ui-toolbar__start {
+  flex: 1 1 auto;
+}
+
+.pipeline-filter-group {
+  display: flex;
+  align-items: center;
+  gap: var(--space-sm);
+  flex-wrap: wrap;
+}
+
+.kanban-board__header {
+  align-items: flex-end;
+  gap: var(--space-md);
+  padding: 0 4px 14px;
+  background: transparent;
+}
+
+.kanban-board__title {
+  margin: 0;
+  font-size: 24px;
+  font-weight: 700;
+  letter-spacing: -0.04em;
+  color: var(--color-text);
+}
+
+.kanban-board__metrics {
+  gap: var(--space-sm);
+  flex-wrap: wrap;
+}
+
+.kanban-board__metric {
+  min-width: 148px;
+  padding: 14px 16px;
+  text-align: left;
+  border: 1px solid rgba(192, 202, 217, 0.8);
+  border-radius: 16px;
+  background: rgba(255, 255, 255, 0.78);
+  box-shadow: var(--shadow-sm);
+  backdrop-filter: blur(18px);
+}
+
+.kanban-board__metric-label {
+  margin-bottom: 4px;
+  color: var(--color-text-muted);
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+}
+
+.kanban-board__metric-value {
+  color: var(--color-text);
+  font-size: 20px;
+  font-weight: 700;
+  letter-spacing: -0.03em;
+}
+
+.kanban-board {
+  gap: 18px;
+  padding: 4px 2px 12px;
+  min-height: auto;
+  background: transparent;
+}
+
+.kanban-column {
+  border: 1px solid rgba(192, 202, 217, 0.76);
+  border-radius: 20px;
+  background:
+    linear-gradient(180deg, rgba(255, 255, 255, 0.96) 0%, rgba(247, 250, 253, 0.96) 100%);
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.9),
+    0 20px 40px rgba(15, 23, 42, 0.07);
+}
+
+.kanban-column--drag-over {
+  background:
+    linear-gradient(180deg, rgba(238, 243, 255, 0.98) 0%, rgba(231, 239, 255, 0.94) 100%);
+  box-shadow:
+    0 0 0 1px rgba(40, 87, 231, 0.2),
+    0 24px 48px rgba(31, 70, 191, 0.12);
+}
+
+.stage-header {
+  padding: 16px 18px 14px;
+  border-bottom: 1px solid rgba(213, 222, 234, 0.88);
+  border-radius: 20px 20px 0 0;
+  background: transparent;
+}
+
+.stage-header__name {
+  font-size: 15px;
+  font-weight: 700;
+  letter-spacing: -0.01em;
+  color: var(--color-text);
+}
+
+.stage-header__count {
+  min-width: 28px;
+  height: 28px;
+  padding: 0 9px;
+  color: var(--color-text-secondary);
+  font-size: 12px;
+  font-weight: 700;
+  background: rgba(237, 242, 248, 0.96);
+}
+
+.stage-header__value {
+  margin-top: 8px;
+  color: var(--color-text-secondary);
+  font-size: 13px;
+  font-weight: 600;
+}
+
+.stage-header__probability {
+  margin-top: 4px;
+  color: var(--color-text-muted);
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+}
+
+.kanban-column__content {
+  padding: 8px 0;
+}
+
+.deal-card {
+  margin: 10px;
+  padding: 14px;
+  border: 1px solid rgba(213, 222, 234, 0.9);
+  border-radius: 16px;
+  background: rgba(255, 255, 255, 0.96);
+  box-shadow: 0 10px 24px rgba(15, 23, 42, 0.06);
+}
+
+.deal-card:hover {
+  box-shadow: 0 16px 30px rgba(15, 23, 42, 0.1);
+  transform: translateY(-1px);
+}
+
+.deal-card__title {
+  font-size: 14px;
+  font-weight: 700;
+  color: var(--color-text);
+}
+
+.deal-card__value {
+  color: var(--color-brand-600);
+  font-size: 14px;
+  font-weight: 700;
+}
+
+.deal-card__client-avatar {
+  background: linear-gradient(135deg, var(--color-brand-500) 0%, #5f82ee 100%);
+}
+
+.deal-card__client-name {
+  color: var(--color-text-secondary);
+  font-size: 13px;
+  font-weight: 500;
+}
+
+.deal-card__date {
+  color: var(--color-text-muted);
+}
+
+.deal-card__probability {
+  padding: 3px 8px;
+  border: 1px solid rgba(213, 222, 234, 0.88);
+  border-radius: 999px;
+  background: rgba(246, 249, 252, 0.92);
+  color: var(--color-text-secondary);
+  font-size: 11px;
+  font-weight: 700;
+}
+
+.deal-card__actions {
+  gap: 8px;
+}
+
+.deal-card__action {
+  width: 30px;
+  height: 30px;
+  border: 1px solid rgba(213, 222, 234, 0.92);
+  border-radius: 10px;
+  background: rgba(246, 249, 252, 0.92);
+  color: var(--color-text-secondary);
+}
+
+.deal-card__action svg {
+  width: 14px;
+  height: 14px;
+}
+
+.deal-card__action:hover {
+  background: var(--color-brand-050);
+  color: var(--color-brand-600);
+}
+
+.empty-stage {
+  padding: 32px 18px;
+  color: var(--color-text-muted);
+}
+
+.empty-stage__icon {
+  opacity: 0.4;
+}
+
+.empty-stage__text {
+  color: var(--color-text-secondary);
+  font-size: 13px;
+  font-weight: 600;
+}
+
+.empty-stage__hint {
+  color: var(--color-text-muted);
+}
+
+.kanban-column__add-btn {
+  gap: 8px;
+  margin: 0 10px 10px;
+  padding: 10px 12px;
+  border: 1px dashed rgba(160, 173, 193, 0.88);
+  border-radius: 12px;
+  color: var(--color-text-secondary);
+  font-size: 13px;
+  font-weight: 600;
+}
+
+.kanban-column__add-btn:hover {
+  color: var(--color-brand-600);
+  border-color: rgba(40, 87, 231, 0.42);
+  background: var(--color-brand-050);
+}
+
+.kanban-board__loading,
+.kanban-board__error {
+  border: 1px solid rgba(192, 202, 217, 0.72);
+  border-radius: 20px;
+  background: rgba(255, 255, 255, 0.84);
+  box-shadow: var(--shadow-sm);
+}
+
+.kanban-board__spinner {
+  border-color: rgba(213, 222, 234, 0.92);
+  border-top-color: var(--color-brand-500);
+}
+
+.inline-note-composer {
+  margin-top: 4px;
+  border: 1px solid rgba(192, 202, 217, 0.76);
+  border-radius: 18px;
+  background: rgba(255, 255, 255, 0.82);
+  box-shadow: var(--shadow-sm);
+}
+
+.inline-note-composer__header {
+  margin-bottom: 10px;
+}
+
+.inline-note-composer__meta,
+.inline-note-composer__hint {
+  color: var(--color-text-muted);
+}
+
+.move-error-toast {
+  border: 1px solid rgba(179, 58, 58, 0.12);
+  background: rgba(179, 58, 58, 0.96);
+  box-shadow: var(--shadow-md);
+}
+
+@media (max-width: 768px) {
+  .pipeline-filter-group {
+    width: 100%;
+    align-items: stretch;
+  }
+
+  .pipeline-filter-group .filter-select {
+    width: 100%;
+  }
+
+  .kanban-board__header {
+    padding-bottom: 10px;
+  }
+
+  .kanban-board__metric {
+    min-width: 0;
+    flex: 1 1 0;
+  }
+}
+
+@media (max-width: 640px) {
+  .kanban-board__title {
+    font-size: 21px;
+  }
+
+  .kanban-board__metric {
+    width: 100%;
+  }
+
+  .kanban-column {
+    border-radius: 18px;
+  }
+
+  .stage-header {
+    padding: 14px 16px 12px;
+    border-radius: 18px 18px 0 0;
+  }
+}

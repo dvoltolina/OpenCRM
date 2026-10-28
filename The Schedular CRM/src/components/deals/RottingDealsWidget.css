@@ -1,0 +1,300 @@
+/**
+ * RottingDealsWidget Styles
+ * Agent CRM-41 Implementation
+ */
+
+/* ============================================
+   Widget Container
+   ============================================ */
+
+.rotting-deals-widget {
+  background: white;
+  border-radius: 8px;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+  overflow: hidden;
+}
+
+/* ============================================
+   Header
+   ============================================ */
+
+.rotting-deals-widget__header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 16px;
+  border-bottom: 1px solid #e5e7eb;
+}
+
+.rotting-deals-widget__title-row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.rotting-deals-widget__title {
+  margin: 0;
+  font-size: 16px;
+  font-weight: 600;
+  color: #111827;
+}
+
+.rotting-deals-widget__badge {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 24px;
+  height: 24px;
+  padding: 0 8px;
+  background: #dc2626;
+  color: white;
+  font-size: 12px;
+  font-weight: 600;
+  border-radius: 12px;
+}
+
+.rotting-deals-widget__toggle {
+  padding: 6px 12px;
+  background: transparent;
+  border: 1px solid #d1d5db;
+  border-radius: 6px;
+  font-size: 13px;
+  color: #6b7280;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.rotting-deals-widget__toggle:hover {
+  background: #f9fafb;
+  border-color: #9ca3af;
+  color: #111827;
+}
+
+/* ============================================
+   Loading State
+   ============================================ */
+
+.rotting-deals-widget__loading {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 40px 16px;
+  gap: 12px;
+  color: #6b7280;
+}
+
+.rotting-deals-widget__spinner {
+  width: 32px;
+  height: 32px;
+  border: 3px solid #e5e7eb;
+  border-top-color: #3b82f6;
+  border-radius: 50%;
+  animation: spin 0.8s linear infinite;
+}
+
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+/* ============================================
+   Empty State
+   ============================================ */
+
+.rotting-deals-widget__empty {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 40px 16px;
+  text-align: center;
+}
+
+.rotting-deals-widget__empty-icon {
+  font-size: 48px;
+  margin: 0 0 12px;
+}
+
+.rotting-deals-widget__empty-text {
+  margin: 0;
+  font-size: 14px;
+  color: #6b7280;
+}
+
+/* ============================================
+   Deals List
+   ============================================ */
+
+.rotting-deals-widget__list {
+  display: flex;
+  flex-direction: column;
+}
+
+/* ============================================
+   Deal Row
+   ============================================ */
+
+.rotting-deal-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 12px 16px;
+  border-bottom: 1px solid #f3f4f6;
+  cursor: pointer;
+  transition: background-color 0.15s ease;
+}
+
+.rotting-deal-row:last-child {
+  border-bottom: none;
+}
+
+.rotting-deal-row:hover {
+  background-color: #f9fafb;
+}
+
+.rotting-deal-row__main {
+  flex: 1;
+  min-width: 0;
+}
+
+.rotting-deal-row__header {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 4px;
+}
+
+.rotting-deal-row__title {
+  margin: 0;
+  font-size: 14px;
+  font-weight: 500;
+  color: #111827;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.rotting-deal-row__details {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  margin-bottom: 4px;
+  font-size: 13px;
+}
+
+.rotting-deal-row__value {
+  font-weight: 600;
+  color: #059669;
+}
+
+.rotting-deal-row__separator {
+  color: #d1d5db;
+}
+
+.rotting-deal-row__client {
+  color: #6b7280;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.rotting-deal-row__meta {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 12px;
+  color: #9ca3af;
+}
+
+.rotting-deal-row__last-activity {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+/* ============================================
+   Actions
+   ============================================ */
+
+.rotting-deal-row__actions {
+  display: flex;
+  gap: 8px;
+  margin-left: 12px;
+}
+
+.rotting-deal-row__action-btn {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  padding: 6px 12px;
+  background: transparent;
+  border: 1px solid #d1d5db;
+  border-radius: 6px;
+  font-size: 13px;
+  color: #6b7280;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  white-space: nowrap;
+}
+
+.rotting-deal-row__action-btn:hover {
+  background: #f9fafb;
+  border-color: #3b82f6;
+  color: #3b82f6;
+}
+
+.rotting-deal-row__action-icon {
+  font-size: 16px;
+  font-weight: 600;
+  line-height: 1;
+}
+
+.rotting-deal-row__action-text {
+  font-weight: 500;
+}
+
+/* ============================================
+   Footer
+   ============================================ */
+
+.rotting-deals-widget__footer {
+  padding: 12px 16px;
+  background: #f9fafb;
+  border-top: 1px solid #e5e7eb;
+  text-align: center;
+}
+
+.rotting-deals-widget__footer-text {
+  margin: 0;
+  font-size: 13px;
+  color: #6b7280;
+}
+
+/* ============================================
+   Responsive
+   ============================================ */
+
+@media (max-width: 768px) {
+  .rotting-deal-row {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 12px;
+  }
+
+  .rotting-deal-row__actions {
+    margin-left: 0;
+    justify-content: stretch;
+  }
+
+  .rotting-deal-row__action-btn {
+    flex: 1;
+    justify-content: center;
+  }
+
+  .rotting-deals-widget__toggle {
+    font-size: 12px;
+    padding: 4px 8px;
+  }
+}

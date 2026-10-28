@@ -1,0 +1,441 @@
+.documents-page {
+  gap: 24px;
+}
+
+.documents-page__hero {
+  display: grid;
+  grid-template-columns: minmax(0, 1.65fr) minmax(280px, 0.95fr);
+  gap: 24px;
+  align-items: start;
+}
+
+.documents-page__hero-copy h2 {
+  margin: 0 0 10px;
+  font-size: clamp(1.8rem, 3vw, 2.35rem);
+  color: var(--color-text);
+}
+
+.documents-page__hero-copy p:last-child {
+  margin: 0;
+  max-width: 62ch;
+  color: var(--color-text-secondary);
+}
+
+.documents-page__hero-stats {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 12px;
+}
+
+.documents-page__hero-stats div {
+  padding: 16px;
+  border-radius: var(--radius-lg);
+  border: 1px solid color-mix(in srgb, var(--color-border) 84%, transparent);
+  background: color-mix(in srgb, var(--color-surface) 84%, white);
+}
+
+.documents-page__hero-stats span {
+  display: block;
+  margin-bottom: 8px;
+  font-size: 12px;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: var(--color-text-secondary);
+}
+
+.documents-page__hero-stats strong {
+  display: block;
+  font-size: 1.5rem;
+  line-height: 1;
+  color: var(--color-text);
+}
+
+.documents-page__error {
+  color: #991b1b;
+  border-color: #fecaca;
+  background: #fef2f2;
+}
+
+.documents-page__layout {
+  display: grid;
+  grid-template-columns: minmax(220px, 280px) minmax(0, 1.6fr) minmax(300px, 360px);
+  gap: 20px;
+  align-items: start;
+}
+
+.documents-page__main-column {
+  display: grid;
+  gap: 20px;
+}
+
+.documents-page__section-copy {
+  margin-bottom: 16px;
+}
+
+.documents-page__section-copy h3 {
+  margin: 0 0 8px;
+  font-size: 1.125rem;
+  color: var(--color-text);
+}
+
+.documents-page__section-copy p:last-child {
+  margin: 0;
+  color: var(--color-text-secondary);
+}
+
+.documents-page__inspector {
+  display: grid;
+  gap: 16px;
+}
+
+.documents-page .document-actions-card,
+.documents-page .public-link-manager,
+.documents-page .signature-status,
+.documents-page .signature-request-form {
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-xl);
+  background: var(--color-surface);
+  padding: 18px;
+}
+
+.documents-page .document-actions-header h4,
+.documents-page .public-link-manager h4,
+.documents-page .signature-status h4,
+.documents-page .signature-request-form h4 {
+  margin: 0 0 8px;
+  font-size: 1rem;
+  color: var(--color-text);
+}
+
+.documents-page .document-actions-meta,
+.documents-page .signature-status ul,
+.documents-page .signature-request-form,
+.documents-page .public-link-manager {
+  color: var(--color-text-secondary);
+}
+
+.documents-page .document-actions-meta {
+  display: grid;
+  gap: 6px;
+  margin: 12px 0 16px;
+  font-size: 13px;
+}
+
+.documents-page .document-actions-buttons {
+  display: flex;
+  gap: 10px;
+}
+
+.documents-page .muted {
+  margin: 0;
+  color: var(--color-text-muted);
+}
+
+.documents-page .error-inline,
+.documents-page .uploader-error,
+.documents-page .signature-error {
+  margin: 0;
+  color: #b91c1c;
+}
+
+.documents-page .document-folder-tree ul,
+.documents-page .signature-status ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.documents-page .folder-header,
+.documents-page .document-list-header,
+.documents-page .signature-status-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  margin-bottom: 16px;
+}
+
+.documents-page .folder-header h4,
+.documents-page .document-list-header h3 {
+  margin: 0;
+  font-size: 1rem;
+  color: var(--color-text);
+}
+
+.documents-page .document-folder-tree li {
+  margin: 0;
+}
+
+.documents-page .document-folder-tree li + li,
+.documents-page .document-folder-tree ul ul {
+  margin-top: 6px;
+}
+
+.documents-page .document-folder-tree li.active > button,
+.documents-page .document-folder-tree li.active > .folder-row > button:first-child {
+  background: color-mix(in srgb, var(--color-brand-500) 10%, white);
+  border-color: var(--color-brand-500);
+  color: var(--color-brand-700);
+}
+
+.documents-page .folder-row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.documents-page .document-folder-tree button,
+.documents-page .document-list button,
+.documents-page .public-link-manager button,
+.documents-page .signature-status button,
+.documents-page .signature-request-form button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  min-height: 34px;
+  padding: 0 12px;
+  border-radius: 999px;
+  border: 1px solid var(--color-border);
+  background: color-mix(in srgb, var(--color-bg-subtle) 82%, white);
+  color: var(--color-text-secondary);
+  font-size: 12px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: border-color 0.18s ease, background-color 0.18s ease, color 0.18s ease;
+}
+
+.documents-page .document-folder-tree button:hover,
+.documents-page .document-list button:hover,
+.documents-page .public-link-manager button:hover,
+.documents-page .signature-status button:hover,
+.documents-page .signature-request-form button:hover {
+  border-color: var(--color-brand-400);
+  color: var(--color-text);
+}
+
+.documents-page .document-folder-tree button:first-child {
+  flex: 1;
+  justify-content: flex-start;
+}
+
+.documents-page .document-uploader {
+  display: grid;
+  gap: 12px;
+}
+
+.documents-page .uploader-dropzone {
+  position: relative;
+  border: 1px dashed var(--color-border);
+  border-radius: var(--radius-xl);
+  padding: 24px;
+  background:
+    radial-gradient(circle at top left, rgba(40, 87, 231, 0.08), transparent 48%),
+    linear-gradient(180deg, rgba(248, 251, 255, 0.86), rgba(255, 255, 255, 0.96));
+}
+
+.documents-page .uploader-dropzone.dragging {
+  border-color: var(--color-brand-500);
+  background:
+    radial-gradient(circle at top left, rgba(40, 87, 231, 0.14), transparent 52%),
+    linear-gradient(180deg, rgba(236, 243, 255, 0.95), rgba(255, 255, 255, 0.98));
+}
+
+.documents-page .uploader-dropzone p {
+  margin: 0 0 8px;
+  color: var(--color-text-secondary);
+}
+
+.documents-page .uploader-meta {
+  font-size: 12px;
+  color: var(--color-text-muted);
+}
+
+.documents-page .uploader-dropzone input[type='file'] {
+  margin-top: 8px;
+}
+
+.documents-page .document-list.loading,
+.documents-page .document-list.empty {
+  border: 1px dashed var(--color-border);
+  border-radius: var(--radius-xl);
+  padding: 24px;
+  text-align: center;
+  color: var(--color-text-secondary);
+}
+
+.documents-page .document-table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.documents-page .document-table th,
+.documents-page .document-table td {
+  padding: 12px 14px;
+  text-align: left;
+  border-bottom: 1px solid var(--color-border);
+  font-size: 13px;
+}
+
+.documents-page .document-table th {
+  font-size: 11px;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: var(--color-text-secondary);
+}
+
+.documents-page .document-table tbody tr {
+  cursor: pointer;
+  transition: background-color 0.18s ease;
+}
+
+.documents-page .document-table tbody tr:hover {
+  background: color-mix(in srgb, var(--color-bg-subtle) 72%, white);
+}
+
+.documents-page .document-type {
+  text-transform: capitalize;
+}
+
+.documents-page .public-link-manager {
+  display: grid;
+  gap: 12px;
+}
+
+.documents-page .public-link-manager p {
+  margin: 0;
+}
+
+.documents-page .public-link-actions {
+  display: grid;
+  gap: 10px;
+}
+
+.documents-page .public-link-actions label {
+  display: grid;
+  gap: 6px;
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--color-text-secondary);
+}
+
+.documents-page .signature-request-form,
+.documents-page .signature-request-form label,
+.documents-page .public-link-actions label {
+  font-size: 12px;
+}
+
+.documents-page .signature-request-form {
+  display: grid;
+  gap: 12px;
+}
+
+.documents-page .signer-row {
+  display: grid;
+  gap: 10px;
+}
+
+.documents-page .signature-controls {
+  display: flex;
+  justify-content: flex-start;
+}
+
+.documents-page .signature-request-form textarea,
+.documents-page .signature-request-form input,
+.documents-page .public-link-actions input,
+.documents-page .document-folder-tree input {
+  width: 100%;
+}
+
+.documents-page input,
+.documents-page textarea,
+.documents-page select {
+  padding: 10px 12px;
+  border: 1px solid var(--color-border);
+  border-radius: 12px;
+  background: var(--color-surface);
+  color: var(--color-text);
+  font: inherit;
+}
+
+.documents-page textarea {
+  min-height: 92px;
+  resize: vertical;
+}
+
+.documents-page .signature-status li {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 16px;
+  padding: 12px 0;
+  border-top: 1px solid var(--color-border);
+}
+
+.documents-page .signature-status li:first-child {
+  border-top: none;
+}
+
+.documents-page .signature-role,
+.documents-page .signature-date {
+  color: var(--color-text-muted);
+  font-size: 12px;
+}
+
+.documents-page .signature-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 6px 10px;
+  border-radius: 999px;
+  font-size: 12px;
+  font-weight: 600;
+  text-transform: capitalize;
+}
+
+.documents-page .status-pending {
+  background: #fffbeb;
+  color: #92400e;
+}
+
+.documents-page .status-signed {
+  background: #ecfdf5;
+  color: #166534;
+}
+
+.documents-page .status-declined,
+.documents-page .status-expired {
+  background: #fef2f2;
+  color: #991b1b;
+}
+
+.documents-page .signature-download a {
+  color: var(--color-brand-600);
+  font-weight: 600;
+}
+
+@media (max-width: 1100px) {
+  .documents-page__hero {
+    grid-template-columns: 1fr;
+  }
+
+  .documents-page__hero-stats {
+    grid-template-columns: 1fr;
+  }
+
+  .documents-page__layout {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 720px) {
+  .documents-page .document-table {
+    display: block;
+    overflow-x: auto;
+  }
+
+  .documents-page .signature-status li {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+}

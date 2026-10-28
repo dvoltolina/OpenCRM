@@ -1,0 +1,552 @@
+/**
+ * Duplicates Component Styles
+ * Styles for duplicate detection and merge components
+ * Agent CRM-27 Implementation
+ */
+
+/* ============================================
+   Duplicate List
+   ============================================ */
+
+.duplicate-list {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+.duplicate-list__header {
+  margin-bottom: 0.5rem;
+}
+
+.duplicate-list__title {
+  font-size: 1.25rem;
+  font-weight: 600;
+  color: var(--color-text-primary, #1f2937);
+  margin: 0 0 0.25rem 0;
+}
+
+.duplicate-list__subtitle {
+  font-size: 0.875rem;
+  color: var(--color-text-secondary, #6b7280);
+  margin: 0;
+}
+
+.duplicate-list--empty {
+  padding: 2rem;
+  text-align: center;
+  background-color: var(--color-bg-secondary, #f9fafb);
+  border-radius: 0.5rem;
+  border: 1px dashed var(--color-border, #d1d5db);
+}
+
+.duplicate-list__empty-message {
+  color: var(--color-text-secondary, #6b7280);
+  margin: 0;
+}
+
+.duplicate-list__matches {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+/* ============================================
+   Duplicate Card
+   ============================================ */
+
+.duplicate-card {
+  background-color: var(--color-bg-primary, #ffffff);
+  border: 1px solid var(--color-border, #e5e7eb);
+  border-radius: 0.5rem;
+  padding: 1rem;
+  transition: box-shadow 0.2s ease;
+}
+
+.duplicate-card:hover {
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+}
+
+.duplicate-card--original {
+  background-color: var(--color-bg-info, #eff6ff);
+  border-color: var(--color-primary, #3b82f6);
+}
+
+.duplicate-card__header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 0.75rem;
+}
+
+.duplicate-card__badge {
+  display: inline-block;
+  padding: 0.25rem 0.75rem;
+  font-size: 0.75rem;
+  font-weight: 600;
+  border-radius: 9999px;
+  background-color: var(--color-primary, #3b82f6);
+  color: white;
+}
+
+.duplicate-card__badge--high {
+  background-color: var(--color-success, #10b981);
+}
+
+.duplicate-card__badge--medium {
+  background-color: var(--color-warning, #f59e0b);
+}
+
+.duplicate-card__badge--low {
+  background-color: var(--color-text-tertiary, #9ca3af);
+}
+
+.duplicate-card__confidence-label {
+  font-size: 0.75rem;
+  color: var(--color-text-secondary, #6b7280);
+  font-weight: 500;
+}
+
+.duplicate-card__body {
+  margin-bottom: 1rem;
+}
+
+.duplicate-card__name {
+  font-size: 1rem;
+  font-weight: 600;
+  color: var(--color-text-primary, #1f2937);
+  margin: 0 0 0.5rem 0;
+}
+
+.duplicate-card__contact {
+  font-size: 0.875rem;
+  color: var(--color-text-secondary, #6b7280);
+  margin: 0 0 0.25rem 0;
+}
+
+.duplicate-card__company {
+  font-size: 0.875rem;
+  color: var(--color-text-secondary, #6b7280);
+  margin: 0 0 0.5rem 0;
+  font-style: italic;
+}
+
+.duplicate-card__details {
+  display: flex;
+  gap: 0.5rem;
+  padding: 0.5rem 0;
+  border-top: 1px solid var(--color-border, #e5e7eb);
+  margin-top: 0.5rem;
+}
+
+.duplicate-card__details-label {
+  font-size: 0.75rem;
+  font-weight: 600;
+  color: var(--color-text-secondary, #6b7280);
+  text-transform: uppercase;
+  letter-spacing: 0.025em;
+}
+
+.duplicate-card__details-value {
+  font-size: 0.875rem;
+  color: var(--color-text-primary, #1f2937);
+}
+
+.duplicate-card__actions {
+  display: flex;
+  gap: 0.5rem;
+  justify-content: flex-end;
+}
+
+.duplicate-card__action {
+  padding: 0.5rem 1rem;
+  font-size: 0.875rem;
+  font-weight: 500;
+  border-radius: 0.375rem;
+  border: 1px solid var(--color-border, #d1d5db);
+  background-color: var(--color-bg-primary, #ffffff);
+  color: var(--color-text-primary, #1f2937);
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.duplicate-card__action:hover:not(:disabled) {
+  background-color: var(--color-bg-secondary, #f9fafb);
+  border-color: var(--color-text-tertiary, #9ca3af);
+}
+
+.duplicate-card__action:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.duplicate-card__action--merge {
+  background-color: var(--color-primary, #3b82f6);
+  color: white;
+  border-color: var(--color-primary, #3b82f6);
+}
+
+.duplicate-card__action--merge:hover:not(:disabled) {
+  background-color: var(--color-primary-dark, #2563eb);
+  border-color: var(--color-primary-dark, #2563eb);
+}
+
+.duplicate-card__action--view {
+  /* Uses default button styles */
+}
+
+/* ============================================
+   Merge Modal
+   ============================================ */
+
+.merge-modal {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+.merge-modal__header {
+  margin-bottom: 0.5rem;
+}
+
+.merge-modal__description {
+  font-size: 0.875rem;
+  color: var(--color-text-secondary, #6b7280);
+  margin: 0;
+}
+
+/* ============================================
+   Merge Comparison
+   ============================================ */
+
+.merge-comparison {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.merge-comparison__headers {
+  display: grid;
+  grid-template-columns: 1fr auto 1fr;
+  gap: 1rem;
+  padding: 1rem;
+  background-color: var(--color-bg-secondary, #f9fafb);
+  border-radius: 0.5rem;
+}
+
+.merge-comparison__header {
+  text-align: center;
+}
+
+.merge-comparison__header--primary {
+  /* Additional styling if needed */
+}
+
+.merge-comparison__header--secondary {
+  /* Additional styling if needed */
+}
+
+.merge-comparison__divider {
+  width: 1px;
+  background-color: var(--color-border, #d1d5db);
+}
+
+.merge-comparison__title {
+  font-size: 0.875rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: var(--color-text-secondary, #6b7280);
+  margin: 0 0 0.5rem 0;
+}
+
+.merge-comparison__name {
+  font-size: 1rem;
+  font-weight: 600;
+  color: var(--color-text-primary, #1f2937);
+  margin: 0;
+}
+
+.merge-comparison__fields {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+/* ============================================
+   Merge Field
+   ============================================ */
+
+.merge-field {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  padding: 0.75rem;
+  background-color: var(--color-bg-primary, #ffffff);
+  border: 1px solid var(--color-border, #e5e7eb);
+  border-radius: 0.375rem;
+}
+
+.merge-field--different {
+  border-color: var(--color-warning, #f59e0b);
+  background-color: var(--color-bg-warning, #fffbeb);
+}
+
+.merge-field__label {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-size: 0.875rem;
+  font-weight: 600;
+  color: var(--color-text-primary, #1f2937);
+}
+
+.merge-field__badge {
+  display: inline-block;
+  padding: 0.125rem 0.5rem;
+  font-size: 0.625rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  border-radius: 0.25rem;
+  background-color: var(--color-warning, #f59e0b);
+  color: white;
+}
+
+.merge-field__values {
+  display: grid;
+  grid-template-columns: 1fr auto 1fr;
+  gap: 0.75rem;
+}
+
+.merge-field__value {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0.75rem;
+  background-color: var(--color-bg-secondary, #f9fafb);
+  border: 2px solid transparent;
+  border-radius: 0.375rem;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  text-align: left;
+}
+
+.merge-field__value:hover:not(:disabled) {
+  background-color: var(--color-bg-hover, #f3f4f6);
+  border-color: var(--color-border-hover, #d1d5db);
+}
+
+.merge-field__value--selected {
+  background-color: var(--color-bg-info, #eff6ff);
+  border-color: var(--color-primary, #3b82f6);
+}
+
+.merge-field__value:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.merge-field__value-content {
+  flex: 1;
+  font-size: 0.875rem;
+  color: var(--color-text-primary, #1f2937);
+  word-break: break-word;
+}
+
+.merge-field__checkmark {
+  flex-shrink: 0;
+  width: 1.5rem;
+  height: 1.5rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: var(--color-primary, #3b82f6);
+  color: white;
+  border-radius: 50%;
+  font-weight: 600;
+  font-size: 1rem;
+  margin-left: 0.5rem;
+}
+
+.merge-field__divider {
+  width: 1px;
+  background-color: var(--color-border, #d1d5db);
+}
+
+/* ============================================
+   Merge Options
+   ============================================ */
+
+.merge-options {
+  padding: 1rem;
+  background-color: var(--color-bg-secondary, #f9fafb);
+  border-radius: 0.375rem;
+  border: 1px solid var(--color-border, #e5e7eb);
+}
+
+.merge-options__checkbox {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  cursor: pointer;
+}
+
+.merge-options__checkbox input[type='checkbox'] {
+  width: 1rem;
+  height: 1rem;
+  cursor: pointer;
+}
+
+.merge-options__checkbox span {
+  font-size: 0.875rem;
+  color: var(--color-text-primary, #1f2937);
+}
+
+/* ============================================
+   Merge Success
+   ============================================ */
+
+.merge-success {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1rem;
+  padding: 2rem;
+  text-align: center;
+}
+
+.merge-success__icon {
+  width: 4rem;
+  height: 4rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: var(--color-success, #10b981);
+  color: white;
+  border-radius: 50%;
+  font-size: 2rem;
+  font-weight: 600;
+}
+
+.merge-success__title {
+  font-size: 1.5rem;
+  font-weight: 600;
+  color: var(--color-text-primary, #1f2937);
+  margin: 0;
+}
+
+.merge-success__description {
+  font-size: 0.875rem;
+  color: var(--color-text-secondary, #6b7280);
+  margin: 0;
+}
+
+.merge-success__stats {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  padding: 1rem;
+  background-color: var(--color-bg-secondary, #f9fafb);
+  border-radius: 0.375rem;
+  width: 100%;
+}
+
+.merge-success__stats p {
+  margin: 0;
+  font-size: 0.875rem;
+  color: var(--color-text-primary, #1f2937);
+}
+
+.merge-success__stats strong {
+  font-weight: 600;
+  color: var(--color-primary, #3b82f6);
+}
+
+/* ============================================
+   Responsive Design
+   ============================================ */
+
+@media (max-width: 768px) {
+  .merge-comparison__headers {
+    grid-template-columns: 1fr;
+    gap: 1rem;
+  }
+
+  .merge-comparison__divider {
+    display: none;
+  }
+
+  .merge-field__values {
+    grid-template-columns: 1fr;
+    gap: 0.5rem;
+  }
+
+  .merge-field__divider {
+    display: none;
+  }
+
+  .duplicate-card__actions {
+    flex-direction: column;
+  }
+
+  .duplicate-card__action {
+    width: 100%;
+  }
+}
+
+/* ============================================
+   Loading State
+   ============================================ */
+
+.modal-loading {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 3rem 2rem;
+  gap: 1rem;
+}
+
+.modal-loading__spinner {
+  width: 3rem;
+  height: 3rem;
+  border: 3px solid var(--color-border, #e5e7eb);
+  border-top-color: var(--color-primary, #3b82f6);
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+}
+
+.modal-loading__text {
+  font-size: 0.875rem;
+  color: var(--color-text-secondary, #6b7280);
+  margin: 0;
+}
+
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+/* ============================================
+   Form Actions (if not defined elsewhere)
+   ============================================ */
+
+.form-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 0.75rem;
+  padding-top: 1rem;
+  border-top: 1px solid var(--color-border, #e5e7eb);
+}
+
+@media (max-width: 640px) {
+  .form-actions {
+    flex-direction: column-reverse;
+  }
+
+  .form-actions button {
+    width: 100%;
+  }
+}

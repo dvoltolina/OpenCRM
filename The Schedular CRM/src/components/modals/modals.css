@@ -1,0 +1,468 @@
+/**
+ * Modal Components Styles
+ * Agent CRM-15 Implementation
+ */
+
+/* ============================================
+   Modal Overlay
+   ============================================ */
+
+.modal-overlay {
+  position: fixed;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 16px;
+  background: rgba(0, 0, 0, 0.5);
+  z-index: 1000;
+  animation: fadeIn 0.15s ease-out;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+/* ============================================
+   Modal Container
+   ============================================ */
+
+.modal {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  max-height: calc(100vh - 32px);
+  background: var(--color-bg-card);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-lg);
+  animation: slideUp 0.2s ease-out;
+}
+
+@keyframes slideUp {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Modal Sizes */
+.modal--sm {
+  max-width: 400px;
+}
+
+.modal--md {
+  max-width: 560px;
+}
+
+.modal--lg {
+  max-width: 720px;
+}
+
+.modal--xl {
+  max-width: 960px;
+}
+
+.modal--full {
+  max-width: calc(100vw - 32px);
+  max-height: calc(100vh - 32px);
+  width: 100%;
+  height: 100%;
+}
+
+/* ============================================
+   Modal Header
+   ============================================ */
+
+.modal__header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 16px 20px;
+  border-bottom: 1px solid var(--color-border);
+}
+
+.modal__title {
+  margin: 0;
+  font-size: 18px;
+  font-weight: 600;
+  color: var(--color-text);
+}
+
+.modal__close {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 32px;
+  height: 32px;
+  padding: 0;
+  background: transparent;
+  border: none;
+  border-radius: var(--radius-sm);
+  color: var(--color-text-muted);
+  cursor: pointer;
+  transition: background 0.15s, color 0.15s;
+}
+
+.modal__close:hover {
+  background: var(--color-bg);
+  color: var(--color-text);
+}
+
+/* ============================================
+   Modal Content
+   ============================================ */
+
+.modal__content {
+  flex: 1;
+  padding: 20px;
+  overflow-y: auto;
+}
+
+/* ============================================
+   Modal Footer
+   ============================================ */
+
+.modal__footer {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 12px;
+  padding: 16px 20px;
+  border-top: 1px solid var(--color-border);
+}
+
+/* ============================================
+   Confirm Dialog
+   ============================================ */
+
+.confirm-dialog {
+  text-align: center;
+}
+
+.confirm-dialog__icon {
+  margin-bottom: 16px;
+}
+
+.confirm-dialog__icon--danger {
+  color: var(--color-danger);
+}
+
+.confirm-dialog__icon--warning {
+  color: var(--color-warning);
+}
+
+.confirm-dialog__icon--info {
+  color: var(--color-primary);
+}
+
+.confirm-dialog__message {
+  margin: 0;
+  font-size: 14px;
+  color: var(--color-text-muted);
+  line-height: 1.5;
+}
+
+.confirm-dialog__actions {
+  display: flex;
+  justify-content: center;
+  gap: 12px;
+  margin-top: 24px;
+}
+
+/* ============================================
+   Slide Over
+   ============================================ */
+
+.slide-over-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.3);
+  z-index: 1000;
+  animation: fadeIn 0.15s ease-out;
+}
+
+.slide-over {
+  position: fixed;
+  top: 0;
+  bottom: 0;
+  display: flex;
+  flex-direction: column;
+  background: var(--color-bg-card);
+  box-shadow: var(--shadow-lg);
+  z-index: 1001;
+}
+
+.slide-over--right {
+  right: 0;
+  animation: slideInRight 0.25s ease-out;
+}
+
+.slide-over--left {
+  left: 0;
+  animation: slideInLeft 0.25s ease-out;
+}
+
+@keyframes slideInRight {
+  from {
+    transform: translateX(100%);
+  }
+  to {
+    transform: translateX(0);
+  }
+}
+
+@keyframes slideInLeft {
+  from {
+    transform: translateX(-100%);
+  }
+  to {
+    transform: translateX(0);
+  }
+}
+
+/* Slide Over Sizes */
+.slide-over--sm {
+  width: 320px;
+}
+
+.slide-over--md {
+  width: 480px;
+}
+
+.slide-over--lg {
+  width: 640px;
+}
+
+@media (max-width: 640px) {
+  .slide-over--sm,
+  .slide-over--md,
+  .slide-over--lg {
+    width: 100%;
+  }
+}
+
+.slide-over__header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 16px 20px;
+  border-bottom: 1px solid var(--color-border);
+}
+
+.slide-over__title {
+  margin: 0;
+  font-size: 16px;
+  font-weight: 600;
+  color: var(--color-text);
+}
+
+.slide-over__close {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 32px;
+  height: 32px;
+  padding: 0;
+  background: transparent;
+  border: none;
+  border-radius: var(--radius-sm);
+  color: var(--color-text-muted);
+  cursor: pointer;
+  transition: background 0.15s, color 0.15s;
+}
+
+.slide-over__close:hover {
+  background: var(--color-bg);
+  color: var(--color-text);
+}
+
+.slide-over__content {
+  flex: 1;
+  padding: 20px;
+  overflow-y: auto;
+}
+
+/* ============================================
+   Entity Modals - Duplicate Match List
+   ============================================ */
+
+.duplicate-matches {
+  margin-top: 16px;
+}
+
+.duplicate-matches__title {
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--color-warning);
+  margin-bottom: 12px;
+}
+
+.duplicate-matches__list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.duplicate-match {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 12px;
+  margin-bottom: 8px;
+  background: var(--color-bg);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-sm);
+  cursor: pointer;
+  transition: border-color 0.15s, box-shadow 0.15s;
+}
+
+.duplicate-match:hover {
+  border-color: var(--color-primary);
+}
+
+.duplicate-match--selected {
+  border-color: var(--color-primary);
+  box-shadow: 0 0 0 2px rgba(99, 102, 241, 0.2);
+}
+
+.duplicate-match__info {
+  flex: 1;
+}
+
+.duplicate-match__name {
+  font-size: 14px;
+  font-weight: 500;
+  color: var(--color-text);
+}
+
+.duplicate-match__detail {
+  font-size: 12px;
+  color: var(--color-text-muted);
+  margin-top: 2px;
+}
+
+.duplicate-match__confidence {
+  padding: 4px 8px;
+  font-size: 11px;
+  font-weight: 500;
+  background: var(--color-bg-card);
+  border-radius: 12px;
+}
+
+.duplicate-match__confidence--high {
+  color: var(--color-success);
+}
+
+.duplicate-match__confidence--medium {
+  color: var(--color-warning);
+}
+
+.duplicate-match__confidence--low {
+  color: var(--color-text-muted);
+}
+
+/* ============================================
+   Loading Spinner for Modals
+   ============================================ */
+
+.modal-loading {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 40px;
+}
+
+.modal-loading__spinner {
+  width: 32px;
+  height: 32px;
+  border: 3px solid var(--color-border);
+  border-top-color: var(--color-primary);
+  border-radius: 50%;
+  animation: spin 0.8s linear infinite;
+}
+
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+.modal-loading__text {
+  margin-top: 12px;
+  font-size: 14px;
+  color: var(--color-text-muted);
+}
+
+/* ============================================
+   Assign Rep Modal
+   ============================================ */
+
+.assign-rep-modal {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.assign-rep-modal__summary {
+  padding: 16px;
+  background: var(--color-bg);
+  border-radius: var(--radius-md);
+}
+
+.assign-rep-modal__bulk-info {
+  margin: 0;
+  font-size: 14px;
+  color: var(--color-text-secondary);
+}
+
+.assign-rep-modal__lead-info {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.assign-rep-modal__lead-name {
+  margin: 0;
+  font-size: 16px;
+  color: var(--color-text);
+}
+
+.assign-rep-modal__lead-email {
+  margin: 0;
+  font-size: 14px;
+  color: var(--color-text-secondary);
+}
+
+.assign-rep-modal__current {
+  margin: 8px 0 0 0;
+  font-size: 13px;
+  color: var(--color-text-muted);
+}
+
+.assign-rep-modal__selection {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.assign-rep-modal__error {
+  padding: 12px;
+  background: var(--color-error-light, #fef2f2);
+  border-radius: var(--radius-md);
+}
+
+.assign-rep-modal__error .error-text {
+  margin: 0;
+  font-size: 14px;
+  color: var(--color-error, #dc2626);
+}

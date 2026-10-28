@@ -1,0 +1,174 @@
+.route-planning-page {
+  gap: 24px;
+}
+
+.route-planning-page__header-actions {
+  display: flex;
+  align-items: end;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+
+.route-planning-page__date-field {
+  display: grid;
+  gap: 6px;
+}
+
+.route-planning-page__date-field span,
+.route-planning-page__section-heading p,
+.route-planning-page__toolbar-meta {
+  color: var(--color-text-secondary);
+  font-size: 13px;
+}
+
+.route-planning-page__date-field span {
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+}
+
+.route-planning-page__hero {
+  display: grid;
+  grid-template-columns: minmax(0, 1.7fr) minmax(280px, 0.95fr);
+  gap: 24px;
+  align-items: start;
+}
+
+.route-planning-page__hero-copy h2 {
+  margin: 0 0 10px;
+  font-size: clamp(1.8rem, 3vw, 2.35rem);
+  color: var(--color-text);
+}
+
+.route-planning-page__hero-copy p:last-child {
+  margin: 0;
+  max-width: 62ch;
+  color: var(--color-text-secondary);
+}
+
+.route-planning-page__hero-stats {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 12px;
+}
+
+.route-planning-page__hero-stats div {
+  padding: 16px;
+  border-radius: var(--radius-lg);
+  border: 1px solid color-mix(in srgb, var(--color-border) 84%, transparent);
+  background: color-mix(in srgb, var(--color-surface) 84%, white);
+}
+
+.route-planning-page__hero-stats span {
+  display: block;
+  margin-bottom: 8px;
+  font-size: 12px;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: var(--color-text-secondary);
+}
+
+.route-planning-page__hero-stats strong {
+  display: block;
+  font-size: 1.5rem;
+  line-height: 1.2;
+  color: var(--color-text);
+}
+
+.route-planning-layout {
+  display: grid;
+  grid-template-columns: minmax(0, 1.55fr) minmax(320px, 0.95fr);
+  gap: 20px;
+  align-items: start;
+  height: auto;
+}
+
+.route-planning-page__map-card {
+  overflow: hidden;
+}
+
+.route-planning-page__toolbar {
+  margin-bottom: 16px;
+}
+
+.route-planning-page__section-heading h2 {
+  margin: 0 0 4px;
+  color: var(--color-text);
+  font-size: 18px;
+}
+
+.route-planning-page__section-heading p {
+  margin: 0;
+}
+
+.route-planning-page .route-map-section {
+  background: transparent;
+  min-height: 460px;
+}
+
+.route-planning-page .route-map-container {
+  border-radius: 18px;
+  overflow: hidden;
+}
+
+.route-planning-page .route-sidebar {
+  background: transparent;
+  border-left: none;
+  overflow: visible;
+  display: grid;
+  gap: 16px;
+}
+
+.route-planning-page__sidebar-card {
+  display: grid;
+  gap: 16px;
+}
+
+.route-planning-page__sidebar-card--warning {
+  background: color-mix(in srgb, #fef3c7 48%, white);
+}
+
+.route-planning-page .search-input {
+  width: 100%;
+  padding: 10px 12px;
+  border: 1px solid var(--color-border);
+  border-radius: 12px;
+  background: var(--color-surface);
+  color: var(--color-text);
+  font: inherit;
+}
+
+.route-planning-page .route-stop-item {
+  border: 1px solid color-mix(in srgb, var(--color-border) 82%, transparent);
+}
+
+.route-planning-page .saved-route-item {
+  align-items: start;
+  gap: 12px;
+}
+
+.route-planning-page .route-info {
+  cursor: pointer;
+}
+
+.route-planning-page__status-card {
+  color: var(--color-text-secondary);
+}
+
+@media (max-width: 1100px) {
+  .route-planning-page__hero,
+  .route-planning-layout {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 720px) {
+  .route-planning-page__hero-stats {
+    grid-template-columns: 1fr;
+  }
+
+  .route-planning-page__header-actions {
+    align-items: stretch;
+  }
+}

@@ -1,0 +1,5 @@
+firstName,lastName,email,phone,companyName,title,address,leadStatus,assignedRepEmail
+John,Doe,john.doe@example.com,555-1001,Acme Corp,CTO,"123 Main St, Austin TX 78701",Qualified,rep1@example.com
+Jane,Smith,jane.smith@example.com,555-1002,Smith LLC,CEO,"456 Oak Ave, Boston MA 02101",Working,rep2@example.com
+Bob,Johnson,bob.johnson@example.com,555-1003,Green Industries,VP Sales,"789 Elm St, Seattle WA 98101",New,rep1@example.com
+Alice,Williams,alice.w@example.com,555-1004,,,Nurturing,

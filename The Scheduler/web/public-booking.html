@@ -1,0 +1,551 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Book an Appointment</title>
+  <style>
+    :root {
+      --bg: #0c1b2a;
+      --card: #12263a;
+      --accent: #22c55e;
+      --muted: #8ea6c1;
+      --text: #e8f1fa;
+      --border: #1f3347;
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      font-family: "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      background: radial-gradient(circle at 20% 20%, #123, #0a1624 45%), #07111c;
+      color: var(--text);
+    }
+    .page {
+      max-width: 480px;
+      margin: 0 auto;
+      padding: 20px 16px 40px;
+    }
+    h1 { margin: 0 0 8px; font-size: 24px; }
+    .card {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      padding: 16px;
+      box-shadow: 0 12px 40px rgba(0,0,0,0.4);
+      margin-bottom: 14px;
+    }
+    label {
+      display: block;
+      font-size: 14px;
+      color: var(--muted);
+      margin-bottom: 6px;
+    }
+    input, select, button, textarea {
+      width: 100%;
+      padding: 12px;
+      border-radius: 10px;
+      border: 1px solid var(--border);
+      background: #0c1b2a;
+      color: var(--text);
+      font-size: 15px;
+    }
+    button {
+      background: linear-gradient(135deg, #22c55e, #16a34a);
+      border: none;
+      font-weight: 700;
+      cursor: pointer;
+      margin-top: 10px;
+    }
+    button:disabled { opacity: 0.5; cursor: not-allowed; }
+    .row { display: flex; gap: 12px; }
+    .row > div { flex: 1; }
+    .badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 6px 10px;
+      background: rgba(34,197,94,0.15);
+      color: #6ee7b7;
+      border-radius: 999px;
+      font-size: 12px;
+    }
+    .error { color: #fca5a5; font-size: 14px; margin-top: 6px; }
+    .success { color: #bbf7d0; font-size: 14px; margin-top: 6px; }
+    .slots {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+      gap: 10px;
+    }
+    .slot-btn {
+      padding: 12px;
+      border-radius: 12px;
+      border: 1px solid var(--border);
+      background: #0f2033;
+      color: var(--text);
+      text-align: left;
+      cursor: pointer;
+    }
+    .slot-btn.selected {
+      border-color: var(--accent);
+      box-shadow: 0 0 0 1px var(--accent);
+    }
+    .hidden { display: none; }
+    .muted { color: var(--muted); font-size: 13px; }
+    .header {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      margin-bottom: 10px;
+    }
+    .logo {
+      width: 40px; height: 40px; border-radius: 12px;
+      background: linear-gradient(135deg, #22c55e, #16a34a);
+      display: inline-flex; align-items: center; justify-content: center;
+      font-weight: 800; color: #0b1724;
+    }
+  </style>
+  <script src="firebase-config.js"></script>
+  <script type="module">
+    import {initializeApp} from "https://www.gstatic.com/firebasejs/10.13.1/firebase-app.js";
+    import {
+      getAuth,
+      signInAnonymously,
+      onAuthStateChanged,
+      RecaptchaVerifier,
+      signInWithPhoneNumber,
+    } from "https://www.gstatic.com/firebasejs/10.13.1/firebase-auth.js";
+
+    // Copy firebase-config.example.js to firebase-config.js and configure it.
+    const firebaseConfig = window.OPENCRM_FIREBASE_CONFIG;
+    if (!firebaseConfig?.apiKey || !firebaseConfig?.projectId || !firebaseConfig?.appId) {
+      throw new Error("Configure your own Firebase project in firebase-config.js first.");
+    }
+    const app = initializeApp(firebaseConfig);
+    const auth = getAuth(app);
+
+    let idToken = null;
+    let phoneConfirmation = null;
+    let recaptchaVerifier = null;
+    signInAnonymously(auth).catch((e) => console.warn("Anon auth failed", e));
+    onAuthStateChanged(auth, async (user) => {
+      if (user) {
+        try {
+          idToken = await user.getIdToken();
+        } catch (err) {
+          console.warn("Failed to fetch ID token", err);
+        }
+      }
+    });
+
+    const initRecaptcha = () => {
+      if (!recaptchaVerifier) {
+        recaptchaVerifier = new RecaptchaVerifier(auth, "recaptcha-container", {
+          size: "invisible",
+        });
+      }
+      return recaptchaVerifier;
+    };
+
+    window.getAuthHeaders = async () => {
+      if (auth.currentUser) {
+        try {
+          const token = await auth.currentUser.getIdToken(true);
+          return {Authorization: `Bearer ${token}`};
+        } catch (err) {
+          console.warn("Token refresh failed", err);
+        }
+      }
+      return {};
+    };
+  </script>
+</head>
+<body>
+  <div class="page">
+    <div id="successScreen" class="card hidden">
+      <div class="badge">Booking confirmed</div>
+      <h2 style="margin:8px 0 4px;">Booking successfully scheduled</h2>
+      <p class="muted" id="successDetails"></p>
+      <button id="newBookingBtn">Book another</button>
+    </div>
+
+    <div class="header">
+      <div class="logo" id="bizLogo">B</div>
+      <div>
+        <div id="bizName" style="font-weight:700;">Find your clinic</div>
+        <div class="muted" id="bizSlug">Enter slug to begin</div>
+      </div>
+    </div>
+
+    <div class="card">
+      <label for="slug">Business slug</label>
+      <input id="slug" placeholder="e.g. bright-spine" />
+      <button id="resolveBtn">Continue</button>
+      <div class="error" id="resolveError"></div>
+    </div>
+
+    <div class="card" id="catalogCard" style="display:none;">
+      <div class="badge">Verified schedule</div>
+      <div class="row" style="margin-top:12px;">
+        <div>
+          <label for="service">Service</label>
+          <select id="service"></select>
+        </div>
+        <div>
+          <label for="provider">Provider</label>
+          <select id="provider"></select>
+        </div>
+      </div>
+      <label style="margin-top:12px;" for="date">Date</label>
+      <input type="date" id="date" />
+      <button id="loadSlotsBtn">Show available times</button>
+      <div class="error" id="slotsError"></div>
+    </div>
+
+    <div class="card" id="slotsCard" style="display:none;">
+      <h3 style="margin:0 0 10px;">Available times</h3>
+      <div class="slots" id="slots"></div>
+    </div>
+
+    <div class="card" id="detailsCard" style="display:none;">
+      <div class="row">
+        <div>
+          <label for="first">First name</label>
+          <input id="first" />
+        </div>
+        <div>
+          <label for="last">Last name</label>
+          <input id="last" />
+        </div>
+      </div>
+      <label style="margin-top:12px;" for="email">Email</label>
+      <input id="email" type="email" />
+      <label style="margin-top:12px;" for="phone">Phone</label>
+      <input id="phone" type="tel" />
+      <div id="recaptcha-container" style="margin:10px 0;"></div>
+      <div class="row" style="margin-top:10px;">
+        <div>
+          <button type="button" id="sendCodeBtn">Send code</button>
+        </div>
+        <div>
+          <button type="button" id="verifyBtn">Verify code</button>
+        </div>
+      </div>
+      <label style="margin-top:8px;" for="code">Code</label>
+      <input id="code" type="text" inputmode="numeric" maxlength="6" placeholder="123456" />
+      <div class="muted" id="verifyMsg"></div>
+      <label style="margin-top:12px;" for="notes">Notes (optional)</label>
+      <textarea id="notes" rows="3"></textarea>
+      <button id="bookBtn">Confirm booking</button>
+      <div class="error" id="bookError"></div>
+      <div class="success" id="bookSuccess"></div>
+    </div>
+  </div>
+
+  <script>
+    const resolveBtn = document.getElementById("resolveBtn");
+    const slugInput = document.getElementById("slug");
+    const resolveError = document.getElementById("resolveError");
+    const catalogCard = document.getElementById("catalogCard");
+    const slotsCard = document.getElementById("slotsCard");
+    const detailsCard = document.getElementById("detailsCard");
+    const bizNameEl = document.getElementById("bizName");
+    const bizSlugEl = document.getElementById("bizSlug");
+    const logoEl = document.getElementById("bizLogo");
+    const serviceSel = document.getElementById("service");
+    const providerSel = document.getElementById("provider");
+    const dateInput = document.getElementById("date");
+    const loadSlotsBtn = document.getElementById("loadSlotsBtn");
+    const slotsError = document.getElementById("slotsError");
+    const slotsEl = document.getElementById("slots");
+    const firstInput = document.getElementById("first");
+    const lastInput = document.getElementById("last");
+    const emailInput = document.getElementById("email");
+    const phoneInput = document.getElementById("phone");
+    const notesInput = document.getElementById("notes");
+    const bookBtn = document.getElementById("bookBtn");
+    const bookError = document.getElementById("bookError");
+    const bookSuccess = document.getElementById("bookSuccess");
+    const sendCodeBtn = document.getElementById("sendCodeBtn");
+    const verifyBtn = document.getElementById("verifyBtn");
+    const codeInput = document.getElementById("code");
+    const verifyMsg = document.getElementById("verifyMsg");
+    const successScreen = document.getElementById("successScreen");
+    const successDetails = document.getElementById("successDetails");
+    const newBookingBtn = document.getElementById("newBookingBtn");
+
+    const apiBase = "https://example.com";
+    let businessId = null;
+    let selectedSlot = null;
+    let verifiedPhone = null;
+    let recaptchaReady = false;
+
+    const resetFlow = () => {
+      businessId = null;
+      selectedSlot = null;
+      verifiedPhone = null;
+      slugInput.value = "";
+      serviceSel.innerHTML = "";
+      providerSel.innerHTML = "";
+      slotsEl.innerHTML = "";
+      slotsError.textContent = "";
+      bookError.textContent = "";
+      bookSuccess.textContent = "";
+      resolveError.textContent = "";
+      firstInput.value = "";
+      lastInput.value = "";
+      emailInput.value = "";
+      phoneInput.value = "";
+      notesInput.value = "";
+      codeInput.value = "";
+      verifyMsg.textContent = "";
+      catalogCard.style.display = "none";
+      slotsCard.style.display = "none";
+      detailsCard.style.display = "none";
+      successScreen.classList.add("hidden");
+    };
+
+    const today = new Date();
+    dateInput.valueAsDate = today;
+
+    const setLoading = (btn, loading) => {
+      btn.disabled = loading;
+      btn.textContent = loading ? "Please wait..." : btn.dataset.label || btn.textContent;
+    };
+
+    resolveBtn.dataset.label = "Continue";
+    loadSlotsBtn.dataset.label = "Show available times";
+    bookBtn.dataset.label = "Confirm booking";
+    sendCodeBtn.dataset.label = "Send code";
+    verifyBtn.dataset.label = "Verify code";
+
+    resolveBtn.onclick = async () => {
+      resolveError.textContent = "";
+      const slug = slugInput.value.trim();
+      if (!slug) {
+        resolveError.textContent = "Please enter a business slug.";
+        return;
+      }
+      setLoading(resolveBtn, true);
+      try {
+        const headers = await window.getAuthHeaders();
+        const resp = await fetch(`${apiBase}/resolveBusinessSlug?slug=${encodeURIComponent(slug)}`, {headers});
+        if (!resp.ok) throw new Error("Not found");
+        const data = await resp.json();
+        businessId = data.businessId;
+        bizNameEl.textContent = data.name || "Business";
+        bizSlugEl.textContent = `slug: ${slug}`;
+        logoEl.textContent = (data.name || "B").slice(0, 1).toUpperCase();
+        await loadCatalog();
+        catalogCard.style.display = "block";
+      } catch (e) {
+        resolveError.textContent = "Business not found.";
+      } finally {
+        setLoading(resolveBtn, false);
+      }
+    };
+
+    async function loadCatalog() {
+      const headers = await window.getAuthHeaders();
+      const resp = await fetch(`${apiBase}/publicListCatalog?businessId=${encodeURIComponent(businessId)}`, {headers});
+      if (!resp.ok) throw new Error("catalog_error");
+      const data = await resp.json();
+      fillSelect(serviceSel, data.services, "Select service");
+      fillSelect(providerSel, data.providers, "Any provider");
+    }
+
+    function fillSelect(selectEl, items, placeholder) {
+      selectEl.innerHTML = "";
+      const ph = document.createElement("option");
+      ph.value = "";
+      ph.textContent = placeholder;
+      selectEl.appendChild(ph);
+      for (const item of items) {
+        const opt = document.createElement("option");
+        opt.value = item.id;
+        opt.textContent = item.name || "Unnamed";
+        selectEl.appendChild(opt);
+      }
+    }
+
+    loadSlotsBtn.onclick = async () => {
+      if (!businessId) return;
+      slotsError.textContent = "";
+      slotsEl.innerHTML = "";
+      setLoading(loadSlotsBtn, true);
+      try {
+        const payload = {
+          businessId,
+          startDate: dateInput.value,
+          providerId: providerSel.value || undefined,
+          serviceId: serviceSel.value || undefined,
+        };
+        const headers = {
+          "Content-Type": "application/json",
+          ...(await window.getAuthHeaders()),
+        };
+        const resp = await fetch(`${apiBase}/publicGetAvailableAppointments`, {
+          method: "POST",
+          headers,
+          body: JSON.stringify(payload),
+        });
+        if (!resp.ok) throw new Error("slots_error");
+        const data = await resp.json();
+        if (!data.slots || !data.slots.length) {
+          slotsError.textContent = "No availability for this day.";
+          slotsCard.style.display = "none";
+          return;
+        }
+        slotsCard.style.display = "block";
+        selectedSlot = null;
+        renderSlots(data.slots);
+        detailsCard.style.display = "block";
+      } catch (e) {
+        slotsError.textContent = "Could not load availability.";
+      } finally {
+        setLoading(loadSlotsBtn, false);
+      }
+    };
+
+    function renderSlots(slots) {
+      slotsEl.innerHTML = "";
+      slots.slice(0, 20).forEach((slot) => {
+        const btn = document.createElement("button");
+        btn.className = "slot-btn";
+        const start = slot.startTime?._seconds
+          ? new Date(slot.startTime._seconds * 1000)
+          : new Date(slot.startTime);
+        const end = slot.endTime?._seconds
+          ? new Date(slot.endTime._seconds * 1000)
+          : (slot.endTime ? new Date(slot.endTime) : null);
+        const timeLabel = end
+          ? `${start.toLocaleTimeString([], {hour: 'numeric', minute: '2-digit'})} - ${end.toLocaleTimeString([], {hour: 'numeric', minute: '2-digit'})}`
+          : start.toLocaleTimeString([], {hour: 'numeric', minute: '2-digit'});
+        btn.textContent = `${start.toLocaleDateString()} • ${timeLabel}`;
+        btn.onclick = () => {
+          document.querySelectorAll(".slot-btn").forEach((b) => b.classList.remove("selected"));
+          btn.classList.add("selected");
+          selectedSlot = {startTime: start, providerId: slot.providerId, serviceId: slot.serviceId};
+        };
+        slotsEl.appendChild(btn);
+      });
+    }
+
+    sendCodeBtn.onclick = async () => {
+      verifyMsg.textContent = "";
+      const phone = phoneInput.value.trim();
+      if (!businessId || !phone) {
+        verifyMsg.textContent = "Enter phone after selecting business.";
+        return;
+      }
+      if (!/^\+?[0-9]{7,15}$/.test(phone)) {
+        verifyMsg.textContent = "Enter phone in international format (e.g., +15551234567).";
+        return;
+      }
+      setLoading(sendCodeBtn, true);
+      try {
+        initRecaptcha();
+        const formatted = phone.startsWith("+") ? phone : `+${phone}`;
+        phoneConfirmation = await signInWithPhoneNumber(auth, formatted, recaptchaVerifier);
+        verifyMsg.textContent = "Code sent. Please check your phone.";
+      } catch (e) {
+        verifyMsg.textContent = "Could not send code.";
+      } finally {
+        setLoading(sendCodeBtn, false);
+      }
+    };
+
+    verifyBtn.onclick = async () => {
+      verifyMsg.textContent = "";
+      const phone = phoneInput.value.trim();
+      const code = codeInput.value.trim();
+      if (!businessId || !phone || !code) {
+        verifyMsg.textContent = "Phone and code required.";
+        return;
+      }
+      if (!phoneConfirmation) {
+        verifyMsg.textContent = "Send the code first.";
+        return;
+      }
+      setLoading(verifyBtn, true);
+      try {
+        await phoneConfirmation.confirm(code);
+        verifiedPhone = phone.startsWith("+") ? phone : `+${phone}`;
+        verifyMsg.textContent = "Phone verified.";
+      } catch (e) {
+        verifyMsg.textContent = "Could not verify code.";
+      } finally {
+        setLoading(verifyBtn, false);
+      }
+    };
+
+    newBookingBtn.onclick = () => {
+      resetFlow();
+      successDetails.textContent = "";
+      bookSuccess.textContent = "";
+      bookError.textContent = "";
+      window.scrollTo({top: 0, behavior: "smooth"});
+    };
+
+    bookBtn.onclick = async () => {
+      bookError.textContent = "";
+      bookSuccess.textContent = "";
+      if (!selectedSlot) {
+        bookError.textContent = "Pick a time slot.";
+        return;
+      }
+      const first = firstInput.value.trim();
+      const last = lastInput.value.trim();
+      const email = emailInput.value.trim();
+      if (!first || !last || !email) {
+        bookError.textContent = "First name, last name, and email are required.";
+        return;
+      }
+      const phone = phoneInput.value.trim();
+      const notes = notesInput.value.trim();
+      if (!phone) {
+        bookError.textContent = "Phone is required.";
+        return;
+      }
+      if (verifiedPhone !== phone) {
+        bookError.textContent = "Please verify your phone number.";
+        return;
+      }
+      setLoading(bookBtn, true);
+      try {
+        const payload = {
+          businessId,
+          serviceId: serviceSel.value || selectedSlot.serviceId || undefined,
+          providerId: providerSel.value || selectedSlot.providerId || undefined,
+          startTime: selectedSlot.startTime.toISOString(),
+          client: {firstName: first, lastName: last, email, phone},
+          notes: notes || undefined,
+        };
+        const headers = {
+          "Content-Type": "application/json",
+          ...(await window.getAuthHeaders()),
+        };
+        const resp = await fetch(`${apiBase}/publicCreateAppointment`, {
+          method: "POST",
+          headers,
+          body: JSON.stringify(payload),
+        });
+        const data = await resp.json();
+        if (!resp.ok) {
+          bookError.textContent = data.error || "Could not book. Try another slot.";
+          return;
+        }
+        successDetails.textContent = `${data.appointmentId ? "Reference: " + data.appointmentId + " • " : ""}${selectedSlot.startTime.toLocaleString()}`;
+        successScreen.classList.remove("hidden");
+        catalogCard.style.display = "none";
+        slotsCard.style.display = "none";
+        detailsCard.style.display = "none";
+        window.scrollTo({top: 0, behavior: "smooth"});
+      } catch (e) {
+        bookError.textContent = "Could not book. Try again.";
+      } finally {
+        setLoading(bookBtn, false);
+      }
+    };
+  </script>
+</body>
+</html>

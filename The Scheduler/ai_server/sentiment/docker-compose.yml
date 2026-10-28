@@ -1,0 +1,54 @@
+# Local development with Ollama
+# Agent AI-6: Python Sentiment Service (Ollama LLM)
+version: '3.8'
+
+services:
+  ollama:
+    image: ollama/ollama
+    ports:
+      - "11434:11434"
+    volumes:
+      - ollama_data:/root/.ollama
+    deploy:
+      resources:
+        reservations:
+          devices:
+            - driver: nvidia
+              count: 1
+              capabilities: [gpu]
+    restart: unless-stopped
+    # Pull models on startup
+    entrypoint: ["/bin/sh", "-c"]
+    command:
+      - |
+        ollama serve &
+        sleep 5
+        ollama pull phi3:mini
+        ollama pull llama3.1:8b
+        wait
+
+  sentiment-service:
+    build: .
+    ports:
+      - "8002:8002"
+    environment:
+      - SENTIMENT_PROVIDER=${SENTIMENT_PROVIDER:-ollama}
+      - SENTIMENT_OLLAMA_URL=http://ollama:11434
+      - SENTIMENT_DEFAULT_MODEL=phi3:mini
+      - SENTIMENT_DEEP_ANALYSIS_MODEL=llama3.1:8b
+      - GOOGLE_APPLICATION_CREDENTIALS=${GOOGLE_APPLICATION_CREDENTIALS:-}
+      - GCLOUD_PROJECT=${GCLOUD_PROJECT:-}
+      - SENTIMENT_LANGUAGE=${SENTIMENT_LANGUAGE:-en}
+      - SENTIMENT_MODEL=${SENTIMENT_MODEL:-gpt-4o-mini}
+      - OPENAI_API_KEY=${OPENAI_API_KEY:-}
+      - SENTIMENT_REQUIRE_HTTPS=${SENTIMENT_REQUIRE_HTTPS:-false}
+      - SENTIMENT_REQUIRE_AUTHENTICATION=${SENTIMENT_REQUIRE_AUTH:-false}
+    # Mount secrets when using hosted providers (optional)
+    # volumes:
+    #   - ./secrets/gcp-sa.json:/secrets/gcp-sa.json:ro
+    depends_on:
+      - ollama
+    restart: unless-stopped
+
+volumes:
+  ollama_data:

@@ -1,0 +1,77 @@
+import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
+
+import '../../../../core/config/app_config.dart';
+
+/// Hero header widget for the client portal with branding and shareable link
+class PortalHero extends StatelessWidget {
+  const PortalHero({
+    required this.config,
+    required this.shareUrl,
+    super.key,
+  });
+
+  final AppConfig config;
+  final String shareUrl;
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      padding: const EdgeInsets.all(24),
+      decoration: BoxDecoration(
+        borderRadius: BorderRadius.circular(16),
+        gradient: LinearGradient(
+          colors: [
+            config.branding.primaryColor.withValues(alpha: 0.9),
+            config.branding.accentColor.withValues(alpha: 0.8),
+          ],
+        ),
+      ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Text(
+            '${config.branding.productName} client portal',
+            style: Theme.of(
+              context,
+            ).textTheme.headlineSmall?.copyWith(color: Colors.white),
+          ),
+          const SizedBox(height: 8),
+          Text(
+            'Share this link with clients to let them self-book.',
+            style: Theme.of(
+              context,
+            ).textTheme.bodyMedium?.copyWith(color: Colors.white),
+          ),
+          const SizedBox(height: 16),
+          Container(
+            padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+            decoration: BoxDecoration(
+              color: Colors.white.withValues(alpha: 0.2),
+              borderRadius: BorderRadius.circular(8),
+            ),
+            child: Row(
+              children: [
+                Expanded(
+                  child: Text(
+                    shareUrl,
+                    style: const TextStyle(color: Colors.white),
+                  ),
+                ),
+                IconButton(
+                  onPressed: () {
+                    Clipboard.setData(ClipboardData(text: shareUrl));
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      const SnackBar(content: Text('Link copied to clipboard')),
+                    );
+                  },
+                  icon: const Icon(Icons.copy_all, color: Colors.white),
+                ),
+              ],
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+}

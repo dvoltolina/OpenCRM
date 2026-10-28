@@ -1,0 +1,920 @@
+/**
+ * Reports Component Styles
+ * Styles for advanced analytics and reporting components
+ *
+ * Agent CRM-31 Implementation
+ */
+
+/* ============================================
+   Common Report Styles
+   ============================================ */
+
+.lead-source-roi,
+.appointment-completion,
+.staff-utilization,
+.payout-report,
+.dispute-log {
+  background: var(--color-bg);
+  border-radius: 8px;
+  padding: 24px;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+}
+
+/* Headers */
+.lead-source-roi__header,
+.appointment-completion__header,
+.staff-utilization__header,
+.payout-report__header,
+.dispute-log__header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 24px;
+  flex-wrap: wrap;
+  gap: 16px;
+}
+
+.lead-source-roi__title,
+.appointment-completion__title,
+.staff-utilization__title,
+.payout-report__title,
+.dispute-log__title {
+  font-size: 24px;
+  font-weight: 600;
+  color: var(--color-text);
+  margin: 0;
+}
+
+/* Actions */
+.lead-source-roi__actions,
+.payout-report__actions {
+  display: flex;
+  gap: 12px;
+  align-items: center;
+}
+
+/* View toggles */
+.lead-source-roi__view-toggle,
+.payout-report__view-toggle {
+  display: flex;
+  gap: 0;
+  border: 1px solid var(--color-border);
+  border-radius: 6px;
+  overflow: hidden;
+}
+
+.lead-source-roi__view-btn,
+.payout-report__view-btn {
+  padding: 8px 16px;
+  background: var(--color-bg);
+  border: none;
+  color: var(--color-text);
+  cursor: pointer;
+  font-size: 14px;
+  transition: all 0.2s;
+}
+
+.lead-source-roi__view-btn:hover,
+.payout-report__view-btn:hover {
+  background: var(--color-bg-secondary);
+}
+
+.lead-source-roi__view-btn--active,
+.payout-report__view-btn--active {
+  background: var(--color-primary);
+  color: white;
+}
+
+.lead-source-roi__view-btn + .lead-source-roi__view-btn,
+.payout-report__view-btn + .payout-report__view-btn {
+  border-left: 1px solid var(--color-border);
+}
+
+/* Export buttons */
+.lead-source-roi__export-btn,
+.payout-report__export-btn {
+  padding: 8px 16px;
+  background: var(--color-success);
+  color: white;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 14px;
+  font-weight: 500;
+  transition: background 0.2s;
+}
+
+.lead-source-roi__export-btn:hover,
+.payout-report__export-btn:hover {
+  background: var(--color-success-dark, #059669);
+}
+
+.lead-source-roi__export-btn:disabled,
+.payout-report__export-btn:disabled {
+  background: var(--color-border);
+  cursor: not-allowed;
+}
+
+/* Loading states */
+.lead-source-roi__loading,
+.appointment-completion__loading,
+.staff-utilization__loading,
+.payout-report__loading,
+.dispute-log__loading {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 64px 24px;
+  color: var(--color-text-muted);
+}
+
+.lead-source-roi__spinner,
+.appointment-completion__spinner,
+.staff-utilization__spinner,
+.payout-report__spinner,
+.dispute-log__spinner {
+  width: 40px;
+  height: 40px;
+  border: 3px solid var(--color-border);
+  border-top-color: var(--color-primary);
+  border-radius: 50%;
+  animation: spin 0.8s linear infinite;
+  margin-bottom: 16px;
+}
+
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+/* Empty states */
+.lead-source-roi__empty,
+.appointment-completion__empty,
+.staff-utilization__empty,
+.payout-report__empty,
+.dispute-log__empty {
+  text-align: center;
+  padding: 64px 24px;
+  color: var(--color-text-muted);
+}
+
+/* Info notes */
+.lead-source-roi__info,
+.staff-utilization__info,
+.dispute-log__info {
+  margin-top: 16px;
+  padding: 12px;
+  background: var(--color-bg-secondary);
+  border-left: 3px solid var(--color-info);
+  border-radius: 4px;
+  font-size: 14px;
+  color: var(--color-text-muted);
+}
+
+/* ============================================
+   Lead Source ROI Specific
+   ============================================ */
+
+.lead-source-roi__table-container {
+  overflow-x: auto;
+  margin-top: 24px;
+}
+
+.lead-source-roi__table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 14px;
+}
+
+.lead-source-roi__table th {
+  background: var(--color-bg-secondary);
+  padding: 12px;
+  text-align: left;
+  font-weight: 600;
+  color: var(--color-text);
+  border-bottom: 2px solid var(--color-border);
+}
+
+.lead-source-roi__table td {
+  padding: 12px;
+  border-bottom: 1px solid var(--color-border);
+  color: var(--color-text);
+}
+
+.lead-source-roi__table tbody tr:hover {
+  background: var(--color-bg-secondary);
+}
+
+.lead-source-roi__source {
+  font-weight: 500;
+}
+
+.lead-source-roi__cost-cell {
+  cursor: pointer;
+  position: relative;
+}
+
+.lead-source-roi__cost-value {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.lead-source-roi__edit-hint {
+  font-size: 11px;
+  color: var(--color-text-muted);
+  opacity: 0;
+  transition: opacity 0.2s;
+}
+
+.lead-source-roi__cost-cell:hover .lead-source-roi__edit-hint {
+  opacity: 1;
+}
+
+.lead-source-roi__cost-input {
+  width: 100%;
+  padding: 6px;
+  border: 1px solid var(--color-primary);
+  border-radius: 4px;
+  font-size: 14px;
+}
+
+.lead-source-roi__positive {
+  color: var(--color-success);
+}
+
+.lead-source-roi__negative {
+  color: var(--color-danger);
+}
+
+.lead-source-roi__table tfoot td {
+  font-weight: 600;
+  background: var(--color-bg-secondary);
+  border-top: 2px solid var(--color-border);
+}
+
+/* ============================================
+   Appointment Completion Specific
+   ============================================ */
+
+.appointment-completion__stats {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+  gap: 16px;
+  margin-bottom: 24px;
+}
+
+.appointment-completion__stat {
+  padding: 16px;
+  background: var(--color-bg-secondary);
+  border-radius: 6px;
+  border-left: 3px solid var(--color-border);
+}
+
+.appointment-completion__stat--success {
+  border-left-color: var(--color-success);
+}
+
+.appointment-completion__stat--danger {
+  border-left-color: var(--color-danger);
+}
+
+.appointment-completion__stat--warning {
+  border-left-color: var(--color-warning);
+}
+
+.appointment-completion__stat--primary {
+  border-left-color: var(--color-primary);
+}
+
+.appointment-completion__stat-label {
+  display: block;
+  font-size: 12px;
+  color: var(--color-text-muted);
+  margin-bottom: 4px;
+}
+
+.appointment-completion__stat-value {
+  display: block;
+  font-size: 24px;
+  font-weight: 600;
+  color: var(--color-text);
+}
+
+.appointment-completion__controls {
+  display: flex;
+  gap: 24px;
+  margin-bottom: 24px;
+  flex-wrap: wrap;
+}
+
+.appointment-completion__control-group {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.appointment-completion__control-group label {
+  font-size: 14px;
+  font-weight: 500;
+  color: var(--color-text);
+}
+
+.appointment-completion__select {
+  padding: 8px 12px;
+  border: 1px solid var(--color-border);
+  border-radius: 6px;
+  background: var(--color-bg);
+  color: var(--color-text);
+  font-size: 14px;
+  cursor: pointer;
+}
+
+.appointment-completion__button-group {
+  display: flex;
+  gap: 0;
+  border: 1px solid var(--color-border);
+  border-radius: 6px;
+  overflow: hidden;
+}
+
+.appointment-completion__btn {
+  padding: 8px 16px;
+  background: var(--color-bg);
+  border: none;
+  color: var(--color-text);
+  cursor: pointer;
+  font-size: 14px;
+  transition: all 0.2s;
+}
+
+.appointment-completion__btn:hover {
+  background: var(--color-bg-secondary);
+}
+
+.appointment-completion__btn--active {
+  background: var(--color-primary);
+  color: white;
+}
+
+.appointment-completion__btn + .appointment-completion__btn {
+  border-left: 1px solid var(--color-border);
+}
+
+/* ============================================
+   Staff Utilization Heatmap Specific
+   ============================================ */
+
+.staff-utilization__selector {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.staff-utilization__selector label {
+  font-size: 14px;
+  font-weight: 500;
+  color: var(--color-text);
+}
+
+.staff-utilization__select {
+  padding: 8px 12px;
+  border: 1px solid var(--color-border);
+  border-radius: 6px;
+  background: var(--color-bg);
+  color: var(--color-text);
+  font-size: 14px;
+  cursor: pointer;
+}
+
+.staff-utilization__stats {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 16px;
+  margin-bottom: 24px;
+}
+
+.staff-utilization__stat {
+  padding: 16px;
+  background: var(--color-bg-secondary);
+  border-radius: 6px;
+}
+
+.staff-utilization__stat-label {
+  display: block;
+  font-size: 12px;
+  color: var(--color-text-muted);
+  margin-bottom: 4px;
+}
+
+.staff-utilization__stat-value {
+  display: block;
+  font-size: 24px;
+  font-weight: 600;
+  color: var(--color-text);
+}
+
+.staff-utilization__heatmap-container {
+  position: relative;
+  overflow-x: auto;
+  margin-bottom: 24px;
+}
+
+.staff-utilization__heatmap {
+  display: inline-block;
+  min-width: 100%;
+}
+
+.staff-utilization__hour-labels {
+  display: grid;
+  grid-template-columns: 60px repeat(16, 50px);
+  gap: 2px;
+  margin-bottom: 2px;
+}
+
+.staff-utilization__corner-cell {
+  width: 60px;
+}
+
+.staff-utilization__hour-label {
+  width: 50px;
+  font-size: 11px;
+  color: var(--color-text-muted);
+  text-align: center;
+  padding: 4px 2px;
+}
+
+.staff-utilization__row {
+  display: grid;
+  grid-template-columns: 60px repeat(16, 50px);
+  gap: 2px;
+  margin-bottom: 2px;
+}
+
+.staff-utilization__day-label {
+  width: 60px;
+  font-size: 12px;
+  font-weight: 500;
+  color: var(--color-text);
+  display: flex;
+  align-items: center;
+  padding-right: 8px;
+  justify-content: flex-end;
+}
+
+.staff-utilization__cell {
+  width: 50px;
+  height: 50px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: transform 0.2s;
+  position: relative;
+}
+
+.staff-utilization__cell:hover {
+  transform: scale(1.1);
+  z-index: 1;
+}
+
+.staff-utilization__count {
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--color-text);
+}
+
+.staff-utilization__tooltip {
+  position: fixed;
+  background: var(--color-text);
+  color: white;
+  padding: 8px 12px;
+  border-radius: 6px;
+  font-size: 12px;
+  pointer-events: none;
+  z-index: 1000;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+}
+
+.staff-utilization__legend {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  justify-content: center;
+  padding: 16px;
+  background: var(--color-bg-secondary);
+  border-radius: 6px;
+  margin-bottom: 16px;
+}
+
+.staff-utilization__legend-label {
+  font-size: 14px;
+  font-weight: 500;
+  color: var(--color-text);
+}
+
+.staff-utilization__legend-scale {
+  display: flex;
+  gap: 12px;
+}
+
+.staff-utilization__legend-item {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 12px;
+  color: var(--color-text-muted);
+}
+
+.staff-utilization__legend-color {
+  width: 24px;
+  height: 24px;
+  border-radius: 4px;
+}
+
+/* Heatmap color variables */
+:root {
+  --color-heatmap-1: #d1fae5;
+  --color-heatmap-2: #6ee7b7;
+  --color-heatmap-3: #34d399;
+  --color-heatmap-4: #10b981;
+  --color-heatmap-5: #059669;
+}
+
+/* ============================================
+   Payout Report Specific
+   ============================================ */
+
+.payout-report__stats {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+  gap: 16px;
+  margin-bottom: 24px;
+}
+
+.payout-report__stat {
+  padding: 16px;
+  background: var(--color-bg-secondary);
+  border-radius: 6px;
+  border-left: 3px solid var(--color-border);
+}
+
+.payout-report__stat--primary {
+  border-left-color: var(--color-primary);
+}
+
+.payout-report__stat-label {
+  display: block;
+  font-size: 12px;
+  color: var(--color-text-muted);
+  margin-bottom: 4px;
+}
+
+.payout-report__stat-value {
+  display: block;
+  font-size: 20px;
+  font-weight: 600;
+  color: var(--color-text);
+}
+
+.payout-report__controls {
+  display: flex;
+  gap: 24px;
+  margin-bottom: 24px;
+  flex-wrap: wrap;
+}
+
+.payout-report__control-group {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.payout-report__control-group label {
+  font-size: 14px;
+  font-weight: 500;
+  color: var(--color-text);
+}
+
+.payout-report__button-group {
+  display: flex;
+  gap: 0;
+  border: 1px solid var(--color-border);
+  border-radius: 6px;
+  overflow: hidden;
+}
+
+.payout-report__btn {
+  padding: 8px 16px;
+  background: var(--color-bg);
+  border: none;
+  color: var(--color-text);
+  cursor: pointer;
+  font-size: 14px;
+  transition: all 0.2s;
+}
+
+.payout-report__btn:hover {
+  background: var(--color-bg-secondary);
+}
+
+.payout-report__btn--active {
+  background: var(--color-primary);
+  color: white;
+}
+
+.payout-report__btn + .payout-report__btn {
+  border-left: 1px solid var(--color-border);
+}
+
+.payout-report__table-container {
+  overflow-x: auto;
+}
+
+.payout-report__table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 14px;
+}
+
+.payout-report__table th {
+  background: var(--color-bg-secondary);
+  padding: 12px;
+  text-align: left;
+  font-weight: 600;
+  color: var(--color-text);
+  border-bottom: 2px solid var(--color-border);
+}
+
+.payout-report__table td {
+  padding: 12px;
+  border-bottom: 1px solid var(--color-border);
+  color: var(--color-text);
+}
+
+.payout-report__table tbody tr:hover {
+  background: var(--color-bg-secondary);
+}
+
+.payout-report__table tfoot td {
+  font-weight: 600;
+  background: var(--color-bg-secondary);
+  border-top: 2px solid var(--color-border);
+}
+
+/* ============================================
+   Dispute Log Specific
+   ============================================ */
+
+.dispute-log__filters {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+
+.dispute-log__filters label {
+  font-size: 14px;
+  font-weight: 500;
+  color: var(--color-text);
+}
+
+.dispute-log__button-group {
+  display: flex;
+  gap: 8px;
+}
+
+.dispute-log__filter-btn {
+  padding: 8px 16px;
+  background: var(--color-bg-secondary);
+  border: 1px solid var(--color-border);
+  color: var(--color-text);
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 14px;
+  transition: all 0.2s;
+}
+
+.dispute-log__filter-btn:hover {
+  background: var(--color-border);
+}
+
+.dispute-log__filter-btn--active {
+  background: var(--color-primary);
+  color: white;
+  border-color: var(--color-primary);
+}
+
+.dispute-log__stats {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+  gap: 16px;
+  margin-bottom: 24px;
+}
+
+.dispute-log__stat {
+  padding: 16px;
+  background: var(--color-bg-secondary);
+  border-radius: 6px;
+  border-left: 3px solid var(--color-border);
+}
+
+.dispute-log__stat--warning {
+  border-left-color: var(--color-warning);
+}
+
+.dispute-log__stat--success {
+  border-left-color: var(--color-success);
+}
+
+.dispute-log__stat--danger {
+  border-left-color: var(--color-danger);
+}
+
+.dispute-log__stat-label {
+  display: block;
+  font-size: 12px;
+  color: var(--color-text-muted);
+  margin-bottom: 4px;
+}
+
+.dispute-log__stat-value {
+  display: block;
+  font-size: 20px;
+  font-weight: 600;
+  color: var(--color-text);
+}
+
+.dispute-log__table-container {
+  overflow-x: auto;
+}
+
+.dispute-log__table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 14px;
+}
+
+.dispute-log__table th {
+  background: var(--color-bg-secondary);
+  padding: 12px;
+  text-align: left;
+  font-weight: 600;
+  color: var(--color-text);
+  border-bottom: 2px solid var(--color-border);
+}
+
+.dispute-log__sortable {
+  cursor: pointer;
+  user-select: none;
+}
+
+.dispute-log__sortable:hover {
+  background: var(--color-border);
+}
+
+.dispute-log__table td {
+  padding: 12px;
+  border-bottom: 1px solid var(--color-border);
+  color: var(--color-text);
+}
+
+.dispute-log__table tbody tr:hover {
+  background: var(--color-bg-secondary);
+}
+
+.dispute-log__status-badge {
+  display: inline-block;
+  padding: 4px 12px;
+  border-radius: 12px;
+  font-size: 12px;
+  font-weight: 500;
+  text-transform: uppercase;
+}
+
+.dispute-log__status-badge--warning {
+  background: rgba(251, 191, 36, 0.1);
+  color: var(--color-warning);
+}
+
+.dispute-log__status-badge--success {
+  background: rgba(16, 185, 129, 0.1);
+  color: var(--color-success);
+}
+
+.dispute-log__status-badge--danger {
+  background: rgba(239, 68, 68, 0.1);
+  color: var(--color-danger);
+}
+
+.dispute-log__reason {
+  max-width: 300px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.dispute-log__age--old {
+  color: var(--color-danger);
+  font-weight: 500;
+}
+
+.dispute-log__actions {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+.dispute-log__link-btn {
+  background: none;
+  border: none;
+  color: var(--color-primary);
+  cursor: pointer;
+  text-decoration: underline;
+  padding: 0;
+  font-size: 14px;
+}
+
+.dispute-log__link-btn:hover {
+  color: var(--color-primary-dark, #2563eb);
+}
+
+.dispute-log__action-btn {
+  padding: 6px 12px;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 12px;
+  font-weight: 500;
+  transition: all 0.2s;
+}
+
+.dispute-log__action-btn--primary {
+  background: var(--color-primary);
+  color: white;
+}
+
+.dispute-log__action-btn--primary:hover {
+  background: var(--color-primary-dark, #2563eb);
+}
+
+.dispute-log__action-btn--success {
+  background: var(--color-success);
+  color: white;
+}
+
+.dispute-log__action-btn--success:hover {
+  background: var(--color-success-dark, #059669);
+}
+
+.dispute-log__action-btn--danger {
+  background: var(--color-danger);
+  color: white;
+}
+
+.dispute-log__action-btn--danger:hover {
+  background: var(--color-danger-dark, #dc2626);
+}
+
+.dispute-log__resolved-date {
+  font-size: 12px;
+  color: var(--color-text-muted);
+}
+
+/* ============================================
+   Responsive Design
+   ============================================ */
+
+@media (max-width: 768px) {
+  .lead-source-roi__header,
+  .appointment-completion__header,
+  .staff-utilization__header,
+  .payout-report__header,
+  .dispute-log__header {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .appointment-completion__stats,
+  .payout-report__stats,
+  .dispute-log__stats {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  .staff-utilization__stats {
+    grid-template-columns: 1fr;
+  }
+
+  .appointment-completion__controls,
+  .payout-report__controls {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .staff-utilization__heatmap-container {
+    overflow-x: scroll;
+  }
+}

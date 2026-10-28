@@ -1,0 +1,6 @@
+firstName,lastName,email,phone,companyName,source
+John,Doe,,555-3001,MissingEmail,website
+,Smith,noname@example.com,555-3002,MissingFirst,referral
+Alice,,incomplete@example.com,555-3003,MissingLast,coldCall
+Bob,Jones,bob@example.com,555-3004,,
+ValidFirst,ValidLast,valid@example.com,555-3005,ValidCo,social

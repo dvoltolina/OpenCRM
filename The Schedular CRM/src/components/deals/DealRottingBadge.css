@@ -1,0 +1,134 @@
+/**
+ * DealRottingBadge Styles
+ * Agent CRM-41 Implementation
+ */
+
+/* ============================================
+   Badge Base Styles
+   ============================================ */
+
+.deal-rotting-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  padding: 4px 8px;
+  border-radius: 4px;
+  font-size: 12px;
+  font-weight: 500;
+  line-height: 1;
+  white-space: nowrap;
+  transition: all 0.2s ease;
+}
+
+.deal-rotting-badge[role='button'] {
+  cursor: pointer;
+}
+
+.deal-rotting-badge[role='button']:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.deal-rotting-badge[role='button']:focus {
+  outline: 2px solid var(--color-primary, #007bff);
+  outline-offset: 2px;
+}
+
+/* ============================================
+   Badge Variants
+   ============================================ */
+
+/* Warning state (yellow) */
+.deal-rotting-badge--warning {
+  background-color: #fff3cd;
+  color: #856404;
+  border: 1px solid #ffc107;
+}
+
+.deal-rotting-badge--warning[role='button']:hover {
+  background-color: #ffe69c;
+}
+
+/* Rotting state (red) */
+.deal-rotting-badge--rotting {
+  background-color: #f8d7da;
+  color: #721c24;
+  border: 1px solid #f5c6cb;
+}
+
+.deal-rotting-badge--rotting[role='button']:hover {
+  background-color: #f1b0b7;
+}
+
+/* Normal state (shouldn't show, but just in case) */
+.deal-rotting-badge--normal {
+  display: none;
+}
+
+/* ============================================
+   Compact Variant
+   ============================================ */
+
+.deal-rotting-badge--compact {
+  display: inline-flex;
+  align-items: center;
+  gap: 2px;
+  padding: 2px 6px;
+  border-radius: 3px;
+  font-size: 11px;
+  font-weight: 500;
+  line-height: 1;
+  white-space: nowrap;
+}
+
+.deal-rotting-badge--compact.deal-rotting-badge--warning {
+  background-color: #fff3cd;
+  color: #856404;
+  border: 1px solid #ffc107;
+}
+
+.deal-rotting-badge--compact.deal-rotting-badge--rotting {
+  background-color: #f8d7da;
+  color: #721c24;
+  border: 1px solid #f5c6cb;
+}
+
+.deal-rotting-badge--compact[role='button'] {
+  cursor: pointer;
+}
+
+.deal-rotting-badge--compact[role='button']:hover {
+  opacity: 0.8;
+}
+
+/* ============================================
+   Badge Elements
+   ============================================ */
+
+.deal-rotting-badge__icon {
+  font-size: 14px;
+  line-height: 1;
+}
+
+.deal-rotting-badge--compact .deal-rotting-badge__icon {
+  font-size: 12px;
+}
+
+.deal-rotting-badge__text {
+  font-weight: 500;
+}
+
+/* ============================================
+   Responsive
+   ============================================ */
+
+@media (max-width: 768px) {
+  .deal-rotting-badge {
+    font-size: 11px;
+    padding: 3px 6px;
+  }
+
+  .deal-rotting-badge__icon {
+    font-size: 12px;
+  }
+}

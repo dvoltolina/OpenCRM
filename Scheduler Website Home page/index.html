@@ -1,0 +1,489 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="OpenCRM Business Suite - Coordinate every appointment with confidence. The complete scheduling solution for small businesses.">
+  <title>OpenCRM - Smart Scheduling for Small Business</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css">
+  <!-- Google tag (gtag.js) -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=AW-18025600391"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+    gtag('config', 'AW-18025600391');
+  </script>
+</head>
+<body>
+  <!-- Navigation -->
+  <header class="header">
+    <nav class="nav container">
+      <a href="index.html" class="nav__brand">
+        <span class="nav__logo">E</span>
+        <span class="nav__name">OpenCRM</span>
+      </a>
+      <ul class="nav__links">
+        <li><a href="features.html" class="nav__link">Features</a></li>
+        <li><a href="#how-it-works" class="nav__link">How It Works</a></li>
+        <li><a href="pricing.html" class="nav__link">Pricing</a></li>
+      </ul>
+      <div class="nav__actions">
+        <div class="nav__dropdown">
+          <button class="btn btn--ghost nav__dropdown-trigger">
+            Sign In
+            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"></polyline></svg>
+          </button>
+          <div class="nav__dropdown-menu">
+            <a href="https://admin.example.com" class="nav__dropdown-item">
+              <span class="nav__dropdown-icon">
+                <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path></svg>
+              </span>
+              <span class="nav__dropdown-text">
+                <strong>Admin Portal</strong>
+                <small>For business administrators</small>
+              </span>
+            </a>
+            <a href="https://crm.example.com" class="nav__dropdown-item">
+              <span class="nav__dropdown-icon">
+                <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path><circle cx="12" cy="7" r="4"></circle></svg>
+              </span>
+              <span class="nav__dropdown-text">
+                <strong>Business Suite (CRM)</strong>
+                <small>For sales & operations</small>
+              </span>
+            </a>
+          </div>
+        </div>
+        <a href="demo.html" class="btn btn--outline nav__demo-link">Try Demo</a>
+        <a href="pricing.html#plans" class="btn btn--primary">Get Started</a>
+      </div>
+      <button class="nav__toggle" aria-label="Toggle menu">
+        <span></span>
+        <span></span>
+        <span></span>
+      </button>
+    </nav>
+  </header>
+
+  <main>
+    <!-- Hero Section -->
+    <section class="hero">
+      <div class="hero__bg"></div>
+      <div class="container hero__container">
+        <div class="hero__content">
+          <span class="hero__badge">Built for Small Businesses</span>
+          <h1 class="hero__title">Coordinate Every Appointment with Confidence</h1>
+          <p class="hero__subtitle">The complete scheduling platform that helps small businesses manage appointments, reduce no-shows, and deliver exceptional customer experiences.</p>
+          <div class="hero__cta">
+            <a href="pricing.html#plans" class="btn btn--cta btn--lg">Start Free Trial</a>
+            <a href="#how-it-works" class="btn btn--outline btn--lg">See How It Works</a>
+          </div>
+        </div>
+        <div class="hero__visual">
+          <div class="hero__mockup">
+            <div class="mockup__header">
+              <div class="mockup__dots">
+                <span></span><span></span><span></span>
+              </div>
+            </div>
+            <div class="mockup__content">
+              <div class="mockup__sidebar">
+                <div class="mockup__nav-item mockup__nav-item--active"></div>
+                <div class="mockup__nav-item"></div>
+                <div class="mockup__nav-item"></div>
+                <div class="mockup__nav-item"></div>
+              </div>
+              <div class="mockup__main">
+                <div class="mockup__calendar">
+                  <div class="mockup__calendar-header"></div>
+                  <div class="mockup__calendar-grid">
+                    <div class="mockup__event mockup__event--primary"></div>
+                    <div class="mockup__event mockup__event--accent"></div>
+                    <div class="mockup__event mockup__event--success"></div>
+                    <div class="mockup__event mockup__event--primary"></div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+
+    <!-- Features Section -->
+    <section id="features" class="features">
+      <div class="container">
+        <div class="section-header">
+          <span class="section-badge">Features</span>
+          <h2 class="section-title">Everything You Need to Manage Your Business</h2>
+          <p class="section-subtitle">Powerful tools designed specifically for small business scheduling workflows.</p>
+        </div>
+        <div class="features__grid">
+          <div class="feature-card">
+            <div class="feature-card__icon feature-card__icon--primary">
+              <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect><line x1="16" y1="2" x2="16" y2="6"></line><line x1="8" y1="2" x2="8" y2="6"></line><line x1="3" y1="10" x2="21" y2="10"></line></svg>
+            </div>
+            <h3 class="feature-card__title">Smart Scheduling</h3>
+            <p class="feature-card__description">Intelligent calendar management that optimizes your daily schedule and reduces gaps between appointments.</p>
+          </div>
+          <div class="feature-card">
+            <div class="feature-card__icon feature-card__icon--accent">
+              <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"></path></svg>
+            </div>
+            <h3 class="feature-card__title">Automated Reminders</h3>
+            <p class="feature-card__description">SMS and email reminders that dramatically reduce no-shows and keep customers informed about their appointments.</p>
+          </div>
+          <div class="feature-card">
+            <div class="feature-card__icon feature-card__icon--success">
+              <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path><circle cx="9" cy="7" r="4"></circle><path d="M23 21v-2a4 4 0 0 0-3-3.87"></path><path d="M16 3.13a4 4 0 0 1 0 7.75"></path></svg>
+            </div>
+            <h3 class="feature-card__title">Client Management</h3>
+            <p class="feature-card__description">Complete client profiles with history, preferences, and notes all in one centralized location.</p>
+          </div>
+          <div class="feature-card">
+            <div class="feature-card__icon feature-card__icon--warning">
+              <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="1" x2="12" y2="23"></line><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"></path></svg>
+            </div>
+            <h3 class="feature-card__title">Billing Integration</h3>
+            <p class="feature-card__description">Seamless integration with popular billing systems to streamline your revenue cycle management.</p>
+          </div>
+          <div class="feature-card">
+            <div class="feature-card__icon feature-card__icon--primary">
+              <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21.21 15.89A10 10 0 1 1 8 2.83"></path><path d="M22 12A10 10 0 0 0 12 2v10z"></path></svg>
+            </div>
+            <h3 class="feature-card__title">Analytics & Reports</h3>
+            <p class="feature-card__description">Detailed insights into your business performance with actionable metrics and customizable reports.</p>
+          </div>
+          <div class="feature-card">
+            <div class="feature-card__icon feature-card__icon--accent">
+              <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="3" width="20" height="14" rx="2" ry="2"></rect><line x1="8" y1="21" x2="16" y2="21"></line><line x1="12" y1="17" x2="12" y2="21"></line></svg>
+            </div>
+            <h3 class="feature-card__title">Multi-Location Support</h3>
+            <p class="feature-card__description">Manage multiple business locations from a single dashboard with location-specific settings.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Demo Section -->
+    <section class="demo-showcase">
+      <div class="container">
+        <div class="section-header">
+          <span class="section-badge">See It In Action</span>
+          <h2 class="section-title">Explore the full platform without signing up</h2>
+          <p class="section-subtitle">Click through the CRM, admin dashboard, and scheduling app with real sample data.</p>
+        </div>
+        <div class="demo-showcase__grid">
+          <article class="demo-entry">
+            <div class="demo-entry__header">
+              <div class="demo-entry__icon demo-entry__icon--crm">
+                <svg xmlns="http://www.w3.org/2000/svg" width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 7h18"></path><path d="M8 7V3"></path><path d="M16 7V3"></path><rect x="3" y="4" width="18" height="17" rx="2"></rect><path d="M7 12h10"></path><path d="M7 16h6"></path></svg>
+              </div>
+              <div>
+                <p class="demo-entry__eyebrow">Live walkthrough</p>
+                <h3 class="demo-entry__title">Sales CRM</h3>
+              </div>
+            </div>
+            <p class="demo-entry__description">Review pipelines, deal stages, lead records, and outreach workflows exactly the way a revenue team would.</p>
+            <ul class="demo-entry__points">
+              <li>Pipeline and deal board views</li>
+              <li>Lead detail and follow-up workflows</li>
+              <li>Reporting and sequence surfaces</li>
+            </ul>
+            <!-- DEMO_URL: https://crm.example.com -->
+            <a href="https://crm.example.com" class="btn btn--outline btn--block" target="_blank" rel="noopener noreferrer">Launch CRM Demo</a>
+          </article>
+
+          <article class="demo-entry">
+            <div class="demo-entry__header">
+              <div class="demo-entry__icon demo-entry__icon--admin">
+                <svg xmlns="http://www.w3.org/2000/svg" width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7" height="9"></rect><rect x="14" y="3" width="7" height="5"></rect><rect x="14" y="12" width="7" height="9"></rect><rect x="3" y="16" width="7" height="5"></rect></svg>
+              </div>
+              <div>
+                <p class="demo-entry__eyebrow">Operations walkthrough</p>
+                <h3 class="demo-entry__title">Admin Dashboard</h3>
+              </div>
+            </div>
+            <p class="demo-entry__description">Explore staffing, services, forms, communication settings, analytics, and the back-office surfaces business admins rely on.</p>
+            <ul class="demo-entry__points">
+              <li>Staffing and service management</li>
+              <li>Billing, forms, and automation settings</li>
+              <li>Admin analytics and reporting</li>
+            </ul>
+            <!-- DEMO_URL: https://admin.example.com -->
+            <a href="https://admin.example.com" class="btn btn--outline btn--block" target="_blank" rel="noopener noreferrer">Launch Admin Demo</a>
+          </article>
+
+          <article class="demo-entry">
+            <div class="demo-entry__header">
+              <div class="demo-entry__icon demo-entry__icon--scheduler">
+                <svg xmlns="http://www.w3.org/2000/svg" width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2"></rect><path d="M16 2v4"></path><path d="M8 2v4"></path><path d="M3 10h18"></path><path d="M8 14h3"></path><path d="M13 14h3"></path><path d="M8 18h3"></path></svg>
+              </div>
+              <div>
+                <p class="demo-entry__eyebrow">Client experience walkthrough</p>
+                <h3 class="demo-entry__title">Scheduling Platform</h3>
+              </div>
+            </div>
+            <p class="demo-entry__description">Browse booking flows, calendars, provider views, payments, and client-facing scheduling screens with fake data only.</p>
+            <ul class="demo-entry__points">
+              <li>Calendar and availability views</li>
+              <li>Waitlist, booking, and client portal flows</li>
+              <li>Provider mode and notes surfaces</li>
+            </ul>
+            <!-- DEMO_URL: https://schedule.example.com -->
+            <a href="https://schedule.example.com" class="btn btn--outline btn--block" target="_blank" rel="noopener noreferrer">Launch Scheduling Demo</a>
+          </article>
+        </div>
+        <div class="demo-showcase__footer">
+          <a href="demo.html" class="btn btn--primary btn--lg">View All Demos</a>
+        </div>
+      </div>
+    </section>
+
+    <!-- How It Works Section -->
+    <section id="how-it-works" class="how-it-works">
+      <div class="container">
+        <div class="section-header">
+          <span class="section-badge">How It Works</span>
+          <h2 class="section-title">Get Started in Minutes</h2>
+          <p class="section-subtitle">Simple setup, powerful results. Here's how OpenCRM transforms your business.</p>
+        </div>
+        <div class="steps">
+          <div class="step">
+            <div class="step__number">1</div>
+            <div class="step__content">
+              <h3 class="step__title">Create Your Account</h3>
+              <p class="step__description">Sign up in under 2 minutes. No credit card required for your free trial.</p>
+            </div>
+          </div>
+          <div class="step">
+            <div class="step__number">2</div>
+            <div class="step__content">
+              <h3 class="step__title">Set Up Your Business</h3>
+              <p class="step__description">Configure your services, staff schedules, and appointment types with our guided setup.</p>
+            </div>
+          </div>
+          <div class="step">
+            <div class="step__number">3</div>
+            <div class="step__content">
+              <h3 class="step__title">Import Your Data</h3>
+              <p class="step__description">Easily migrate existing client data and appointments from your current system.</p>
+            </div>
+          </div>
+          <div class="step">
+            <div class="step__number">4</div>
+            <div class="step__content">
+              <h3 class="step__title">Start Scheduling</h3>
+              <p class="step__description">Begin booking appointments and let automation handle the rest.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+
+    <!-- Pricing Section -->
+    <section id="pricing" class="pricing">
+      <div class="container">
+        <div class="section-header">
+          <span class="section-badge">Pricing</span>
+          <h2 class="section-title">Simple, Transparent Pricing</h2>
+          <p class="section-subtitle">Choose the plan that fits your business. No hidden fees, cancel anytime.</p>
+        </div>
+        <div class="pricing__grid">
+          <div class="pricing-card">
+            <div class="pricing-card__header">
+              <h3 class="pricing-card__name">Starter</h3>
+              <p class="pricing-card__description">Perfect for solo professionals</p>
+            </div>
+            <div class="pricing-card__price">
+              <span class="pricing-card__amount">$49</span>
+              <span class="pricing-card__period">/month</span>
+            </div>
+            <ul class="pricing-card__features">
+              <li>1 Provider</li>
+              <li>Unlimited appointments</li>
+              <li>Email reminders</li>
+              <li>Basic reporting</li>
+              <li>Email support</li>
+            </ul>
+            <a href="pricing.html#plans" class="btn btn--outline btn--block">Get Started</a>
+          </div>
+          <div class="pricing-card pricing-card--featured">
+            <div class="pricing-card__badge">Most Popular</div>
+            <div class="pricing-card__header">
+              <h3 class="pricing-card__name">Professional</h3>
+              <p class="pricing-card__description">For growing businesses</p>
+            </div>
+            <div class="pricing-card__price">
+              <span class="pricing-card__amount">$99</span>
+              <span class="pricing-card__period">/month</span>
+            </div>
+            <ul class="pricing-card__features">
+              <li>Up to 5 Providers</li>
+              <li>SMS + Email reminders</li>
+              <li>Advanced analytics</li>
+              <li>Client portal</li>
+              <li>Priority support</li>
+              <li>Custom branding</li>
+            </ul>
+            <a href="pricing.html#plans" class="btn btn--cta btn--block">Start Free Trial</a>
+          </div>
+          <div class="pricing-card">
+            <div class="pricing-card__header">
+              <h3 class="pricing-card__name">Enterprise</h3>
+              <p class="pricing-card__description">For large organizations</p>
+            </div>
+            <div class="pricing-card__price">
+              <span class="pricing-card__amount">Custom</span>
+            </div>
+            <ul class="pricing-card__features">
+              <li>Unlimited providers</li>
+              <li>Multi-location support</li>
+              <li>API access</li>
+              <li>Custom integrations</li>
+              <li>Dedicated account manager</li>
+              <li>SLA guarantee</li>
+            </ul>
+            <a href="pricing.html#contact-sales" class="btn btn--outline btn--block">Contact Sales</a>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- CTA Section -->
+    <section class="cta">
+      <div class="container">
+        <div class="cta__content">
+          <h2 class="cta__title">Ready to Transform Your Business?</h2>
+          <p class="cta__subtitle">Start managing your appointments more efficiently with OpenCRM.</p>
+          <div class="cta__actions">
+            <a href="pricing.html#plans" class="btn btn--white btn--lg">Start Your Free Trial</a>
+            <a href="pricing.html#contact-sales" class="btn btn--ghost-white btn--lg">Schedule a Demo</a>
+          </div>
+          <p class="cta__note">No credit card required. 14-day free trial.</p>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <!-- Footer -->
+  <footer class="footer">
+    <div class="container">
+      <div class="footer__grid">
+        <div class="footer__brand">
+          <a href="index.html" class="footer__logo">
+            <span class="nav__logo">E</span>
+            <span>OpenCRM</span>
+          </a>
+          <p class="footer__tagline">Coordinate every appointment with confidence.</p>
+          <div class="footer__social">
+            <a href="#" aria-label="Twitter">
+              <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 4s-.7 2.1-2 3.4c1.6 10-9.4 17.3-18 11.6 2.2.1 4.4-.6 6-2C3 15.5.5 9.6 3 5c2.2 2.6 5.6 4.1 9 4-.9-4.2 4-6.6 7-3.8 1.1 0 3-1.2 3-1.2z"></path></svg>
+            </a>
+            <a href="#" aria-label="LinkedIn">
+              <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z"></path><rect x="2" y="9" width="4" height="12"></rect><circle cx="4" cy="4" r="2"></circle></svg>
+            </a>
+          </div>
+        </div>
+        <div class="footer__links">
+          <h4 class="footer__title">Product</h4>
+          <ul>
+            <li><a href="features.html">Features</a></li>
+            <li><a href="pricing.html">Pricing</a></li>
+            <li><a href="demo.html">Interactive Demo</a></li>
+            <li><a href="#">Integrations</a></li>
+            <li><a href="#">Updates</a></li>
+          </ul>
+        </div>
+        <div class="footer__links">
+          <h4 class="footer__title">Company</h4>
+          <ul>
+            <li><a href="#">About</a></li>
+            <li><a href="#">Blog</a></li>
+            <li><a href="#">Careers</a></li>
+            <li><a href="#">Contact</a></li>
+          </ul>
+        </div>
+        <div class="footer__links">
+          <h4 class="footer__title">Resources</h4>
+          <ul>
+            <li><a href="#">Help Center</a></li>
+            <li><a href="#">Documentation</a></li>
+            <li><a href="#">API Reference</a></li>
+            <li><a href="#">Status</a></li>
+          </ul>
+        </div>
+        <div class="footer__links">
+          <h4 class="footer__title">Legal</h4>
+          <ul>
+            <li><a href="#">Privacy Policy</a></li>
+            <li><a href="#">Terms of Service</a></li>
+            <li><a href="#">Data Protection</a></li>
+            <li><a href="#">Security</a></li>
+          </ul>
+        </div>
+      </div>
+      <div class="footer__bottom">
+        <p>&copy; 2024 OpenCRM. All rights reserved.</p>
+      </div>
+    </div>
+  </footer>
+
+  <script>
+    // Mobile menu toggle
+    const toggle = document.querySelector('.nav__toggle');
+    const navLinks = document.querySelector('.nav__links');
+    const navActions = document.querySelector('.nav__actions');
+
+    toggle.addEventListener('click', () => {
+      navLinks.classList.toggle('nav__links--open');
+      navActions.classList.toggle('nav__actions--open');
+      toggle.classList.toggle('nav__toggle--open');
+    });
+
+    // Dropdown menu
+    const dropdownTrigger = document.querySelector('.nav__dropdown-trigger');
+    const dropdown = document.querySelector('.nav__dropdown');
+
+    if (dropdownTrigger && dropdown) {
+      dropdownTrigger.addEventListener('click', (e) => {
+        e.stopPropagation();
+        dropdown.classList.toggle('nav__dropdown--open');
+      });
+
+      document.addEventListener('click', () => {
+        dropdown.classList.remove('nav__dropdown--open');
+      });
+    }
+
+    // Smooth scroll for anchor links
+    document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+      anchor.addEventListener('click', function (e) {
+        const href = this.getAttribute('href');
+        if (href === '#') return;
+        e.preventDefault();
+        const target = document.querySelector(href);
+        if (target) {
+          target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        }
+      });
+    });
+
+    // Header background on scroll
+    const header = document.querySelector('.header');
+    window.addEventListener('scroll', () => {
+      if (window.scrollY > 50) {
+        header.classList.add('header--scrolled');
+      } else {
+        header.classList.remove('header--scrolled');
+      }
+    });
+  </script>
+</body>
+</html>

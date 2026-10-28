@@ -1,0 +1,98 @@
+# Cloud Run Service Configuration for Prediction Service
+# Agent AI-13: Docker & Cloud Deployment
+#
+# Deploy with:
+#   gcloud run services replace prediction-service.yaml --region=us-central1
+#
+# Or use deploy.sh for full deployment workflow
+
+apiVersion: serving.knative.dev/v1
+kind: Service
+metadata:
+  name: scheduler-prediction
+  labels:
+    app: scheduler
+    service: prediction
+    version: v1
+  annotations:
+    run.googleapis.com/description: "No-show prediction service using LightGBM"
+    run.googleapis.com/ingress: internal-and-cloud-load-balancing
+spec:
+  template:
+    metadata:
+      annotations:
+        # Autoscaling configuration
+        autoscaling.knative.dev/minScale: "1"
+        autoscaling.knative.dev/maxScale: "10"
+        # CPU allocation: always-on for low latency
+        run.googleapis.com/cpu-throttling: "false"
+        # Startup CPU boost for faster cold starts
+        run.googleapis.com/startup-cpu-boost: "true"
+        # Execution environment
+        run.googleapis.com/execution-environment: gen2
+    spec:
+      containerConcurrency: 80
+      timeoutSeconds: 30
+      serviceAccountName: scheduler-ai-services@${PROJECT_ID}.iam.gserviceaccount.com
+      containers:
+        - image: ${CONTAINER_REGISTRY}/scheduler-prediction:${VERSION:-latest}
+          ports:
+            - containerPort: 8001
+              name: http1
+          resources:
+            limits:
+              cpu: "2"
+              memory: 2Gi
+          env:
+            - name: PREDICTION_HOST
+              value: "0.0.0.0"
+            - name: PREDICTION_PORT
+              value: "8001"
+            - name: PREDICTION_DEBUG
+              value: "false"
+            - name: PREDICTION_LOG_LEVEL
+              value: "WARNING"
+            - name: PREDICTION_REQUIRE_AUTHENTICATION
+              value: "true"
+            - name: PREDICTION_HIGH_RISK_THRESHOLD
+              value: "0.7"
+            - name: PREDICTION_MEDIUM_RISK_THRESHOLD
+              value: "0.4"
+            # Secrets from Secret Manager
+            - name: PREDICTION_API_KEYS
+              valueFrom:
+                secretKeyRef:
+                  name: prediction-api-keys
+                  key: latest
+            - name: PREDICTION_ALLOWED_ORIGINS
+              valueFrom:
+                secretKeyRef:
+                  name: cors-allowed-origins
+                  key: latest
+          startupProbe:
+            httpGet:
+              path: /health/live
+              port: 8001
+            initialDelaySeconds: 5
+            periodSeconds: 5
+            timeoutSeconds: 5
+            failureThreshold: 12
+          livenessProbe:
+            httpGet:
+              path: /health/live
+              port: 8001
+            initialDelaySeconds: 0
+            periodSeconds: 15
+            timeoutSeconds: 5
+            failureThreshold: 3
+          readinessProbe:
+            httpGet:
+              path: /health/ready
+              port: 8001
+            initialDelaySeconds: 0
+            periodSeconds: 5
+            timeoutSeconds: 5
+            failureThreshold: 3
+  traffic:
+    - percent: 100
+      latestRevision: true

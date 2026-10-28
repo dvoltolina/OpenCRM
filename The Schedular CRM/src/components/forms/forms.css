@@ -1,0 +1,449 @@
+/**
+ * Form Components Styles
+ * Agent CRM-14 Implementation
+ */
+
+/* ============================================
+   Form Field
+   ============================================ */
+
+.form-field {
+  margin-bottom: 16px;
+}
+
+.form-field__label {
+  display: block;
+  font-size: 13px;
+  font-weight: 500;
+  color: var(--color-text);
+  margin-bottom: 6px;
+}
+
+.form-field__required {
+  color: var(--color-danger);
+  margin-left: 2px;
+}
+
+.form-field__input-wrapper {
+  position: relative;
+}
+
+.form-field__error {
+  font-size: 12px;
+  color: var(--color-danger);
+  margin-top: 4px;
+}
+
+.form-field__help {
+  font-size: 12px;
+  color: var(--color-text-muted);
+  margin-top: 4px;
+}
+
+/* ============================================
+   Form Input
+   ============================================ */
+
+.form-input {
+  width: 100%;
+  padding: 8px 12px;
+  font-size: 14px;
+  line-height: 1.5;
+  color: var(--color-text);
+  background: var(--color-bg-card);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-sm);
+  transition: border-color 0.15s, box-shadow 0.15s;
+}
+
+.form-input:focus {
+  outline: none;
+  border-color: var(--color-primary);
+  box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.1);
+}
+
+.form-input::placeholder {
+  color: var(--color-text-muted);
+}
+
+.form-input:disabled {
+  background: var(--color-bg);
+  cursor: not-allowed;
+  opacity: 0.7;
+}
+
+.form-input--error {
+  border-color: var(--color-danger);
+}
+
+.form-input--error:focus {
+  box-shadow: 0 0 0 3px rgba(239, 68, 68, 0.1);
+}
+
+/* ============================================
+   Form Textarea
+   ============================================ */
+
+.form-textarea {
+  width: 100%;
+  min-height: 100px;
+  padding: 8px 12px;
+  font-size: 14px;
+  line-height: 1.5;
+  color: var(--color-text);
+  background: var(--color-bg-card);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-sm);
+  resize: vertical;
+  font-family: inherit;
+  transition: border-color 0.15s, box-shadow 0.15s;
+}
+
+.form-textarea:focus {
+  outline: none;
+  border-color: var(--color-primary);
+  box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.1);
+}
+
+.form-textarea::placeholder {
+  color: var(--color-text-muted);
+}
+
+.form-textarea--error {
+  border-color: var(--color-danger);
+}
+
+/* ============================================
+   Form Select
+   ============================================ */
+
+.form-select {
+  width: 100%;
+  padding: 8px 32px 8px 12px;
+  font-size: 14px;
+  line-height: 1.5;
+  color: var(--color-text);
+  background: var(--color-bg-card);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-sm);
+  cursor: pointer;
+  appearance: none;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'%3E%3Cpath fill='%2364748b' d='M6 8L2 4h8z'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 12px center;
+  transition: border-color 0.15s, box-shadow 0.15s;
+}
+
+.form-select:focus {
+  outline: none;
+  border-color: var(--color-primary);
+  box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.1);
+}
+
+.form-select:disabled {
+  background-color: var(--color-bg);
+  cursor: not-allowed;
+  opacity: 0.7;
+}
+
+.form-select--error {
+  border-color: var(--color-danger);
+}
+
+/* ============================================
+   Searchable Select
+   ============================================ */
+
+.searchable-select {
+  position: relative;
+  width: 100%;
+}
+
+.searchable-select__trigger {
+  display: flex;
+  align-items: center;
+  width: 100%;
+  min-height: 38px;
+  padding: 8px 12px;
+  background: var(--color-bg-card);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-sm);
+  cursor: pointer;
+  transition: border-color 0.15s, box-shadow 0.15s;
+}
+
+.searchable-select__trigger:hover {
+  border-color: var(--color-primary);
+}
+
+.searchable-select--error .searchable-select__trigger {
+  border-color: var(--color-danger);
+}
+
+.searchable-select--disabled .searchable-select__trigger {
+  background: var(--color-bg);
+  cursor: not-allowed;
+  opacity: 0.7;
+}
+
+.searchable-select__input {
+  flex: 1;
+  border: none;
+  outline: none;
+  font-size: 14px;
+  background: transparent;
+}
+
+.searchable-select__value {
+  flex: 1;
+  font-size: 14px;
+  color: var(--color-text);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.searchable-select__placeholder {
+  color: var(--color-text-muted);
+}
+
+.searchable-select__clear {
+  padding: 0 4px;
+  font-size: 16px;
+  color: var(--color-text-muted);
+  background: none;
+  border: none;
+  cursor: pointer;
+}
+
+.searchable-select__clear:hover {
+  color: var(--color-danger);
+}
+
+.searchable-select__arrow {
+  margin-left: 8px;
+  font-size: 10px;
+  color: var(--color-text-muted);
+}
+
+.searchable-select__dropdown {
+  position: absolute;
+  top: 100%;
+  left: 0;
+  right: 0;
+  margin-top: 4px;
+  max-height: 200px;
+  overflow-y: auto;
+  background: var(--color-bg-card);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-sm);
+  box-shadow: var(--shadow-md);
+  z-index: 100;
+}
+
+.searchable-select__option {
+  padding: 8px 12px;
+  font-size: 14px;
+  cursor: pointer;
+  transition: background 0.1s;
+}
+
+.searchable-select__option:hover {
+  background: var(--color-bg);
+}
+
+.searchable-select__option--selected {
+  background: rgba(99, 102, 241, 0.1);
+  color: var(--color-primary);
+}
+
+.searchable-select__option--disabled {
+  color: var(--color-text-muted);
+  cursor: not-allowed;
+}
+
+.searchable-select__no-results {
+  padding: 12px;
+  text-align: center;
+  color: var(--color-text-muted);
+  font-size: 14px;
+}
+
+/* ============================================
+   Form Date Picker
+   ============================================ */
+
+.form-datepicker {
+  cursor: pointer;
+}
+
+.form-datepicker::-webkit-calendar-picker-indicator {
+  cursor: pointer;
+  opacity: 0.6;
+}
+
+.form-datepicker::-webkit-calendar-picker-indicator:hover {
+  opacity: 1;
+}
+
+/* ============================================
+   Form Actions
+   ============================================ */
+
+.form-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 12px;
+  margin-top: 24px;
+  padding-top: 16px;
+  border-top: 1px solid var(--color-border);
+}
+
+/* ============================================
+   Form Button
+   ============================================ */
+
+.form-button {
+  padding: 8px 16px;
+  font-size: 14px;
+  font-weight: 500;
+  border-radius: var(--radius-sm);
+  cursor: pointer;
+  transition: background 0.15s, transform 0.1s;
+}
+
+.form-button:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.form-button--primary {
+  background: var(--color-primary);
+  color: white;
+  border: none;
+}
+
+.form-button--primary:hover:not(:disabled) {
+  background: var(--color-primary-hover);
+}
+
+.form-button--secondary {
+  background: transparent;
+  color: var(--color-text);
+  border: 1px solid var(--color-border);
+}
+
+.form-button--secondary:hover:not(:disabled) {
+  background: var(--color-bg);
+}
+
+.form-button--danger {
+  background: var(--color-danger);
+  color: white;
+  border: none;
+}
+
+.form-button--danger:hover:not(:disabled) {
+  background: #dc2626;
+}
+
+/* ============================================
+   Form Row
+   ============================================ */
+
+.form-row {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 16px;
+}
+
+@media (max-width: 640px) {
+  .form-row {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* ============================================
+   Form Section
+   ============================================ */
+
+.form-section {
+  margin-bottom: 24px;
+}
+
+.form-section__title {
+  font-size: 15px;
+  font-weight: 600;
+  color: var(--color-text);
+  margin-bottom: 8px;
+}
+
+.form-section__description {
+  font-size: 13px;
+  color: var(--color-text-muted);
+  margin-bottom: 16px;
+}
+
+.form-section__content {
+  /* Fields container */
+}
+
+/* ============================================
+   Tags Input
+   ============================================ */
+
+.tags-input {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  padding: 8px;
+  min-height: 42px;
+  background: var(--color-bg-card);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-sm);
+  cursor: text;
+}
+
+.tags-input:focus-within {
+  border-color: var(--color-primary);
+  box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.1);
+}
+
+.tags-input__tag {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  padding: 2px 8px;
+  font-size: 12px;
+  background: var(--color-bg);
+  border-radius: var(--radius-sm);
+  color: var(--color-text);
+}
+
+.tags-input__tag-remove {
+  padding: 0;
+  font-size: 14px;
+  color: var(--color-text-muted);
+  background: none;
+  border: none;
+  cursor: pointer;
+  line-height: 1;
+}
+
+.tags-input__tag-remove:hover {
+  color: var(--color-danger);
+}
+
+.tags-input__input {
+  flex: 1;
+  min-width: 100px;
+  padding: 2px;
+  font-size: 14px;
+  border: none;
+  outline: none;
+  background: transparent;
+}
+
+.tags-input__input::placeholder {
+  color: var(--color-text-muted);
+}

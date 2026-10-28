@@ -1,0 +1,7 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 256" role="img" aria-label="Scheduler logo">
+  <rect width="256" height="256" fill="#0f172a" rx="32" />
+  <path d="M64 88h128v16H64zM64 128h96v16H64zM64 168h72v16H64z" fill="#38bdf8"/>
+  <circle cx="188" cy="176" r="12" fill="#38bdf8"/>
+  <circle cx="188" cy="136" r="12" fill="#22c55e"/>
+  <circle cx="188" cy="96" r="12" fill="#f97316"/>
+</svg>

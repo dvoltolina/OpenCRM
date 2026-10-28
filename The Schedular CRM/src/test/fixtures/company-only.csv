@@ -1,0 +1,4 @@
+name,industry,size,website,phone,email,address,notes
+Acme Corp,Technology,enterprise,https://acme.com,555-0100,info@example.com,"123 Main St, Austin TX 78701",Leading software provider
+Smith LLC,Healthcare,medium,https://smithmed.com,555-0200,contact@example.com,"456 Oak Ave, Boston MA 02101",Medical practice group
+Green Industries,Manufacturing,large,https://greenind.com,555-0300,sales@example.com,"789 Elm St, Seattle WA 98101",Sustainable manufacturing

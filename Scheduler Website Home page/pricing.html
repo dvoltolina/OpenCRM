@@ -1,0 +1,483 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Simple, transparent pricing for OpenCRM Business Suite. Choose the plan that fits your business.">
+  <title>Pricing - OpenCRM</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css">
+  <!-- Google tag (gtag.js) -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=AW-18025600391"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+    gtag('config', 'AW-18025600391');
+  </script>
+</head>
+<body>
+  <!-- Navigation -->
+  <header class="header">
+    <nav class="nav container">
+      <a href="index.html" class="nav__brand">
+        <span class="nav__logo">E</span>
+        <span class="nav__name">OpenCRM</span>
+      </a>
+      <ul class="nav__links">
+        <li><a href="features.html" class="nav__link">Features</a></li>
+        <li><a href="index.html#how-it-works" class="nav__link">How It Works</a></li>
+        <li><a href="pricing.html" class="nav__link nav__link--active">Pricing</a></li>
+      </ul>
+      <div class="nav__actions">
+        <div class="nav__dropdown">
+          <button class="btn btn--ghost nav__dropdown-trigger">
+            Sign In
+            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"></polyline></svg>
+          </button>
+          <div class="nav__dropdown-menu">
+            <a href="https://admin.example.com" class="nav__dropdown-item">
+              <span class="nav__dropdown-icon">
+                <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path></svg>
+              </span>
+              <span class="nav__dropdown-text">
+                <strong>Admin Portal</strong>
+                <small>For business administrators</small>
+              </span>
+            </a>
+            <a href="https://crm.example.com" class="nav__dropdown-item">
+              <span class="nav__dropdown-icon">
+                <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path><circle cx="12" cy="7" r="4"></circle></svg>
+              </span>
+              <span class="nav__dropdown-text">
+                <strong>Business Suite (CRM)</strong>
+                <small>For sales & operations</small>
+              </span>
+            </a>
+          </div>
+        </div>
+        <a href="demo.html" class="btn btn--outline nav__demo-link">Try Demo</a>
+        <a href="#plans" class="btn btn--primary">Get Started</a>
+      </div>
+      <button class="nav__toggle" aria-label="Toggle menu">
+        <span></span>
+        <span></span>
+        <span></span>
+      </button>
+    </nav>
+  </header>
+
+  <main>
+    <!-- Pricing Hero -->
+    <section class="pricing-hero">
+      <div class="container">
+        <div class="pricing-hero__content">
+          <span class="section-badge">Pricing</span>
+          <h1 class="pricing-hero__title">Simple, Transparent Pricing</h1>
+          <p class="pricing-hero__subtitle">No hidden fees. No surprises. Choose the plan that grows with your business.</p>
+          <div class="pricing-toggle">
+            <span class="pricing-toggle__label pricing-toggle__label--active">Monthly</span>
+            <button class="pricing-toggle__switch" aria-label="Toggle annual billing" data-active="monthly">
+              <span class="pricing-toggle__thumb"></span>
+            </button>
+            <span class="pricing-toggle__label">
+              Annual
+              <span class="pricing-toggle__badge">Save 20%</span>
+            </span>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Plans Section -->
+    <section id="plans" class="plans">
+      <div class="container">
+        <div class="plans__grid">
+          <!-- Starter Plan -->
+          <div class="plan-card">
+            <div class="plan-card__header">
+              <span class="plan-card__icon plan-card__icon--starter">
+                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2L2 7l10 5 10-5-10-5z"></path><path d="M2 17l10 5 10-5"></path><path d="M2 12l10 5 10-5"></path></svg>
+              </span>
+              <h3 class="plan-card__name">Starter</h3>
+              <p class="plan-card__description">For small teams getting started</p>
+            </div>
+            <div class="plan-card__pricing">
+              <div class="plan-card__price">
+                <span class="plan-card__currency">$</span>
+                <span class="plan-card__amount" data-monthly="29" data-annual="23">29</span>
+                <span class="plan-card__period">/month</span>
+              </div>
+              <p class="plan-card__seats">3 team seats included</p>
+            </div>
+            <ul class="plan-card__features">
+              <li>
+                <svg class="plan-card__check" xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg>
+                Basic scheduling
+              </li>
+              <li>
+                <svg class="plan-card__check" xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg>
+                Client management
+              </li>
+              <li>
+                <svg class="plan-card__check" xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg>
+                Email notifications
+              </li>
+              <li>
+                <svg class="plan-card__check" xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg>
+                Basic support
+              </li>
+            </ul>
+            <div class="plan-card__actions">
+              <a href="https://admin.example.com/sign-up" class="btn btn--outline btn--block plan-card__btn">Start Free Trial</a>
+              <a href="demo.html" class="btn btn--ghost btn--block plan-card__btn plan-card__btn--secondary">Try Free Demo</a>
+            </div>
+          </div>
+
+          <!-- Pro Plan (Featured) -->
+          <div class="plan-card plan-card--featured">
+            <div class="plan-card__badge">Most Popular</div>
+            <div class="plan-card__header">
+              <span class="plan-card__icon plan-card__icon--pro">
+                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon></svg>
+              </span>
+              <h3 class="plan-card__name">Pro</h3>
+              <p class="plan-card__description">For growing businesses</p>
+            </div>
+            <div class="plan-card__pricing">
+              <div class="plan-card__price">
+                <span class="plan-card__currency">$</span>
+                <span class="plan-card__amount" data-monthly="99" data-annual="79">99</span>
+                <span class="plan-card__period">/month</span>
+              </div>
+              <p class="plan-card__seats">10 team seats included</p>
+            </div>
+            <ul class="plan-card__features">
+              <li>
+                <svg class="plan-card__check" xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg>
+                Everything in Starter
+              </li>
+              <li>
+                <svg class="plan-card__check" xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg>
+                Reporting & analytics
+              </li>
+              <li>
+                <svg class="plan-card__check" xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg>
+                Marketing campaigns
+              </li>
+              <li>
+                <svg class="plan-card__check" xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg>
+                CSV import/export
+              </li>
+              <li>
+                <svg class="plan-card__check" xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg>
+                SMS reminders
+              </li>
+              <li>
+                <svg class="plan-card__check" xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg>
+                Priority support
+              </li>
+            </ul>
+            <div class="plan-card__actions">
+              <a href="https://admin.example.com/sign-up" class="btn btn--cta btn--block plan-card__btn">Start Free Trial</a>
+              <a href="demo.html" class="btn btn--outline btn--block plan-card__btn plan-card__btn--secondary">Try Free Demo</a>
+            </div>
+          </div>
+
+          <!-- Scale Plan -->
+          <div class="plan-card">
+            <div class="plan-card__header">
+              <span class="plan-card__icon plan-card__icon--scale">
+                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 20V10"></path><path d="M12 20V4"></path><path d="M6 20v-6"></path></svg>
+              </span>
+              <h3 class="plan-card__name">Scale</h3>
+              <p class="plan-card__description">For established businesses</p>
+            </div>
+            <div class="plan-card__pricing">
+              <div class="plan-card__price">
+                <span class="plan-card__currency">$</span>
+                <span class="plan-card__amount" data-monthly="299" data-annual="239">299</span>
+                <span class="plan-card__period">/month</span>
+              </div>
+              <p class="plan-card__seats">30 team seats included</p>
+            </div>
+            <ul class="plan-card__features">
+              <li>
+                <svg class="plan-card__check" xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg>
+                Everything in Pro
+              </li>
+              <li>
+                <svg class="plan-card__check" xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg>
+                Advanced reporting
+              </li>
+              <li>
+                <svg class="plan-card__check" xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg>
+                Custom integrations
+              </li>
+              <li>
+                <svg class="plan-card__check" xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg>
+                Multi-location support
+              </li>
+              <li>
+                <svg class="plan-card__check" xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg>
+                Dedicated support
+              </li>
+              <li>
+                <svg class="plan-card__check" xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg>
+                SLA guarantee
+              </li>
+            </ul>
+            <div class="plan-card__actions">
+              <a href="https://admin.example.com/sign-up" class="btn btn--outline btn--block plan-card__btn">Start Free Trial</a>
+              <a href="demo.html" class="btn btn--ghost btn--block plan-card__btn plan-card__btn--secondary">Try Free Demo</a>
+            </div>
+          </div>
+        </div>
+
+        <!-- Enterprise CTA -->
+        <div id="contact-sales" class="enterprise-cta">
+          <div class="enterprise-cta__content">
+            <div class="enterprise-cta__text">
+              <h3>Need a custom solution?</h3>
+              <p>For enterprise organizations with specific requirements, we offer custom plans with dedicated support, custom integrations, and volume pricing.</p>
+            </div>
+            <a href="#contact-sales" class="btn btn--primary">Contact Sales</a>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Add-ons Section -->
+    <section class="addons">
+      <div class="container">
+        <div class="section-header">
+          <span class="section-badge">Add-ons</span>
+          <h2 class="section-title">Enhance Your Plan</h2>
+          <p class="section-subtitle">Supercharge your workflow with powerful add-ons.</p>
+        </div>
+        <div class="addons__grid">
+          <div class="addon-card">
+            <div class="addon-card__icon">
+              <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21.21 15.89A10 10 0 1 1 8 2.83"></path><path d="M22 12A10 10 0 0 0 12 2v10z"></path></svg>
+            </div>
+            <div class="addon-card__content">
+              <h4>Advanced Reports</h4>
+              <p>Detailed analytics and custom reporting dashboards</p>
+            </div>
+            <div class="addon-card__price">
+              <span>$19</span>/mo
+            </div>
+          </div>
+          <div class="addon-card">
+            <div class="addon-card__icon">
+              <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="17 8 12 3 7 8"></polyline><line x1="12" y1="3" x2="12" y2="15"></line></svg>
+            </div>
+            <div class="addon-card__content">
+              <h4>Import/Export</h4>
+              <p>CSV bulk operations for data migration</p>
+            </div>
+            <div class="addon-card__price">
+              <span>$9</span>/mo
+            </div>
+          </div>
+          <div class="addon-card">
+            <div class="addon-card__icon">
+              <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"></path><polyline points="22,6 12,13 2,6"></polyline></svg>
+            </div>
+            <div class="addon-card__content">
+              <h4>Marketing</h4>
+              <p>Email & SMS marketing campaigns</p>
+            </div>
+            <div class="addon-card__price">
+              <span>$29</span>/mo
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- FAQ Section -->
+    <section class="faq">
+      <div class="container">
+        <div class="section-header">
+          <span class="section-badge">FAQ</span>
+          <h2 class="section-title">Frequently Asked Questions</h2>
+        </div>
+        <div class="faq__grid">
+          <div class="faq-item">
+            <h4 class="faq-item__question">Can I change plans later?</h4>
+            <p class="faq-item__answer">Yes! You can upgrade or downgrade your plan at any time. Changes take effect immediately and billing is prorated.</p>
+          </div>
+          <div class="faq-item">
+            <h4 class="faq-item__question">What happens after my trial ends?</h4>
+            <p class="faq-item__answer">After your 14-day free trial, you'll be prompted to choose a plan. Your data is preserved, and you can continue right where you left off.</p>
+          </div>
+          <div class="faq-item">
+            <h4 class="faq-item__question">Do you offer refunds?</h4>
+            <p class="faq-item__answer">We offer a 30-day money-back guarantee. If you're not satisfied, contact us for a full refund.</p>
+          </div>
+          <div class="faq-item">
+            <h4 class="faq-item__question">Is my data secure?</h4>
+            <p class="faq-item__answer">Absolutely. We use enterprise-grade encryption, regular security audits, and strict access controls to protect your data.</p>
+          </div>
+          <div class="faq-item">
+            <h4 class="faq-item__question">Can I add more team seats?</h4>
+            <p class="faq-item__answer">Yes! You can add additional seats at any time. Extra seats are billed proportionally based on your plan.</p>
+          </div>
+          <div class="faq-item">
+            <h4 class="faq-item__question">What payment methods do you accept?</h4>
+            <p class="faq-item__answer">We accept all major credit cards, debit cards, and ACH bank transfers through our secure payment processor, Stripe.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- CTA Section -->
+    <section class="cta">
+      <div class="container">
+        <div class="cta__content">
+          <h2 class="cta__title">Ready to Get Started?</h2>
+          <p class="cta__subtitle">Start your free trial and see what OpenCRM can do for your business.</p>
+          <div class="cta__actions">
+            <a href="https://admin.example.com/sign-up" class="btn btn--white btn--lg">Start Your Free Trial</a>
+          </div>
+          <p class="cta__note">No credit card required. 14-day free trial on all plans.</p>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <!-- Footer -->
+  <footer class="footer">
+    <div class="container">
+      <div class="footer__grid">
+        <div class="footer__brand">
+          <a href="index.html" class="footer__logo">
+            <span class="nav__logo">E</span>
+            <span>OpenCRM</span>
+          </a>
+          <p class="footer__tagline">Coordinate every appointment with confidence.</p>
+          <div class="footer__social">
+            <a href="#" aria-label="Twitter">
+              <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 4s-.7 2.1-2 3.4c1.6 10-9.4 17.3-18 11.6 2.2.1 4.4-.6 6-2C3 15.5.5 9.6 3 5c2.2 2.6 5.6 4.1 9 4-.9-4.2 4-6.6 7-3.8 1.1 0 3-1.2 3-1.2z"></path></svg>
+            </a>
+            <a href="#" aria-label="LinkedIn">
+              <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z"></path><rect x="2" y="9" width="4" height="12"></rect><circle cx="4" cy="4" r="2"></circle></svg>
+            </a>
+          </div>
+        </div>
+        <div class="footer__links">
+          <h4 class="footer__title">Product</h4>
+          <ul>
+            <li><a href="index.html#features">Features</a></li>
+            <li><a href="pricing.html">Pricing</a></li>
+            <li><a href="demo.html">Interactive Demo</a></li>
+            <li><a href="#">Integrations</a></li>
+            <li><a href="#">Updates</a></li>
+          </ul>
+        </div>
+        <div class="footer__links">
+          <h4 class="footer__title">Company</h4>
+          <ul>
+            <li><a href="#">About</a></li>
+            <li><a href="#">Blog</a></li>
+            <li><a href="#">Careers</a></li>
+            <li><a href="#">Contact</a></li>
+          </ul>
+        </div>
+        <div class="footer__links">
+          <h4 class="footer__title">Resources</h4>
+          <ul>
+            <li><a href="#">Help Center</a></li>
+            <li><a href="#">Documentation</a></li>
+            <li><a href="#">API Reference</a></li>
+            <li><a href="#">Status</a></li>
+          </ul>
+        </div>
+        <div class="footer__links">
+          <h4 class="footer__title">Legal</h4>
+          <ul>
+            <li><a href="#">Privacy Policy</a></li>
+            <li><a href="#">Terms of Service</a></li>
+            <li><a href="#">Data Protection</a></li>
+            <li><a href="#">Security</a></li>
+          </ul>
+        </div>
+      </div>
+      <div class="footer__bottom">
+        <p>&copy; 2024 OpenCRM. All rights reserved.</p>
+      </div>
+    </div>
+  </footer>
+
+  <script>
+    // Mobile menu toggle
+    const toggle = document.querySelector('.nav__toggle');
+    const navLinks = document.querySelector('.nav__links');
+    const navActions = document.querySelector('.nav__actions');
+
+    toggle.addEventListener('click', () => {
+      navLinks.classList.toggle('nav__links--open');
+      navActions.classList.toggle('nav__actions--open');
+      toggle.classList.toggle('nav__toggle--open');
+    });
+
+    // Dropdown menu
+    const dropdownTrigger = document.querySelector('.nav__dropdown-trigger');
+    const dropdown = document.querySelector('.nav__dropdown');
+
+    if (dropdownTrigger && dropdown) {
+      dropdownTrigger.addEventListener('click', (e) => {
+        e.stopPropagation();
+        dropdown.classList.toggle('nav__dropdown--open');
+      });
+
+      document.addEventListener('click', () => {
+        dropdown.classList.remove('nav__dropdown--open');
+      });
+    }
+
+    // Header background on scroll
+    const header = document.querySelector('.header');
+    window.addEventListener('scroll', () => {
+      if (window.scrollY > 50) {
+        header.classList.add('header--scrolled');
+      } else {
+        header.classList.remove('header--scrolled');
+      }
+    });
+
+    // Pricing toggle (monthly/annual)
+    const pricingToggle = document.querySelector('.pricing-toggle__switch');
+    const toggleLabels = document.querySelectorAll('.pricing-toggle__label');
+    const priceAmounts = document.querySelectorAll('.plan-card__amount');
+
+    pricingToggle.addEventListener('click', () => {
+      const isMonthly = pricingToggle.dataset.active === 'monthly';
+      pricingToggle.dataset.active = isMonthly ? 'annual' : 'monthly';
+
+      toggleLabels[0].classList.toggle('pricing-toggle__label--active', !isMonthly);
+      toggleLabels[1].classList.toggle('pricing-toggle__label--active', isMonthly);
+
+      priceAmounts.forEach(el => {
+        el.textContent = isMonthly ? el.dataset.annual : el.dataset.monthly;
+      });
+    });
+
+    // Smooth scroll for anchor links
+    document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+      anchor.addEventListener('click', function (e) {
+        const href = this.getAttribute('href');
+        if (href === '#') return;
+        e.preventDefault();
+        const target = document.querySelector(href);
+        if (target) {
+          target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        }
+      });
+    });
+  </script>
+</body>
+</html>

@@ -1,0 +1,58 @@
+# =============================================================================
+# The Scheduler - Model Training Pipeline Dependencies
+# Agent AI-14: Model Training Pipeline
+# =============================================================================
+#
+# Install with: pip install -r requirements.txt
+#
+# =============================================================================
+
+# Core ML Libraries
+lightgbm>=4.0.0,<5.0.0
+scikit-learn>=1.3.0,<2.0.0
+numpy>=1.24.0,<2.0.0
+pandas>=2.0.0,<3.0.0
+
+# Hyperparameter Tuning
+optuna>=3.4.0,<4.0.0
+
+# Model Evaluation & Explainability
+shap>=0.43.0,<1.0.0
+
+# Data Export & Storage
+google-cloud-firestore>=2.13.0,<3.0.0
+google-cloud-storage>=2.12.0,<3.0.0
+firebase-admin>=6.2.0,<7.0.0
+pyarrow>=14.0.0,<16.0.0
+
+# Data Processing & Class Imbalance
+imbalanced-learn>=0.11.0,<1.0.0
+
+# Visualization (for notebooks)
+matplotlib>=3.8.0,<4.0.0
+seaborn>=0.13.0,<1.0.0
+
+# Jupyter Notebooks
+jupyter>=1.0.0
+ipykernel>=6.26.0,<7.0.0
+nbformat>=5.9.0,<6.0.0
+
+# Configuration & CLI
+python-dotenv>=1.0.0,<2.0.0
+click>=8.1.0,<9.0.0
+
+# Logging & Monitoring
+structlog>=23.2.0,<24.0.0
+
+# HTTP Client (for deployment)
+httpx>=0.25.0,<1.0.0
+
+# Type Hints
+pydantic>=2.5.0,<3.0.0
+
+# Testing
+pytest>=7.4.0,<8.0.0
+pytest-cov>=4.1.0,<5.0.0
+
+# Model Serialization
+joblib>=1.3.0,<2.0.0

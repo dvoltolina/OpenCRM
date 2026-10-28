@@ -1,0 +1,84 @@
+# This file configures the analyzer, which statically analyzes Dart code to
+# check for errors, warnings, and lints.
+#
+# The issues identified by the analyzer are surfaced in the UI of Dart-enabled
+# IDEs (https://dart.dev/tools#ides-and-editors). The analyzer can also be
+# invoked from the command line by running `flutter analyze`.
+
+# The following line activates a set of recommended lints for Flutter apps,
+# packages, and plugins designed to encourage good coding practices.
+include: package:flutter_lints/flutter.yaml
+
+analyzer:
+  exclude:
+    # AI MODULE DISABLED FOR LAUNCH (2025-11-26)
+    # The AI module has unresolved API mismatches and is not needed for initial launch.
+    # Re-enable when AI services are ready for production.
+    - lib/ai/**
+    - test/ai/**
+
+linter:
+  # The lint rules applied to this project can be customized in the
+  # section below to disable rules from the `package:flutter_lints/flutter.yaml`
+  # included above or to enable additional rules. A list of all available lints
+  # and their documentation is published at https://dart.dev/lints.
+  #
+  # Instead of disabling a lint rule for the entire project in the
+  # section below, it can also be suppressed for a single line of code
+  # or a specific dart file by using the `// ignore: name_of_lint` and
+  # `// ignore_for_file: name_of_lint` syntax on the line or in the file
+  # producing the lint.
+  rules:
+    # avoid_print: false  # Uncomment to disable the `avoid_print` rule
+    # prefer_single_quotes: true  # Uncomment to enable the `prefer_single_quotes` rule
+
+# Additional information about this file can be found at
+# https://dart.dev/guides/language/analysis-options
+
+# ============================================================================
+# PROJECT-SPECIFIC CONFIGURATION - The Scheduler
+# ============================================================================
+#
+# CODE QUALITY STANDARDS:
+# - All pages MUST stay under 600 lines (enforce via code review)
+# - Prefer extracting widgets over adding more code to pages
+# - Use meaningful variable/function names for easy customization
+# - Comment complex business logic (especially around booking/payments)
+#
+# CUSTOMIZATION REQUIREMENTS:
+# - Branding values should be in lib/core/config/app_branding.dart
+# - Feature toggles should be in lib/core/config/feature_flags.dart
+# - Business policies should be in lib/core/config/app_config.dart
+# - UI tweaks should NOT require editing page files
+#
+# SECURITY CONSIDERATIONS:
+# - Never commit API keys, secrets, or credentials (use environment variables)
+# - HIPAA-sensitive code requires extra scrutiny (see docs/security_rules_guide.md)
+# - Multi-tenant isolation must be enforced at all layers
+# - Always validate SecurityContext before database operations
+#
+# TESTING EXPECTATIONS:
+# - Target 80% code coverage for business logic
+# - All new features require unit tests
+# - Security-critical code requires integration tests
+# - See docs/testing_guide.md for detailed strategy
+#
+# AGENT COORDINATION:
+# - UI agents: Keep UI in lib/modules/*/presentation/**
+# - Data agents: Keep data logic in lib/data/** and lib/core/services/**
+# - Changes to shared configs (this file, pubspec.yaml) should be documented
+# - Append updates to architecture.md and changes_logs.md (never overwrite)
+#
+# RECOMMENDED LINT RULES (uncomment to enable):
+# - prefer_const_constructors: true      # Performance optimization
+# - prefer_const_literals_to_create_immutables: true  # Reduce rebuilds
+# - always_use_package_imports: true     # Avoid relative import confusion
+# - avoid_print: true                    # Use proper logging in production
+# - prefer_single_quotes: true           # Consistency
+# - sort_pub_dependencies: true          # Keep pubspec organized
+#
+# For complete documentation, see:
+# - docs/operations.md (deployment & release procedures)
+# - docs/onboarding.md (client setup checklists)
+# - docs/testing_guide.md (QA & test strategy)
+# - architecture.md (codebase structure)

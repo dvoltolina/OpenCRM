@@ -1,0 +1,109 @@
+.staff-schedules-page {
+  gap: 24px;
+}
+
+.staff-schedules-page__hero {
+  display: grid;
+  grid-template-columns: minmax(0, 1.7fr) minmax(300px, 0.95fr);
+  gap: 24px;
+  align-items: start;
+}
+
+.staff-schedules-page__hero-copy h2 {
+  margin: 0 0 10px;
+  font-size: clamp(1.8rem, 3vw, 2.35rem);
+  color: var(--color-text);
+}
+
+.staff-schedules-page__hero-copy p:last-child {
+  margin: 0;
+  max-width: 62ch;
+  color: var(--color-text-secondary);
+}
+
+.staff-schedules-page__hero-stats {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 12px;
+}
+
+.staff-schedules-page__hero-stats div {
+  padding: 16px;
+  border-radius: var(--radius-lg);
+  border: 1px solid color-mix(in srgb, var(--color-border) 84%, transparent);
+  background: color-mix(in srgb, var(--color-surface) 84%, white);
+}
+
+.staff-schedules-page__hero-stats span {
+  display: block;
+  margin-bottom: 8px;
+  font-size: 12px;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: var(--color-text-secondary);
+}
+
+.staff-schedules-page__hero-stats strong {
+  display: block;
+  font-size: 1.1rem;
+  line-height: 1.25;
+  color: var(--color-text);
+}
+
+.staff-schedules-layout {
+  display: grid;
+  grid-template-columns: minmax(280px, 320px) minmax(0, 1fr);
+  gap: 20px;
+  min-height: 0;
+}
+
+.staff-schedules-page__list-card,
+.staff-schedules-page__editor-card {
+  padding: 0;
+  overflow: hidden;
+}
+
+.staff-schedules-page .staff-list-panel,
+.staff-schedules-page .schedule-editor-panel {
+  background: transparent;
+  border: none;
+  border-radius: 0;
+  max-height: none;
+}
+
+.staff-schedules-page .staff-list-header {
+  background: color-mix(in srgb, var(--color-bg-subtle) 72%, white);
+}
+
+.staff-schedules-page .search-input,
+.staff-schedules-page .schedule-settings-grid .form-group input,
+.staff-schedules-page .schedule-settings-grid .form-group select {
+  border-radius: 12px;
+}
+
+.staff-schedules-page .schedule-editor-empty,
+.staff-schedules-page .schedule-editor-no-schedule {
+  min-height: 420px;
+}
+
+.staff-schedules-page .schedule-editor {
+  padding: 24px;
+}
+
+.staff-schedules-page__status-card {
+  color: var(--color-text-secondary);
+}
+
+@media (max-width: 1100px) {
+  .staff-schedules-page__hero,
+  .staff-schedules-layout {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 720px) {
+  .staff-schedules-page__hero-stats,
+  .schedule-settings-grid {
+    grid-template-columns: 1fr;
+  }
+}

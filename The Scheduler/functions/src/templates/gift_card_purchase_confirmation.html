@@ -1,0 +1,275 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Gift Card Purchase Confirmation</title>
+  <!--[if mso]>
+  <noscript>
+    <xml>
+      <o:OfficeDocumentSettings>
+        <o:PixelsPerInch>96</o:PixelsPerInch>
+      </o:OfficeDocumentSettings>
+    </xml>
+  </noscript>
+  <![endif]-->
+  <style>
+    body {
+      margin: 0;
+      padding: 0;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background-color: #f4f4f4;
+      -webkit-font-smoothing: antialiased;
+    }
+    .wrapper {
+      width: 100%;
+      background-color: #f4f4f4;
+      padding: 40px 0;
+    }
+    .container {
+      max-width: 600px;
+      margin: 0 auto;
+      background-color: #ffffff;
+      border-radius: 12px;
+      overflow: hidden;
+      box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    }
+    .header {
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      padding: 30px;
+      text-align: center;
+    }
+    .header img {
+      max-width: 150px;
+      max-height: 60px;
+      margin-bottom: 15px;
+    }
+    .header h1 {
+      color: #ffffff;
+      margin: 0;
+      font-size: 24px;
+      font-weight: 600;
+    }
+    .content {
+      padding: 40px 30px;
+    }
+    .greeting {
+      font-size: 18px;
+      color: #333333;
+      margin-bottom: 20px;
+    }
+    .message {
+      font-size: 16px;
+      color: #555555;
+      line-height: 1.6;
+      margin-bottom: 25px;
+    }
+    .gift-card-box {
+      background: linear-gradient(135deg, #f5f7fa 0%, #e4e8ec 100%);
+      border-radius: 12px;
+      padding: 25px;
+      text-align: center;
+      margin: 25px 0;
+      border: 2px dashed #667eea;
+    }
+    .code-label {
+      font-size: 12px;
+      color: #888888;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      margin-bottom: 8px;
+    }
+    .gift-code {
+      font-size: 32px;
+      font-weight: bold;
+      color: #333333;
+      letter-spacing: 4px;
+      font-family: 'Courier New', monospace;
+      background-color: #ffffff;
+      padding: 15px 20px;
+      border-radius: 8px;
+      display: inline-block;
+      margin: 10px 0;
+      border: 1px solid #e0e0e0;
+    }
+    .amount {
+      font-size: 28px;
+      font-weight: bold;
+      color: #667eea;
+      margin-top: 15px;
+    }
+    .delivery-info {
+      background-color: #e8f5e9;
+      border-left: 4px solid #4caf50;
+      padding: 15px 20px;
+      margin: 25px 0;
+      border-radius: 0 8px 8px 0;
+    }
+    .delivery-info p {
+      margin: 0;
+      color: #2e7d32;
+      font-size: 14px;
+    }
+    .self-use-info {
+      background-color: #e3f2fd;
+      border-left: 4px solid #2196f3;
+      padding: 15px 20px;
+      margin: 25px 0;
+      border-radius: 0 8px 8px 0;
+    }
+    .self-use-info p {
+      margin: 0;
+      color: #1565c0;
+      font-size: 14px;
+    }
+    .details-table {
+      width: 100%;
+      margin: 25px 0;
+      border-collapse: collapse;
+    }
+    .details-table td {
+      padding: 12px 0;
+      border-bottom: 1px solid #eeeeee;
+    }
+    .details-table td:first-child {
+      color: #888888;
+      font-size: 14px;
+    }
+    .details-table td:last-child {
+      text-align: right;
+      color: #333333;
+      font-weight: 500;
+    }
+    .footer {
+      background-color: #f9f9f9;
+      padding: 25px 30px;
+      text-align: center;
+      border-top: 1px solid #eeeeee;
+    }
+    .footer p {
+      color: #888888;
+      font-size: 13px;
+      margin: 5px 0;
+      line-height: 1.5;
+    }
+    .footer a {
+      color: #667eea;
+      text-decoration: none;
+    }
+    .cta-button {
+      display: inline-block;
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      color: #ffffff;
+      padding: 14px 35px;
+      border-radius: 30px;
+      text-decoration: none;
+      font-weight: 600;
+      font-size: 16px;
+      margin-top: 20px;
+    }
+    @media only screen and (max-width: 600px) {
+      .container {
+        margin: 0 15px;
+      }
+      .content {
+        padding: 30px 20px;
+      }
+      .gift-code {
+        font-size: 24px;
+        letter-spacing: 2px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="wrapper">
+    <div class="container">
+      <!-- Header with Business Branding -->
+      <div class="header">
+        {{#if businessLogoUrl}}
+        <img src="{{businessLogoUrl}}" alt="{{businessName}}" />
+        {{/if}}
+        <h1>Gift Card Confirmation</h1>
+      </div>
+
+      <!-- Main Content -->
+      <div class="content">
+        <p class="greeting">Hi {{purchaserName}},</p>
+
+        <p class="message">
+          Thank you for your gift card purchase! Your gift card has been successfully processed and is ready to use.
+        </p>
+
+        <!-- Gift Card Display Box -->
+        <div class="gift-card-box">
+          <div class="code-label">Gift Card Code</div>
+          <div class="gift-code">{{code}}</div>
+          <div class="amount">${{amountDollars}}</div>
+        </div>
+
+        {{#if isSendingToOther}}
+        <!-- Delivery Info for Gift -->
+        <div class="delivery-info">
+          <p><strong>Delivery Status:</strong> This gift card will be delivered to <strong>{{recipientName}}</strong> at <strong>{{recipientEmail}}</strong> shortly.</p>
+        </div>
+        {{else}}
+        <!-- Self-Use Info -->
+        <div class="self-use-info">
+          <p><strong>Ready to Use:</strong> Enter this code when booking your next appointment to apply the balance.</p>
+        </div>
+        {{/if}}
+
+        <!-- Purchase Details -->
+        <table class="details-table">
+          <tr>
+            <td>Purchase Date</td>
+            <td>{{purchaseDate}}</td>
+          </tr>
+          <tr>
+            <td>Amount</td>
+            <td>${{amountDollars}}</td>
+          </tr>
+          {{#if expiresAt}}
+          <tr>
+            <td>Valid Until</td>
+            <td>{{expiresAt}}</td>
+          </tr>
+          {{else}}
+          <tr>
+            <td>Validity</td>
+            <td>Never Expires</td>
+          </tr>
+          {{/if}}
+          <tr>
+            <td>Confirmation</td>
+            <td>{{code}}</td>
+          </tr>
+        </table>
+
+        {{#if bookingUrl}}
+        <div style="text-align: center;">
+          <a href="{{bookingUrl}}" class="cta-button">Book an Appointment</a>
+        </div>
+        {{/if}}
+      </div>
+
+      <!-- Footer -->
+      <div class="footer">
+        <p><strong>{{businessName}}</strong></p>
+        {{#if businessAddress}}
+        <p>{{businessAddress}}</p>
+        {{/if}}
+        {{#if businessPhone}}
+        <p>Phone: {{businessPhone}}</p>
+        {{/if}}
+        {{#if businessEmail}}
+        <p>Email: <a href="mailto:{{businessEmail}}">{{businessEmail}}</a></p>
+        {{/if}}
+        <p style="margin-top: 15px; font-size: 11px; color: #aaa;">
+          This is an automated email. Please do not reply directly to this message.
+        </p>
+      </div>
+    </div>
+  </div>
+</body>
+</html>

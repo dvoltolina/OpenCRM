@@ -1,0 +1,122 @@
+{
+  "$schema": "https://schema.runpod.io/template/v1",
+  "name": "Scheduler Sentiment Analysis Service",
+  "description": "GPU-accelerated sentiment analysis service for The Scheduler using Ollama LLM. HIPAA-compliant with audit logging.",
+  "version": "1.0.0",
+  "tags": ["sentiment-analysis", "llm", "ollama", "hipaa-compliant", "scheduler"],
+
+  "template": {
+    "containerDisk": 20,
+    "volumeDisk": 50,
+    "volumePath": "/workspace",
+
+    "dockerArgs": "",
+    "ports": "8002/http,11434/http",
+
+    "env": [
+      {
+        "key": "SENTIMENT_HOST",
+        "value": "0.0.0.0",
+        "description": "Service bind host"
+      },
+      {
+        "key": "SENTIMENT_PORT",
+        "value": "8002",
+        "description": "Service port"
+      },
+      {
+        "key": "SENTIMENT_DEBUG",
+        "value": "false",
+        "description": "Enable debug mode"
+      },
+      {
+        "key": "SENTIMENT_LOG_LEVEL",
+        "value": "WARNING",
+        "description": "Logging level: DEBUG, INFO, WARNING, ERROR"
+      },
+      {
+        "key": "SENTIMENT_OLLAMA_URL",
+        "value": "http://localhost:11434",
+        "description": "Ollama API URL (local in this container)"
+      },
+      {
+        "key": "SENTIMENT_DEFAULT_MODEL",
+        "value": "phi3:mini",
+        "description": "Default model for quick analysis (~8GB VRAM)"
+      },
+      {
+        "key": "SENTIMENT_DEEP_ANALYSIS_MODEL",
+        "value": "llama3.1:8b",
+        "description": "Model for deep analysis (~16GB VRAM)"
+      },
+      {
+        "key": "SENTIMENT_REQUIRE_AUTHENTICATION",
+        "value": "true",
+        "description": "Require API key authentication (REQUIRED for HIPAA)"
+      },
+      {
+        "key": "SENTIMENT_API_KEYS",
+        "value": "",
+        "description": "Comma-separated API keys (format: key:business_id or key for admin)",
+        "secret": true
+      },
+      {
+        "key": "SENTIMENT_ALLOWED_ORIGINS",
+        "value": "",
+        "description": "Comma-separated allowed CORS origins",
+        "secret": true
+      },
+      {
+        "key": "SENTIMENT_REDACT_TRIGGER_TEXT",
+        "value": "true",
+        "description": "Redact PHI trigger text from responses (HIPAA)"
+      },
+      {
+        "key": "SENTIMENT_RATE_LIMIT_RPM",
+        "value": "60",
+        "description": "Rate limit requests per minute per API key"
+      }
+    ],
+
+    "startCommand": "/start.sh",
+
+    "readme": "# Scheduler Sentiment Analysis Service\n\n## Overview\nGPU-accelerated sentiment analysis service using Ollama LLM for The Scheduler application.\n\n## Features\n- Real-time sentiment analysis of client communications\n- Trigger word detection for staff alerts\n- Deep analysis mode for complex cases\n- HIPAA-compliant audit logging\n- Multi-tenant support with business isolation\n\n## Models\n- **phi3:mini** (~8GB VRAM): Fast analysis, ~200ms latency\n- **llama3.1:8b** (~16GB VRAM): Deep analysis, ~800ms latency\n\n## GPU Requirements\n- Minimum: 8GB VRAM (phi3:mini only)\n- Recommended: 16GB+ VRAM (full functionality)\n\n## Endpoints\n- `GET /health/live` - Liveness check\n- `GET /health/ready` - Readiness check (model loaded)\n- `POST /api/v1/analyze` - Analyze text sentiment\n- `POST /api/v1/batch` - Batch analysis\n\n## Security\n- API key authentication required\n- CORS origin validation\n- PHI redaction enabled\n- Audit logging for HIPAA\n\n## Configuration\nSet environment variables in the RunPod dashboard:\n1. `SENTIMENT_API_KEYS` - Your API keys\n2. `SENTIMENT_ALLOWED_ORIGINS` - Your app domains\n\n## Support\nContact: support@example.com"
+  },
+
+  "gpu": {
+    "minVram": 8,
+    "recommendedVram": 16,
+    "supportedGpus": [
+      "RTX 3090",
+      "RTX 4090",
+      "A10",
+      "A10G",
+      "A100",
+      "L4",
+      "L40"
+    ]
+  },
+
+  "pricing": {
+    "tier": "gpu",
+    "estimatedCostPerHour": 0.50,
+    "notes": "Cost varies by GPU type. A10G recommended for production."
+  },
+
+  "healthCheck": {
+    "endpoint": "/health/ready",
+    "port": 8002,
+    "initialDelaySeconds": 120,
+    "periodSeconds": 30,
+    "timeoutSeconds": 10,
+    "failureThreshold": 5
+  },
+
+  "scaling": {
+    "minReplicas": 1,
+    "maxReplicas": 5,
+    "targetConcurrency": 10,
+    "scaleDownDelay": 300,
+    "notes": "Scale based on request queue depth. Each GPU handles ~10 concurrent requests."
+  }
+}

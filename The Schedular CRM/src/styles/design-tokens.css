@@ -1,0 +1,68 @@
+:root {
+  color-scheme: light;
+
+  --font-family-sans: "Avenir Next", "Segoe UI", "Helvetica Neue", sans-serif;
+  --font-family-mono: "SFMono-Regular", "SF Mono", Consolas, "Liberation Mono", monospace;
+
+  --space-2xs: 4px;
+  --space-xs: 8px;
+  --space-sm: 12px;
+  --space-md: 16px;
+  --space-lg: 24px;
+  --space-xl: 32px;
+  --space-2xl: 48px;
+
+  --radius-sm: 8px;
+  --radius-md: 12px;
+  --radius-lg: 18px;
+  --radius-pill: 999px;
+
+  --shadow-sm: 0 10px 28px rgba(15, 23, 42, 0.06);
+  --shadow-md: 0 18px 40px rgba(15, 23, 42, 0.1);
+  --shadow-lg: 0 28px 64px rgba(15, 23, 42, 0.16);
+
+  --color-brand-500: #2857e7;
+  --color-brand-600: #1f46bf;
+  --color-brand-050: #eef3ff;
+  --color-brand-100: #dbe6ff;
+
+  --color-surface-canvas: #edf2f8;
+  --color-surface-subtle: #f6f9fc;
+  --color-surface-card: rgba(255, 255, 255, 0.88);
+  --color-surface-card-strong: #ffffff;
+  --color-surface-border: #d5deea;
+  --color-surface-border-strong: #c0cad9;
+
+  --color-text: #162033;
+  --color-text-secondary: #51607a;
+  --color-text-muted: #72819a;
+  --color-text-inverse: #f8fbff;
+
+  --color-success: #16794f;
+  --color-success-soft: #eefaf3;
+  --color-warning: #946200;
+  --color-warning-soft: #fff7e7;
+  --color-danger: #b33a3a;
+  --color-danger-soft: #fff1f1;
+  --color-info: #1d5fd4;
+  --color-info-soft: #eef5ff;
+
+  --color-focus-ring: rgba(40, 87, 231, 0.18);
+  --color-overlay: rgba(12, 18, 28, 0.14);
+
+  --sidebar-width: 280px;
+  --header-height: 64px;
+  --page-max-width: 1360px;
+
+  --surface-app-gradient:
+    radial-gradient(circle at top left, rgba(40, 87, 231, 0.08), transparent 28%),
+    radial-gradient(circle at top right, rgba(14, 165, 233, 0.08), transparent 24%),
+    linear-gradient(180deg, #f6f9fc 0%, #edf2f8 52%, #eef2f7 100%);
+
+  /* Legacy aliases for the existing stylesheet */
+  --color-primary: var(--color-brand-500);
+  --color-primary-hover: var(--color-brand-600);
+  --color-bg: var(--color-surface-canvas);
+  --color-bg-card: var(--color-surface-card-strong);
+  --color-border: var(--color-surface-border);
+}
