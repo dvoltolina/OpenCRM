@@ -40,3 +40,7 @@ gitleaks git . --redact --no-banner
 ```
 
 The GitHub workflow runs these source and history checks on pushes and pull requests. GitHub secret scanning, push protection, and private vulnerability reporting are enabled for the public repository.
+
+## License update — 2026-10-28
+
+The project-level license files were changed from MIT to PolyForm Noncommercial License 1.0.0 at the owner's request. The README and repository description identify the project as free source-available CRM software for noncommercial use, with no active maintenance planned. This change does not withdraw permissions already granted for the initial MIT release. Third-party dependency licenses remain unchanged. No application behavior changed in this update.
