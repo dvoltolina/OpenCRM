@@ -1,0 +1,112 @@
+# OpenCRM Personal and Internal Business Use License 1.0
+
+Copyright (c) 2026 Scheduler contributors
+
+This is a source-available license. Using, modifying, or distributing the
+Software under this license means you accept its terms.
+
+## 1. Scope and definitions
+
+**Software** means the OpenCRM code and documentation made available under
+this license, including copies, modified versions, and portions incorporated
+into other works. Separately licensed third-party components are excluded.
+
+**Licensor** means the copyright holders offering the Software under these
+terms. **You** means the individual or organization exercising these permissions.
+
+**Project Owner** means the owner of the original OpenCRM repository at
+<https://github.com/dvoltolina/OpenCRM>. Requests for commercial permission
+must be directed to the Project Owner through that repository.
+
+## 2. Free personal and internal business use
+
+Subject to this license, the Licensor grants you a worldwide, nonexclusive,
+royalty-free copyright license to use, run, copy, study, and modify the Software
+for your own personal use or your organization's internal business operations.
+This permission applies to individuals, sole proprietors, companies of any
+size, nonprofits, and other organizations, including for-profit businesses.
+
+You may use the Software to operate a revenue-generating business, manage your
+own customers, leads, appointments, staff, and records, and provide your own
+customers with booking or account portals connected to those operations.
+Earning revenue from your own goods or services while using the Software as
+an operational tool does not require separate commercial permission.
+
+You may deploy your own instance on your own infrastructure or a hosting
+provider. Employees and contractors may install, operate, and modify it on
+your behalf for these permitted purposes. Paying a contractor for installation,
+customization, maintenance, or support of your own instance is permitted.
+These permissions do not authorize the contractor to sell a packaged copy or
+to offer the Software as a commercial CRM or scheduling service.
+
+You retain your rights in your own data and outputs, such as customer records,
+reports, and booking confirmations. These restrictions do not apply to those
+outputs unless they contain copies of the Software itself.
+
+## 3. Free sharing and forks
+
+You may distribute the Software and modified versions without charge, including
+through public forks, provided you include this entire license and preserve
+copyright and attribution notices in every copy or substantial portion. You
+must identify material modifications, and recipients must receive the rights
+and restrictions in this license for the Software you distribute.
+
+This permission does not authorize distribution as part of a paid or otherwise
+monetized product, bundle, or service. You may not grant recipients broader
+rights to the Software than you have received.
+
+## 4. Commercial redistribution requires prior written consent
+
+Without the Project Owner's prior written consent in a separate commercial
+license, you may not, whether the Software is unchanged, modified, rebranded,
+incorporated into another product, or bundled with other software:
+
+- Sell, rent, lease, or license access to or copies of the Software for a fee
+  or other commercial consideration.
+- Package, repackage, white-label, or distribute the Software as part of a
+  paid or otherwise monetized software product, application, or bundle,
+  including when the Software is described as a free component.
+- Offer the Software's CRM or scheduling functionality to third parties as a
+  commercial hosted, managed, or software-as-a-service offering. This includes
+  subscriptions, access fees, and offerings monetized through advertising,
+  sponsorship, or charges bundled with another product or service.
+
+Renaming the Software, changing its branding, modifying its code, or charging
+for another part of a bundle does not remove these restrictions. No showing
+of net profit is required for these restrictions to apply.
+
+The internal business use, customer portals, and contractor services expressly
+permitted in Section 2 remain permitted. A separate commercial license grants
+only the rights the Project Owner holds or is authorized to license; any other
+required copyright or third-party permissions must also be obtained.
+
+## 5. Other rights and licenses
+
+All rights not expressly granted are reserved. This license does not grant
+trademark rights or permission to suggest endorsement by the Project Owner or
+other contributors. It does not restrict rights you have under applicable law,
+such as fair use, or permissions independently granted under another license.
+
+Third-party dependencies, components, and assets retain their own licenses and
+notices. This license does not replace, restrict, or expand those permissions.
+
+Earlier copies released under MIT or other licenses remain subject to the
+permissions granted for those copies. This license does not retroactively
+withdraw those permissions or impose these restrictions on those copies.
+
+## 6. Violations
+
+Use outside the permissions granted here is not authorized. On your first
+written notice of a violation, you have 30 days to come into full compliance
+and take practical steps to remedy the violation. If you do not do so, or if
+you violate this license again after that notice, your permissions under this
+license terminate automatically. The Licensor may reinstate them in writing.
+
+## 7. No warranty or liability
+
+TO THE EXTENT PERMITTED BY APPLICABLE LAW, THE SOFTWARE IS PROVIDED "AS IS",
+WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED
+TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE, AND
+NONINFRINGEMENT. IN NO EVENT SHALL THE LICENSOR, PROJECT OWNER, AUTHORS, OR
+CONTRIBUTORS BE LIABLE FOR ANY CLAIM, DAMAGES, OR OTHER LIABILITY ARISING
+FROM THE SOFTWARE OR ITS USE, WHETHER IN CONTRACT, TORT, OR OTHERWISE.

@@ -1,133 +1,112 @@
-# PolyForm Noncommercial License 1.0.0
+# OpenCRM Personal and Internal Business Use License 1.0
 
-<https://polyformproject.org/licenses/noncommercial/1.0.0>
+Copyright (c) 2026 Scheduler contributors
 
-## Acceptance
+This is a source-available license. Using, modifying, or distributing the
+Software under this license means you accept its terms.
 
-In order to get any license under these terms, you must agree
-to them as both strict obligations and conditions to all
-your licenses.
+## 1. Scope and definitions
 
-## Copyright License
+**Software** means the OpenCRM code and documentation made available under
+this license, including copies, modified versions, and portions incorporated
+into other works. Separately licensed third-party components are excluded.
 
-The licensor grants you a copyright license for the
-software to do everything you might do with the software
-that would otherwise infringe the licensor's copyright
-in it for any permitted purpose.  However, you may
-only distribute the software according to [Distribution
-License](#distribution-license) and make changes or new works
-based on the software according to [Changes and New Works
-License](#changes-and-new-works-license).
+**Licensor** means the copyright holders offering the Software under these
+terms. **You** means the individual or organization exercising these permissions.
 
-## Distribution License
+**Project Owner** means the owner of the original OpenCRM repository at
+<https://github.com/dvoltolina/OpenCRM>. Requests for commercial permission
+must be directed to the Project Owner through that repository.
 
-The licensor grants you an additional copyright license
-to distribute copies of the software.  Your license
-to distribute covers distributing the software with
-changes and new works permitted by [Changes and New Works
-License](#changes-and-new-works-license).
+## 2. Free personal and internal business use
 
-## Notices
+Subject to this license, the Licensor grants you a worldwide, nonexclusive,
+royalty-free copyright license to use, run, copy, study, and modify the Software
+for your own personal use or your organization's internal business operations.
+This permission applies to individuals, sole proprietors, companies of any
+size, nonprofits, and other organizations, including for-profit businesses.
 
-You must ensure that anyone who gets a copy of any part of
-the software from you also gets a copy of these terms or the
-URL for them above, as well as copies of any plain-text lines
-beginning with `Required Notice:` that the licensor provided
-with the software.  For example:
+You may use the Software to operate a revenue-generating business, manage your
+own customers, leads, appointments, staff, and records, and provide your own
+customers with booking or account portals connected to those operations.
+Earning revenue from your own goods or services while using the Software as
+an operational tool does not require separate commercial permission.
 
-> Required Notice: Copyright Yoyodyne, Inc. (http://example.com)
+You may deploy your own instance on your own infrastructure or a hosting
+provider. Employees and contractors may install, operate, and modify it on
+your behalf for these permitted purposes. Paying a contractor for installation,
+customization, maintenance, or support of your own instance is permitted.
+These permissions do not authorize the contractor to sell a packaged copy or
+to offer the Software as a commercial CRM or scheduling service.
 
-## Changes and New Works License
+You retain your rights in your own data and outputs, such as customer records,
+reports, and booking confirmations. These restrictions do not apply to those
+outputs unless they contain copies of the Software itself.
 
-The licensor grants you an additional copyright license to
-make changes and new works based on the software for any
-permitted purpose.
+## 3. Free sharing and forks
 
-## Patent License
+You may distribute the Software and modified versions without charge, including
+through public forks, provided you include this entire license and preserve
+copyright and attribution notices in every copy or substantial portion. You
+must identify material modifications, and recipients must receive the rights
+and restrictions in this license for the Software you distribute.
 
-The licensor grants you a patent license for the software that
-covers patent claims the licensor can license, or becomes able
-to license, that you would infringe by using the software.
+This permission does not authorize distribution as part of a paid or otherwise
+monetized product, bundle, or service. You may not grant recipients broader
+rights to the Software than you have received.
 
-## Noncommercial Purposes
+## 4. Commercial redistribution requires prior written consent
 
-Any noncommercial purpose is a permitted purpose.
+Without the Project Owner's prior written consent in a separate commercial
+license, you may not, whether the Software is unchanged, modified, rebranded,
+incorporated into another product, or bundled with other software:
 
-## Personal Uses
+- Sell, rent, lease, or license access to or copies of the Software for a fee
+  or other commercial consideration.
+- Package, repackage, white-label, or distribute the Software as part of a
+  paid or otherwise monetized software product, application, or bundle,
+  including when the Software is described as a free component.
+- Offer the Software's CRM or scheduling functionality to third parties as a
+  commercial hosted, managed, or software-as-a-service offering. This includes
+  subscriptions, access fees, and offerings monetized through advertising,
+  sponsorship, or charges bundled with another product or service.
 
-Personal use for research, experiment, and testing for
-the benefit of public knowledge, personal study, private
-entertainment, hobby projects, amateur pursuits, or religious
-observance, without any anticipated commercial application,
-is use for a permitted purpose.
+Renaming the Software, changing its branding, modifying its code, or charging
+for another part of a bundle does not remove these restrictions. No showing
+of net profit is required for these restrictions to apply.
 
-## Noncommercial Organizations
+The internal business use, customer portals, and contractor services expressly
+permitted in Section 2 remain permitted. A separate commercial license grants
+only the rights the Project Owner holds or is authorized to license; any other
+required copyright or third-party permissions must also be obtained.
 
-Use by any charitable organization, educational institution,
-public research organization, public safety or health
-organization, environmental protection organization,
-or government institution is use for a permitted purpose
-regardless of the source of funding or obligations resulting
-from the funding.
+## 5. Other rights and licenses
 
-## Fair Use
+All rights not expressly granted are reserved. This license does not grant
+trademark rights or permission to suggest endorsement by the Project Owner or
+other contributors. It does not restrict rights you have under applicable law,
+such as fair use, or permissions independently granted under another license.
 
-You may have "fair use" rights for the software under the
-law. These terms do not limit them.
+Third-party dependencies, components, and assets retain their own licenses and
+notices. This license does not replace, restrict, or expand those permissions.
 
-## No Other Rights
+Earlier copies released under MIT or other licenses remain subject to the
+permissions granted for those copies. This license does not retroactively
+withdraw those permissions or impose these restrictions on those copies.
 
-These terms do not allow you to sublicense or transfer any of
-your licenses to anyone else, or prevent the licensor from
-granting licenses to anyone else.  These terms do not imply
-any other licenses.
+## 6. Violations
 
-## Patent Defense
+Use outside the permissions granted here is not authorized. On your first
+written notice of a violation, you have 30 days to come into full compliance
+and take practical steps to remedy the violation. If you do not do so, or if
+you violate this license again after that notice, your permissions under this
+license terminate automatically. The Licensor may reinstate them in writing.
 
-If you make any written claim that the software infringes or
-contributes to infringement of any patent, your patent license
-for the software granted under these terms ends immediately. If
-your company makes such a claim, your patent license ends
-immediately for work on behalf of your company.
+## 7. No warranty or liability
 
-## Violations
-
-The first time you are notified in writing that you have
-violated any of these terms, or done anything with the software
-not covered by your licenses, your licenses can nonetheless
-continue if you come into full compliance with these terms,
-and take practical steps to correct past violations, within
-32 days of receiving notice.  Otherwise, all your licenses
-end immediately.
-
-## No Liability
-
-***As far as the law allows, the software comes as is, without
-any warranty or condition, and the licensor will not be liable
-to you for any damages arising out of these terms or the use
-or nature of the software, under any kind of legal claim.***
-
-## Definitions
-
-The **licensor** is the individual or entity offering these
-terms, and the **software** is the software the licensor makes
-available under these terms.
-
-**You** refers to the individual or entity agreeing to these
-terms.
-
-**Your company** is any legal entity, sole proprietorship,
-or other kind of organization that you work for, plus all
-organizations that have control over, are under the control of,
-or are under common control with that organization.  **Control**
-means ownership of substantially all the assets of an entity,
-or the power to direct its management and policies by vote,
-contract, or otherwise.  Control can be direct or indirect.
-
-**Your licenses** are all the licenses granted to you for the
-software under these terms.
-
-**Use** means anything you do with the software requiring one
-of your licenses.
-
-Required Notice: Copyright (c) 2026 Scheduler contributors
+TO THE EXTENT PERMITTED BY APPLICABLE LAW, THE SOFTWARE IS PROVIDED "AS IS",
+WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED
+TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE, AND
+NONINFRINGEMENT. IN NO EVENT SHALL THE LICENSOR, PROJECT OWNER, AUTHORS, OR
+CONTRIBUTORS BE LIABLE FOR ANY CLAIM, DAMAGES, OR OTHER LIABILITY ARISING
+FROM THE SOFTWARE OR ITS USE, WHETHER IN CONTRACT, TORT, OR OTHERWISE.

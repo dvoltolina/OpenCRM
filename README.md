@@ -1,10 +1,10 @@
 # OpenCRM
 
-OpenCRM is free CRM and scheduling software shared publicly for noncommercial use. It is available so people can study the code, fork it, and build free CRM tools for noncommercial purposes.
+OpenCRM is CRM and scheduling software available at no charge for personal use and internal business use, including use by for-profit companies. You can study the code, modify it for your own operations, and share free forks under the project license.
 
 The suite brings together a CRM, an appointment scheduling app, an administration dashboard, and a static marketing website. It uses React, TypeScript, Flutter, Firebase, and optional Python AI services.
 
-**Noncommercial use only under the current project license.** OpenCRM is source available under the [PolyForm Noncommercial License 1.0.0](LICENSE).
+**Free for your own use; commercial redistribution requires the project owner's prior written consent.** OpenCRM is source available under the [OpenCRM Personal and Internal Business Use License 1.0](LICENSE).
 
 | Folder | Purpose |
 | --- | --- |
@@ -55,8 +55,21 @@ Each app retains its existing test commands. See [VERIFICATION.md](VERIFICATION.
 
 ## License
 
-The current project license is [PolyForm Noncommercial License 1.0.0](LICENSE), copyright Scheduler contributors. It permits use, modification, and sharing for the purposes defined in that license. Commercial use is not granted under these terms. Selling the software, offering it as a paid CRM service, or using it in a commercial product is not authorized by the current project license.
+The current project license is the [OpenCRM Personal and Internal Business Use License 1.0](LICENSE), copyright Scheduler contributors.
 
-Because it restricts commercial use, this release is described as **source available**, rather than open source under the [Open Source Definition](https://opensource.org/osd). “Free” here means available at no charge for permitted noncommercial use.
+| Use | Permission under the current license |
+| --- | --- |
+| Personal use, study, and modifications for yourself | Allowed at no charge |
+| Internal use by any company, including a for-profit company | Allowed at no charge |
+| Managing your own customers, sales, staff, and appointments | Allowed, even when your business earns revenue |
+| Letting your own customers book or use a portal for your business | Allowed |
+| Hiring someone to install, customize, maintain, or support your own instance | Allowed |
+| Sharing free copies or modified forks | Allowed with the full license and required notices |
+| Selling, repackaging, white-labeling, or bundling the software into a monetized product | Requires the project owner's prior written consent |
+| Offering the software as a commercial hosted CRM or scheduling service to others | Requires the project owner's prior written consent |
 
-**Earlier release:** the initial public revision was distributed under MIT. This license change does not revoke permissions already granted for that revision. The noncommercial terms do not override licenses or notices for third-party dependencies; those retain their own licenses.
+The license applies to modified and rebranded versions as well as the original. Calling a bundled copy “free” or earning revenue through advertising does not bypass the commercial redistribution restriction. The full [LICENSE](LICENSE) governs these permissions. Request commercial permission from the project owner through the [original repository](https://github.com/dvoltolina/OpenCRM).
+
+Because it restricts commercial redistribution, this release is **source available** and does not meet the [Open Source Definition](https://opensource.org/osd). “Free” means no license fee for the permitted uses above; it does not mean unrestricted resale rights.
+
+**Earlier release:** the initial public revision, [`e0b2399`](https://github.com/dvoltolina/OpenCRM/commit/e0b2399), was distributed under MIT. This license change cannot revoke the permissions already granted for that revision, including commercial rights. Third-party dependencies retain their own licenses and notices.
